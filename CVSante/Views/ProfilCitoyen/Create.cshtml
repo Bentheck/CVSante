@@ -4,25 +4,15 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>UserCitoyen</h4>
 <div class="row">
     <div class="col-md-4">
+        <h4>Voulez-vous vraiment créer un profil?</h4>
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FkIdentityUser" class="control-label"></label>
-                <select asp-for="FkIdentityUser" class ="form-control" asp-items="ViewBag.FkIdentityUser"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="buttons-container">
+                <button type="submit" value="Oui" class="btn btn-primary">Créer</button>
+                <button class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Bienvenue", "ProfilCitoyen")'">Annuler</button>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

@@ -4,7 +4,6 @@ namespace CVSante.ViewModels
 {
     internal class User
     {
-        public string ASPUser { get; set; }
         public UserInfo userInfo { get; set; }
         public IEnumerable<UserAdresse> adresse { get; set; }
         public IEnumerable<UserAllergy> allergies { get; set; }
