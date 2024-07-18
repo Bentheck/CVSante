@@ -1,5 +1,42 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Membre de l'équipe";
 }
 
+<header class="logo-container header-background-logo">
+    <div class="header-content">
+        <h1 class="team-title">Membre de l'équipe</h1>
+    </div>
+</header>
+
+<div class=" container">
+    <div class="team-members">
+        <div class="team-member" data-name="Joel Blais" data-role="Gestionnaire de réseaux" data-description="Joel est un gestionnaire de réseaux avec plus de 10 ans d'expérience dans l'industrie.">
+            <p>Joel Blais</p>
+            <p>Gestionnaire de réseaux</p>
+        </div>
+        <div class="team-member" data-name="Mathieu Vézina" data-role="Gestionnaire de réseaux" data-description="Mathieu est un gestionnaire de réseaux compétent, expert en infrastructures réseaux.">
+            <p>Mathieu Vézina</p>
+            <p>Gestionnaire de réseaux</p>
+        </div>
+        <div class="team-member" data-name="Jeff Sauvageau" data-role="Gestionnaire de réseaux" data-description="Jeff est un gestionnaire de réseaux dédié à l'optimisation des systèmes de communication.">
+            <p>Jeff Sauvageau</p>
+            <p>Gestionnaire de réseaux</p>
+        </div>
+        <div class="team-member" data-name="Benoit Lavallée" data-role="Programmeur d'applications Web et mobiles" data-description="Benoit est un programmeur d'applications Web et mobiles avec une expertise en applications iOS et Android.">
+            <p>Benoit Lavallée</p>
+            <p>Programmeur d'applications Web et mobiles</p>
+        </div>
+        <div class="team-member" data-name="Takwa Ben Youssef" data-role="Programmeuse d'applications Web et mobiles" data-description="Takwa est une programmeuse d'applications Web et mobiles passionnée par les technologies front-end.">
+            <p>Takwa Ben Youssef</p>
+            <p>Programmeuse d'applications Web et mobiles</p>
+        </div>
+    </div>
+
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="memberDetails"></div>
+        </div>
+    </div>
+</div>
 

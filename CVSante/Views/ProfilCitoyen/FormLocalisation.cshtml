@@ -1,0 +1,34 @@
+﻿@model IEnumerable<CVSante.Models.UserCitoyen>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Localisation</h3>
+@foreach (var form in Model)
+{
+    <div class="localisation-form">
+        <label for="civicNumber-@form.Id">Numéro Civique</label>
+        <input type="text" id="civicNumber-@form.Id" name="civicNumber" value="@form.CivicNumber">
+        <label for="postalCode-@form.Id">Code Postal</label>
+        <input type="text" id="postalCode-@form.Id" name="postalCode" value="@form.PostalCode">
+        <label for="city-@form.Id">Ville</label>
+        <input type="text" id="city-@form.Id" name="city" value="@form.City">
+        <label for="phone-@form.Id">Téléphone</label>
+        <input type="text" id="phone-@form.Id" name="phone" value="@form.Phone" pattern="\(\d{3}\)\d{3}-\d{4}" placeholder="(819)451-3754">
+    </div>
+}
+<p><a href="javascript:void(0)" onclick="addAdditionalForm()">+ Ajouter adresse supplémentaire/Téléphone</a></p>
+</div>
+
+@section Scripts {
+    <script>
+        function addAdditionalForm() {
+            fetch('@Url.Action("AddAdditionalForm", "Home")')
+                .then(response => response.text())
+                .then(html => {
+                    document.querySelector('.localisation-form').insertAdjacentHTML('beforeend', html);
+                });
+        }
+    </script>
+}

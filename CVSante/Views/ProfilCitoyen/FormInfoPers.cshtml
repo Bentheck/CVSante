@@ -1,0 +1,130 @@
+﻿@model IEnumerable<CVSante.Models.UserCitoyen>
+
+@{
+    ViewData["Title"] = "Informations Personnelles";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" class="form-container">
+    <fieldset>
+        <legend>Informations Personnelles</legend>
+
+        <div class="form-group">
+            <label asp-for="Nom">Nom</label>
+            <input asp-for="Nom" class="form-control" />
+            <span asp-validation-for="Nom" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Prenom">Prénom</label>
+            <input asp-for="Prenom" class="form-control" />
+            <span asp-validation-for="Prenom" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateNaissance">Date de naissance</label>
+            <input asp-for="DateNaissance" type="date" class="form-control" />
+            <span asp-validation-for="DateNaissance" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TelephoneCell">Tel cellulaire</label>
+            <input asp-for="TelephoneCell" class="form-control" />
+            <span asp-validation-for="TelephoneCell" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Sexe à la naissance</label>
+            <div>
+                <label>
+                    <input type="radio" asp-for="Sexe" value="Masculin" /> Masculin
+                </label>
+                <label>
+                    <input type="radio" asp-for="Sexe" value="Féminin" /> Féminin
+                </label>
+                <label>
+                    <input type="radio" asp-for="Sexe" value="Autre" /> Autre
+                </label>
+            </div>
+            <span asp-validation-for="Sexe" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Pronoms">Pronoms</label>
+            <input asp-for="Pronoms" class="form-control" />
+            <span asp-validation-for="Pronoms" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Taille">Taille (pi)</label>
+            <input asp-for="Taille" class="form-control" />
+            <span asp-validation-for="Taille" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Poids">Poids (lb)</label>
+            <input asp-for="Poids" class="form-control" />
+            <span asp-validation-for="Poids" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TypeSanguin">Type Sanguin</label>
+            <input asp-for="TypeSanguin" class="form-control" />
+            <span asp-validation-for="TypeSanguin" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Handicap</label>
+            <div>
+                <label>
+                    <input type="radio" asp-for="Handicap" value="Oui" /> Oui
+                </label>
+                <label>
+                    <input type="radio" asp-for="Handicap" value="Non" /> Non
+                </label>
+            </div>
+            <span asp-validation-for="Handicap" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Situations de handicap</label>
+            <div>
+                <label>
+                    <input type="checkbox" name="HandicapTypes" value="Autisme" /> Autisme
+                </label>
+                <label>
+                    <input type="checkbox" name="HandicapTypes" value="Mobilité réduite" /> Mobilité réduite
+                </label>
+                <label>
+                    <input type="checkbox" name="HandicapTypes" value="Déficience auditive" /> Déficience auditive
+                </label>
+                <label>
+                    <input type="checkbox" name="HandicapTypes" value="Déficience visuelle" /> Déficience visuelle
+                </label>
+                <label>
+                    <input type="checkbox" name="HandicapTypes" value="Autre" /> Autre
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Definition">Description du handicap</label>
+            <textarea asp-for="Definition" class="form-control"></textarea>
+            <span asp-validation-for="Definition" class="text-danger"></span>
+        </div>
+
+        <div class="form-buttons">
+            <button type="button" class="btn btn-secondary">Retour</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <button type="button" class="btn btn-secondary">Annuler modifications</button>
+            <button type="button" class="btn btn-danger">Supprimer</button>
+            <button type="button" class="btn btn-secondary">Précédent</button>
+            <button type="button" class="btn btn-secondary">Suivant</button>
+        </div>
+    </fieldset>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
