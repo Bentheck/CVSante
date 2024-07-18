@@ -1,31 +1,44 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CVSante.Models;
 using CVSante.ViewModels;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using NuGet.Common;
+using Microsoft.AspNetCore.Identity;
 
 namespace CVSante.Controllers
 {
     public class ProfilCitoyenController : Controller
     {
         private readonly CvsanteContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ProfilCitoyenController(CvsanteContext context)
+        public ProfilCitoyenController(CvsanteContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ProfilCitoyen
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Bienvenue()
         {
+            var currentUserId = _userManager.GetUserId(User);
+            var userCitoyen = await _context.UserCitoyens
+                .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
+
+            if (userCitoyen != null)
+            {
+                TempData["UserID"] = userCitoyen.UserId;
+            }
+            else
+            {
+                TempData["UserID"] = null;
+            }
+
             var profilCitoyen = await _context.UserCitoyens.Select(
                 userInfos => new User
-                {               
+                {
                     userInfo = _context.UserInfos.FirstOrDefault(u => u.FkUserId == userInfos.UserId),
                     adresse = _context.UserAdresses.Where(a => a.FkUserId == userInfos.UserId).ToList(),
                     allergies = _context.UserAllergies.Where(al => al.FkUserId == userInfos.UserId).ToList(),
@@ -33,7 +46,7 @@ namespace CVSante.Controllers
                     medications = _context.UserMedications.Where(m => m.FkUserId == userInfos.UserId).ToList(),
                     handicaps = _context.UserHandicaps.Where(h => h.FkUserId == userInfos.UserId).ToList()
                 }).ToListAsync();
-            ViewBag.FkIdentityUser = _context.AspNetUsers.FirstOrDefault().Id;
+
 
             return View(profilCitoyen);
         }
@@ -41,15 +54,14 @@ namespace CVSante.Controllers
         // GET: ProfilCitoyen/Create
         public IActionResult Create()
         {
-            if (ViewBag.FkIdentityUser != null)
+            if (TempData["UserID"] != null)
             {
-                return RedirectToAction("Edit", new { id = ViewBag.FkIdentityUser });
+                return RedirectToAction("Edit", new { id = TempData["UserID"] });
             }
             else
             {
-                ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id");
+                return View();
             }
-            return View();
         }
 
         // POST: ProfilCitoyen/Create
@@ -57,18 +69,19 @@ namespace CVSante.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserId,FkIdentityUser")] UserCitoyen userCitoyen)
         {
-            if (ModelState.IsValid)
+            userCitoyen = new UserCitoyen
             {
-                _context.Add(userCitoyen);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", userCitoyen.FkIdentityUser);
-            return View(userCitoyen);
+                FkIdentityUser = _userManager.GetUserId(User)
+            };
+
+            _context.Add(userCitoyen);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Edit", new { id = userCitoyen.UserId });
         }
 
         // GET: ProfilCitoyen/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int ?id)
         {
             if (id == null)
             {
@@ -77,14 +90,14 @@ namespace CVSante.Controllers
 
             var userCitoyen = await _context.UserInfos
                 .Where(u => u.FkUserId == id)
-                .Select(userInfo => new
+                .Select(userInfo => new User
                 {
-                    UserInfo = userInfo,
-                    UserAdresse = _context.UserAdresses.FirstOrDefault(a => a.FkUserId == userInfo.FkUserId),
-                    UserAllergies = _context.UserAllergies.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
-                    UserAntecedents = _context.UserAntecedents.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
-                    UserMedications = _context.UserMedications.Where(m => m.FkUserId == userInfo.FkUserId).ToList(),
-                    UserHandicaps = _context.UserHandicaps.Where(h => h.FkUserId == userInfo.FkUserId).ToList()
+                    userInfo = userInfo,
+                    adresse = _context.UserAdresses.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
+                    allergies = _context.UserAllergies.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
+                    antecedents = _context.UserAntecedents.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
+                    medications = _context.UserMedications.Where(m => m.FkUserId == userInfo.FkUserId).ToList(),
+                    handicaps = _context.UserHandicaps.Where(h => h.FkUserId == userInfo.FkUserId).ToList()
                 })
                 .FirstOrDefaultAsync();
 
@@ -93,7 +106,7 @@ namespace CVSante.Controllers
                 return NotFound();
             }
 
-            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", userCitoyen.UserInfo.FkUserId);
+            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "UserName", userCitoyen.userInfo.FkUserId);
             return View(userCitoyen);
         }
 
@@ -125,9 +138,9 @@ namespace CVSante.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Bienvenue));
             }
-            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", userCitoyen.FkIdentityUser);
+            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "UserName", userCitoyen.FkIdentityUser);
             return View(userCitoyen);
         }
 
@@ -141,14 +154,14 @@ namespace CVSante.Controllers
 
             var userCitoyen = await _context.UserInfos
                 .Where(u => u.FkUserId == id)
-                .Select(userInfo => new
+                .Select(userInfo => new User
                 {
-                    UserInfo = userInfo,
-                    UserAdresse = _context.UserAdresses.FirstOrDefault(a => a.FkUserId == userInfo.FkUserId),
-                    UserAllergies = _context.UserAllergies.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
-                    UserAntecedents = _context.UserAntecedents.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
-                    UserMedications = _context.UserMedications.Where(m => m.FkUserId == userInfo.FkUserId).ToList(),
-                    UserHandicaps = _context.UserHandicaps.Where(h => h.FkUserId == userInfo.FkUserId).ToList()
+                    userInfo = userInfo,
+                    adresse = _context.UserAdresses.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
+                    allergies = _context.UserAllergies.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
+                    antecedents = _context.UserAntecedents.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
+                    medications = _context.UserMedications.Where(m => m.FkUserId == userInfo.FkUserId).ToList(),
+                    handicaps = _context.UserHandicaps.Where(h => h.FkUserId == userInfo.FkUserId).ToList()
                 })
                 .FirstOrDefaultAsync();
 
@@ -172,7 +185,7 @@ namespace CVSante.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Bienvenue));
         }
 
         private bool UserCitoyenExists(int id)
