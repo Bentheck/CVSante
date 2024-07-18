@@ -11,5 +11,7 @@ public partial class UserHandicap
 
     public string Type { get; set; } = null!;
 
+    public int HanId { get; set; }
+
     public virtual UserCitoyen FkUser { get; set; } = null!;
 }

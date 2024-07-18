@@ -201,22 +201,23 @@ public partial class CvsanteContext : DbContext
 
         modelBuilder.Entity<HistoriqueParam>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("HistoriqueParam");
+            entity.HasKey(e => new { e.FkUserId, e.FkParamId });
 
+            entity.ToTable("HistoriqueParam");
+
+            entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
+            entity.Property(e => e.FkParamId).HasColumnName("FK_PARAM_ID");
             entity.Property(e => e.Action).HasMaxLength(450);
             entity.Property(e => e.Date).HasColumnType("datetime");
-            entity.Property(e => e.FkParamId).HasColumnName("FK_PARAM_ID");
-            entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
 
-            entity.HasOne(d => d.FkParam).WithMany()
+            entity.HasOne(d => d.FkParam).WithMany(p => p.HistoriqueParams)
                 .HasForeignKey(d => d.FkParamId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_HistoriqueParam_UserParamedic");
 
-            entity.HasOne(d => d.FkUser).WithMany()
+            entity.HasOne(d => d.FkUser).WithMany(p => p.HistoriqueParams)
                 .HasForeignKey(d => d.FkUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_HistoriqueParam_UserCitoyen");
         });
 
@@ -236,18 +237,17 @@ public partial class CvsanteContext : DbContext
 
         modelBuilder.Entity<UserAdresse>(entity =>
         {
-            entity.HasKey(e => e.FkUserId);
+            entity.HasKey(e => e.AdId).HasName("PK_UserAdresse_1");
 
             entity.ToTable("UserAdresse");
 
-            entity.Property(e => e.FkUserId)
-                .ValueGeneratedNever()
-                .HasColumnName("FK_USER_ID");
+            entity.Property(e => e.AdId).HasColumnName("AdID");
             entity.Property(e => e.AdressePrimaire).HasColumnName("Adresse_Primaire");
             entity.Property(e => e.Appartement).HasMaxLength(450);
             entity.Property(e => e.CodePostal)
                 .HasMaxLength(450)
                 .HasColumnName("Code_Postal");
+            entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
             entity.Property(e => e.NumCivic)
                 .HasMaxLength(450)
                 .HasColumnName("Num_Civic");
@@ -257,42 +257,40 @@ public partial class CvsanteContext : DbContext
                 .HasColumnName("Telphone_adresse");
             entity.Property(e => e.Ville).HasMaxLength(450);
 
-            entity.HasOne(d => d.FkUser).WithOne(p => p.UserAdresse)
-                .HasForeignKey<UserAdresse>(d => d.FkUserId)
+            entity.HasOne(d => d.FkUser).WithMany(p => p.UserAdresses)
+                .HasForeignKey(d => d.FkUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserAdresse_UserCitoyen1");
         });
 
         modelBuilder.Entity<UserAllergy>(entity =>
         {
-            entity.HasKey(e => e.FkUserId);
+            entity.HasKey(e => e.AlId).HasName("PK_UserAllergies_1");
 
-            entity.Property(e => e.FkUserId)
-                .ValueGeneratedNever()
-                .HasColumnName("FK_USER_ID");
+            entity.Property(e => e.AlId).HasColumnName("AlID");
             entity.Property(e => e.AllergieIntolerance)
                 .HasMaxLength(450)
                 .HasColumnName("Allergie_Intolerance");
+            entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
             entity.Property(e => e.Gravite).HasMaxLength(450);
             entity.Property(e => e.Produit).HasMaxLength(450);
 
-            entity.HasOne(d => d.FkUser).WithOne(p => p.UserAllergy)
-                .HasForeignKey<UserAllergy>(d => d.FkUserId)
+            entity.HasOne(d => d.FkUser).WithMany(p => p.UserAllergies)
+                .HasForeignKey(d => d.FkUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserAllergies_UserCitoyen");
         });
 
         modelBuilder.Entity<UserAntecedent>(entity =>
         {
-            entity.HasKey(e => e.FkUserId);
+            entity.HasKey(e => e.AnId);
 
-            entity.Property(e => e.FkUserId)
-                .ValueGeneratedNever()
-                .HasColumnName("FK_USER_ID");
+            entity.Property(e => e.AnId).HasColumnName("AnID");
             entity.Property(e => e.Antecedent).HasMaxLength(2500);
+            entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
 
-            entity.HasOne(d => d.FkUser).WithOne(p => p.UserAntecedent)
-                .HasForeignKey<UserAntecedent>(d => d.FkUserId)
+            entity.HasOne(d => d.FkUser).WithMany(p => p.UserAntecedents)
+                .HasForeignKey(d => d.FkUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserAntecedents_UserCitoyen");
         });
@@ -315,23 +313,23 @@ public partial class CvsanteContext : DbContext
 
         modelBuilder.Entity<UserFamily>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("UserFamily");
+            entity.HasKey(e => new { e.FkFamilyId, e.FkUserId });
 
+            entity.ToTable("UserFamily");
+
+            entity.Property(e => e.FkFamilyId).HasColumnName("FK_FAMILY_ID");
+            entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
             entity.Property(e => e.FamilyRole)
                 .HasMaxLength(450)
                 .HasColumnName("Family_Role");
-            entity.Property(e => e.FkFamilyId).HasColumnName("FK_FAMILY_ID");
-            entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
             entity.Property(e => e.IsFamilyAccount).HasColumnName("Is_family_account");
 
-            entity.HasOne(d => d.FkFamily).WithMany()
+            entity.HasOne(d => d.FkFamily).WithMany(p => p.UserFamilies)
                 .HasForeignKey(d => d.FkFamilyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserFamily_FamilyList");
 
-            entity.HasOne(d => d.FkUser).WithMany()
+            entity.HasOne(d => d.FkUser).WithMany(p => p.UserFamilies)
                 .HasForeignKey(d => d.FkUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserFamily_UserCitoyen");
@@ -339,18 +337,17 @@ public partial class CvsanteContext : DbContext
 
         modelBuilder.Entity<UserHandicap>(entity =>
         {
-            entity.HasKey(e => e.FkUserId);
+            entity.HasKey(e => e.HanId);
 
             entity.ToTable("UserHandicap");
 
-            entity.Property(e => e.FkUserId)
-                .ValueGeneratedNever()
-                .HasColumnName("FK_USER_ID");
+            entity.Property(e => e.HanId).HasColumnName("HanID");
             entity.Property(e => e.Definition).HasMaxLength(2500);
+            entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
             entity.Property(e => e.Type).HasMaxLength(50);
 
-            entity.HasOne(d => d.FkUser).WithOne(p => p.UserHandicap)
-                .HasForeignKey<UserHandicap>(d => d.FkUserId)
+            entity.HasOne(d => d.FkUser).WithMany(p => p.UserHandicaps)
+                .HasForeignKey(d => d.FkUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserHandicap_UserCitoyen");
         });
@@ -386,13 +383,12 @@ public partial class CvsanteContext : DbContext
 
         modelBuilder.Entity<UserMedication>(entity =>
         {
-            entity.HasKey(e => e.FkUserId);
+            entity.HasKey(e => e.MedId);
 
             entity.ToTable("UserMedication");
 
-            entity.Property(e => e.FkUserId)
-                .ValueGeneratedNever()
-                .HasColumnName("FK_USER_ID");
+            entity.Property(e => e.MedId).HasColumnName("MedID");
+            entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
             entity.Property(e => e.MedicamentProduitNat)
                 .HasMaxLength(50)
                 .HasColumnName("Medicament_ProduitNat");
@@ -400,8 +396,8 @@ public partial class CvsanteContext : DbContext
             entity.Property(e => e.Posologie).HasMaxLength(450);
             entity.Property(e => e.Raison).HasMaxLength(450);
 
-            entity.HasOne(d => d.FkUser).WithOne(p => p.UserMedication)
-                .HasForeignKey<UserMedication>(d => d.FkUserId)
+            entity.HasOne(d => d.FkUser).WithMany(p => p.UserMedications)
+                .HasForeignKey(d => d.FkUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserMedicaiton_UserCitoyen");
         });

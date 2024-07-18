@@ -13,15 +13,19 @@ public partial class UserCitoyen
 
     public virtual AspNetUser? FkIdentityUserNavigation { get; set; }
 
-    public virtual UserAdresse? UserAdresse { get; set; }
+    public virtual ICollection<HistoriqueParam> HistoriqueParams { get; set; } = new List<HistoriqueParam>();
 
-    public virtual UserAllergy? UserAllergy { get; set; }
+    public virtual ICollection<UserAdresse> UserAdresses { get; set; } = new List<UserAdresse>();
 
-    public virtual UserAntecedent? UserAntecedent { get; set; }
+    public virtual ICollection<UserAllergy> UserAllergies { get; set; } = new List<UserAllergy>();
 
-    public virtual UserHandicap? UserHandicap { get; set; }
+    public virtual ICollection<UserAntecedent> UserAntecedents { get; set; } = new List<UserAntecedent>();
+
+    public virtual ICollection<UserFamily> UserFamilies { get; set; } = new List<UserFamily>();
+
+    public virtual ICollection<UserHandicap> UserHandicaps { get; set; } = new List<UserHandicap>();
 
     public virtual UserInfo? UserInfo { get; set; }
 
-    public virtual UserMedication? UserMedication { get; set; }
+    public virtual ICollection<UserMedication> UserMedications { get; set; } = new List<UserMedication>();
 }

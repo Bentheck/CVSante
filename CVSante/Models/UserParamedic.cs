@@ -29,5 +29,7 @@ public partial class UserParamedic
 
     public virtual AspNetUser? FkIdentityUserNavigation { get; set; }
 
+    public virtual ICollection<HistoriqueParam> HistoriqueParams { get; set; } = new List<HistoriqueParam>();
+
     public virtual ICollection<CompanyRole> FkRoles { get; set; } = new List<CompanyRole>();
 }

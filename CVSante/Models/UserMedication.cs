@@ -15,5 +15,7 @@ public partial class UserMedication
 
     public string? Raison { get; set; }
 
+    public int MedId { get; set; }
+
     public virtual UserCitoyen FkUser { get; set; } = null!;
 }
