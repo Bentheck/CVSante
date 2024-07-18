@@ -21,5 +21,7 @@ public partial class UserAdresse
 
     public string? TelphoneAdresse { get; set; }
 
+    public int AdId { get; set; }
+
     public virtual UserCitoyen FkUser { get; set; } = null!;
 }

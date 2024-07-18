@@ -25,14 +25,15 @@ namespace CVSante.Controllers
         {
             var profilCitoyen = await _context.UserCitoyens.Select(
                 userInfos => new User
-                {
+                {               
                     userInfo = _context.UserInfos.FirstOrDefault(u => u.FkUserId == userInfos.UserId),
-                    adresse = _context.UserAdresses.FirstOrDefault(a => a.FkUserId == userInfos.UserId),
+                    adresse = _context.UserAdresses.Where(a => a.FkUserId == userInfos.UserId).ToList(),
                     allergies = _context.UserAllergies.Where(al => al.FkUserId == userInfos.UserId).ToList(),
                     antecedents = _context.UserAntecedents.Where(an => an.FkUserId == userInfos.UserId).ToList(),
                     medications = _context.UserMedications.Where(m => m.FkUserId == userInfos.UserId).ToList(),
                     handicaps = _context.UserHandicaps.Where(h => h.FkUserId == userInfos.UserId).ToList()
                 }).ToListAsync();
+            ViewBag.FkIdentityUser = _context.AspNetUsers.FirstOrDefault().Id;
 
             return View(profilCitoyen);
         }
@@ -40,7 +41,14 @@ namespace CVSante.Controllers
         // GET: ProfilCitoyen/Create
         public IActionResult Create()
         {
-            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id");
+            if (ViewBag.FkIdentityUser != null)
+            {
+                return RedirectToAction("Edit", new { id = ViewBag.FkIdentityUser });
+            }
+            else
+            {
+                ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id");
+            }
             return View();
         }
 
