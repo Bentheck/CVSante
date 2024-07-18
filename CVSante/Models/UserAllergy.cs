@@ -13,5 +13,7 @@ public partial class UserAllergy
 
     public string Produit { get; set; } = null!;
 
+    public int AlId { get; set; }
+
     public virtual UserCitoyen FkUser { get; set; } = null!;
 }

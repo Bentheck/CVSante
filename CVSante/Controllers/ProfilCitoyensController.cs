@@ -27,7 +27,7 @@ namespace CVSante.Controllers
                 userInfos => new User
                 {
                     userInfo = _context.UserInfos.FirstOrDefault(u => u.FkUserId == userInfos.UserId),
-                    adresse = _context.UserAdresses.FirstOrDefault(a => a.FkUserId == userInfos.UserId),
+                    adresse = _context.UserAdresses.Where(a => a.FkUserId == userInfos.UserId).ToList(),
                     allergies = _context.UserAllergies.Where(al => al.FkUserId == userInfos.UserId).ToList(),
                     antecedents = _context.UserAntecedents.Where(an => an.FkUserId == userInfos.UserId).ToList(),
                     medications = _context.UserMedications.Where(m => m.FkUserId == userInfos.UserId).ToList(),
