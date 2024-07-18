@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CVSante.Models.UserCitoyen>
+
+@{
+    ViewData["Title"] = "Bienvenue";
+}
+
+<div class="welcome-container">
+    <h2>Bienvenue, <a href="#">Nom de l'utilisateur</a></h2>
+    <p>Nous sommes ravis de vous accueillir sur notre plateforme</p>
+    <div class="profile-picture">
+        <img src="~/images/profile-placeholder.png" alt="Photo de profil">
+        <p>Photo de profil</p>
+    </div>
+    <div class="buttons-container">
+        <button type="button" onclick="location.href='@Url.Action("Formulaire", "Home")'">Ajouter / modifier profil</button>
+        <button type="button" onclick="location.href='@Url.Action("Formulaire", "Home")'">Gestion de la famille</button>
+    </div>
+</div>
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FkIdentityUserNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FkIdentityUserNavigation.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+ *@

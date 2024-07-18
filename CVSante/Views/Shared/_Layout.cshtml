@@ -4,36 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CVSante</title>
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link href="~/css/styles.css" rel="stylesheet"  />
+    <link href="~/css/site.css" rel="stylesheet"  />
 </head>
 <body>
+    <div class="wrapper">
     <header>
         <div class="header-container">
-            <nav>
+            <nav id="navmenu" class="navmenu">
                 <ul class="nav-list">
-                    <li><a asp-controller="Home" asp-action="Index">Accueil</a></li>
-                    <li><NavLink href="/presentation-projet">Présentation du projet</NavLink></li>
-                    <li><NavLink href="/membre-equipe">Membre de l'équipe</NavLink></li>
-                    <li><NavLink href="/faq">FAQ</NavLink></li>
-                    <li class="nav-right"><NavLink href="/inscription">Inscription</NavLink></li>
-                    <li><NavLink href="/connexion">Connexion</NavLink></li>
+                    <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Accueil</a></li>
+                    <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Presentation">Présentation du projet</a></li>
+                    <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="MembreEquipe">Membre de l'équipe</a></li>
+                    <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="FAQ">FAQ</a></li>
+                        <li class="nav-right"><partial name="_LoginPartial" /></li>
+                        
                 </ul>
-            </nav>
+                  
+                </nav>
         </div>
     </header>
-
-    <div class="page">
-        <main>
-            <article>
-                @RenderBody()
-            </article>
+    <div class="container">
+        <main >
+            @RenderBody()
         </main>
     </div>
+  
+    
 
     <footer>
         <div class="container">
             <p>&copy; 2024, cvsante.qc.ca</p>
         </div>
     </footer>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+   
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
