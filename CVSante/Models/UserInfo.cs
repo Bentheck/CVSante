@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CVSante.Models;
 
@@ -21,9 +22,13 @@ public partial class UserInfo
 
     public string Prenom { get; set; } = null!;
 
-    public string TelephoneCell { get; set; } = null!;
+    [Display(Name = "Téléphone Cell")]
+    [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Invalid phone number format.")]
+    public string TelephoneCell { get; set; }
 
     public string? Pronoms { get; set; }
+
+    public string? AutrePrecision { get; set; }
 
     public virtual UserCitoyen FkUser { get; set; } = null!;
 }

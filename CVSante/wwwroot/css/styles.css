@@ -894,3 +894,24 @@ button {
     .form-buttons button {
         padding: 10px 20px;
     }
+
+.nav-link.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.form-check-label {
+    margin-right: 1rem; /* Space between radio button and label text */
+}
+
+.severity-field {
+    margin-top: 1rem;
+}
+
+.radio-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 1rem; /* Adjust spacing between items as needed */
+}

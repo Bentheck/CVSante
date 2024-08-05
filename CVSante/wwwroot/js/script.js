@@ -1,7 +1,7 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
 
     function showDetails(name, role, description) {
-        var details = `
+        let details = `
             <h2>${name}</h2>
             <p><strong>${role}</strong></p>
             <p>${description}</p>
@@ -20,15 +20,15 @@
 
     document.querySelectorAll('.team-member').forEach(function (element) {
         element.addEventListener('click', function () {
-            var name = element.dataset.name;
-            var role = element.dataset.role;
-            var description = element.dataset.description;
+            let name = element.dataset.name;
+            let role = element.dataset.role;
+            let description = element.dataset.description;
             showDetails(name, role, description);
         });
     });
 
     // Vérifiez l'existence de l'élément avant d'ajouter l'écouteur d'événements
-    var closeButton = document.querySelector('.modal .close');
+    let closeButton = document.querySelector('.modal .close');
     if (closeButton) {
         closeButton.addEventListener('click', closeModal);
     }

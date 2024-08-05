@@ -1,18 +1,315 @@
-﻿@model CVSante.Models.UserCitoyen
+﻿@model CVSante.ViewModels.User
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="~/js/ProfilCitoyenCreate.js" asp-append-version="true" defer></script>
 
-<div class="row">
-    <div class="col-md-4">
-        <h4>Voulez-vous vraiment créer un profil?</h4>
-        <form asp-action="Create">
-            <div class="buttons-container">
-                <button type="submit" value="Oui" class="btn btn-primary">Créer</button>
-                <button class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Bienvenue", "ProfilCitoyen")'">Annuler</button>
+<h2>Create</h2>
+
+<form asp-action="Create" asp-controller="ProfilCitoyen" method="post" class="form-horizontal">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <!-- User Info -->
+                <div id="userinfo" class="section">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h4>User Info</h4>
+                        </div>
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <!--- Nom --->
+                            <div class="form-group row">
+                                <label asp-for="UserInfo.Nom" class="col-md-2 col-form-label">Nom</label>
+                                <div class="col-md-10">
+                                    <input asp-for="UserInfo.Nom" class="form-control" />
+                                    <span asp-validation-for="UserInfo.Nom" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!--- Prénom --->
+                            <div class="form-group row">
+                                <label asp-for="UserInfo.Prenom" class="col-md-2 col-form-label">Prenom</label>
+                                <div class="col-md-10">
+                                    <input asp-for="UserInfo.Prenom" class="form-control" />
+                                    <span asp-validation-for="UserInfo.Prenom" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!--- Date Naissance--->
+                            <div class="form-group row">
+                                <label asp-for="UserInfo.DateNaissance" class="col-md-2 col-form-label">Date Naissance</label>
+                                <div class="col-md-10">
+                                    <input asp-for="UserInfo.DateNaissance" class="form-control" type="date" />
+                                    <span asp-validation-for="UserInfo.DateNaissance" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!--- Cell --->
+                            <div class="form-group row">
+                                <label asp-for="UserInfo.TelephoneCell" class="col-md-2 col-form-label">Téléphone Cell</label>
+                                <div class="col-md-10">
+                                    <input asp-for="UserInfo.TelephoneCell" class="form-control" id="telephoneCell" />
+                                    <span asp-validation-for="UserInfo.TelephoneCell" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!--- Sexe Naissance --->
+                            <div class="form-group row align-items-center">
+                                <label class="col-md-2 col-form-label">Sexe à la naissance</label>
+                                <div class="col-md-10 d-flex align-items-center">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="sexeHomme" name="UserInfo.Sexe" value="Homme" />
+                                        <label class="form-check-label" for="sexeHomme">Homme</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="sexeFemme" name="UserInfo.Sexe" value="Femme" />
+                                        <label class="form-check-label" for="sexeFemme">Femme</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="sexeAutre" name="UserInfo.Sexe" value="Autre" />
+                                        <label class="form-check-label" for="sexeAutre">Autre</label>
+                                    </div>
+                                    <div class="form-group mb-0 ms-3" id="autrePrecisionGroup" style="display: none;">
+                                        <input type="text" class="form-control" id="autrePrecision" name="UserInfo.AutrePrecision" placeholder="Précisez">
+                                    </div>
+                                    <span asp-validation-for="UserInfo.Sexe" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!--- Pronoms --->
+                            <div class="form-group row">
+                                <label asp-for="UserInfo.Pronoms" class="col-md-2 col-form-label">Pronoms</label>
+                                <div class="col-md-10">
+                                    <input asp-for="UserInfo.Pronoms" class="form-control" />
+                                    <span asp-validation-for="UserInfo.Pronoms" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!--- Poids --->
+                            <div class="form-group row">
+                                <label asp-for="UserInfo.Poids" class="col-md-2 col-form-label">Poids</label>
+                                <div class="col-md-10">
+                                    <input asp-for="UserInfo.Poids" class="form-control" />
+                                    <span asp-validation-for="UserInfo.Poids" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!--- Taille --->
+                            <div class="form-group row">
+                                <label asp-for="UserInfo.Taille" class="col-md-2 col-form-label">Taille</label>
+                                <div class="col-md-10">
+                                    <input asp-for="UserInfo.Taille" class="form-control" />
+                                    <span asp-validation-for="UserInfo.Taille" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!--- TypeSanguin --->
+                            <div class="form-group row">
+                                <label asp-for="UserInfo.TypeSanguin" class="col-md-2 col-form-label">Type Sanguin</label>
+                                <div class="col-md-10">
+                                    <select asp-for="UserInfo.TypeSanguin" class="form-control">
+                                        <option value="">Choisir votre type sanguin</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                    <span asp-validation-for="UserInfo.TypeSanguin" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Addresses -->
+                <div id="address" class="section" style="display:none;">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h4>Addresses</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="address-fields">
+                                <!-- Initial address field -->
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label">Adresse Primaire</label>
+                                            <div class="col-md-10">
+                                                <input type="checkbox" name="Addresses[0].AdressePrimaire" class="address-primary" value="true"  />
+                                                <span style="display: none; color: red;">Adresse primaire déja sélectionnée</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label">Num Civic</label>
+                                            <div class="col-md-10">
+                                                <input type="text" name="Addresses[0].NumCivic" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label">Rue</label>
+                                            <div class="col-md-10">
+                                                <input type="text" name="Addresses[0].Rue" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label">Appartement</label>
+                                            <div class="col-md-10">
+                                                <input type="text" name="Addresses[0].Appartement" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label">Code Postal</label>
+                                            <div class="col-md-10">
+                                                <input type="text" name="Addresses[0].CodePostal" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label">Ville</label>
+                                            <div class="col-md-10">
+                                                <input type="text" name="Addresses[0].Ville" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label">Téléphone filaire</label>
+                                            <div class="col-md-10">
+                                                <input type="text" name="Addresses[0].TelphoneAdresse" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="addDynamicField('address')">Ajoutez Addresse</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Antecedents Section -->
+                <div id="antecedent" class="section" style="display:none;">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h4>Antécédents</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="antecedent-checkboxes">
+                                <!-- Checkboxes for Antecedents -->
+                                @foreach (var item in new[] { "Aucun", "Asthme", "AVC", "Diabète", "Hypertension", "Maladie cardiaque", "Hypercholestérolémie", "Problèmes abdominaux", "Néoplasie", "Psychiatrie", "Autre" })
+                                {
+                                    <div class="form-group d-flex align-items-center">
+                                        <input type="checkbox" id="@item" name="antecedents" class="form-check-input" value="@item" onclick="updateAntecedentsString()" />
+                                        <label for="@item" class="form-check-label ml-2">@item</label>
+                                    </div>
+                                }
+                            </div>
+                            <!-- Manual entry for "Autre" -->
+                            <div id="manual-entry" style="display:none;">
+                                <div class="form-group">
+                                    <label for="autre-details">Veuillez préciser :</label>
+                                    <input type="text" id="autre-details" name="autre-details" class="form-control" oninput="updateAntecedentsString()" />
+                                </div>
+                            </div>
+                            <!-- Hidden field to store combined antecedents -->
+                            <input type="hidden" id="antecedent-aggregate" name="antecedent.antecedent" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Allergies -->
+                <div id="allergy" class="section" style="display:none;">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h4>Allergies</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="allergy-fields">
+                                <!-- Placeholder for dynamically added allergy fields -->
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="addDynamicField('allergy')">Ajoutez allergie/intolérance</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Handicaps -->
+                <div id="handicap" class="section" style="display:none;">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h4>Handicaps</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="handicap-fields">
+                                <!-- Placeholder for dynamically added handicap fields -->
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="addDynamicField('handicap')">Ajoutez Handicap</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medication -->
+                <div id="medication" class="section" style="display:none;">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h4>Medications</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="medication-fields">
+                                <!-- Placeholder for dynamically added medication fields -->
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="addDynamicField('medication')">Ajouté Médication/Produit Naturel</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
+
+            <!-- Navigation List Box and Buttons -->
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h4>Navigation</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a id="nav-userinfo" class="nav-link active" href="#" onclick="showSection('userinfo')">User Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-address" class="nav-link" href="#" onclick="showSection('address')">Addresses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-antecedent" class="nav-link" href="#" onclick="showSection('antecedent')">Antécédents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-allergy" class="nav-link" href="#" onclick="showSection('allergy')">Allergies</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-handicap" class="nav-link" href="#" onclick="showSection('handicap')">Handicaps</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-medication" class="nav-link" href="#" onclick="showSection('medication')">Medications</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons and Save Button -->
+                <div class="card">
+                    <div class="card-body text-center">
+                        <button id="prev-btn" type="button" class="btn btn-primary" onclick="previousSection()">Previous</button>
+                        <button id="next-btn" type="button" class="btn btn-primary" onclick="nextSection()">Next</button>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</form>
+
 

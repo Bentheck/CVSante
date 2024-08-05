@@ -14,6 +14,11 @@
     <Content Remove="wwwroot\assets\img\fondecran.jpg" />
     <Content Remove="wwwroot\assets\img\imageCVsante1.png" />
     <Content Remove="wwwroot\assets\img\photoTakwa.jpg" />
+    <Content Remove="wwwroot\js\ProfilCitoyenCreate.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\ProfilCitoyenCreate.js" />
   </ItemGroup>
 
   <ItemGroup>
