@@ -2,13 +2,13 @@
 
 namespace CVSante.ViewModels
 {
-    internal class User
+    public class User
     {
-        public UserInfo userInfo { get; set; }
-        public IEnumerable<UserAdresse> adresse { get; set; }
-        public IEnumerable<UserAllergy> allergies { get; set; }
-        public IEnumerable<UserAntecedent> antecedents { get; set; }
-        public IEnumerable<UserMedication> medications { get; set; }
-        public IEnumerable<UserHandicap> handicaps { get; set; }
+        public UserInfo UserInfo { get; set; } = null!;
+        public List<UserAdresse> Addresses { get; set; } = null!;
+        public List<UserAllergy>? Allergies { get; set; }
+        public UserAntecedent? Antecedent { get; set; } = null!;
+        public List<UserMedication>? Medications { get; set; }
+        public List<UserHandicap>? Handicaps { get; set; }
     }
 }
