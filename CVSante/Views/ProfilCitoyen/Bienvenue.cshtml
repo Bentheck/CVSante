@@ -1,12 +1,22 @@
-﻿@model IEnumerable<CVSante.Models.UserCitoyen>
+﻿@model IEnumerable<CVSante.ViewModels.User>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Bienvenue";
 }
 
-<h1>Index</h1>
-
-<p>
+<div class="welcome-container">
+    <h2>Bienvenue, <a href="#">Nom de l'utilisateur</a></h2>
+    <p>Nous sommes ravis de vous accueillir sur notre plateforme</p>
+    <div class="profile-picture">
+        <img src="~/images/profile-placeholder.png" alt="Photo de profil">
+        <p>Photo de profil</p>
+    </div>
+    <div class="buttons-container">
+        <button type="button" onclick="location.href='@Url.Action("CreateId", "ProfilCitoyen")'">Ajouter / modifier profil</button>
+@*         <button type="button" onclick="location.href='@Url.Action("Formulaire", "Home")'">Gestion de la famille</button> *@
+    </div>
+</div>
+@* <p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -33,3 +43,4 @@
 }
     </tbody>
 </table>
+ *@

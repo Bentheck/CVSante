@@ -5,7 +5,7 @@ namespace CVSante.Models;
 
 public partial class HistoriqueParam
 {
-    public int? FkUserId { get; set; }
+    public int FkUserId { get; set; }
 
     public int FkParamId { get; set; }
 
@@ -15,5 +15,5 @@ public partial class HistoriqueParam
 
     public virtual UserParamedic FkParam { get; set; } = null!;
 
-    public virtual UserCitoyen? FkUser { get; set; }
+    public virtual UserCitoyen FkUser { get; set; } = null!;
 }
