@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CVSante.Models;
 using CVSante.ViewModels;
+using CVSante.Services;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration.UserSecrets;
@@ -15,11 +16,13 @@ namespace CVSante.Controllers
     {
         private readonly CvsanteContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserValidation _UserValidation;
 
-        public ProfilCitoyenController(CvsanteContext context, UserManager<IdentityUser> userManager)
+        public ProfilCitoyenController(CvsanteContext context, UserManager<IdentityUser> userManager, UserValidation userValidation)
         {
             _context = context;
             _userManager = userManager;
+            _UserValidation = userValidation;
         }
 
         // GET: ProfilCitoyen
@@ -32,31 +35,51 @@ namespace CVSante.Controllers
             if (userCitoyen != null)
             {
                 TempData["UserID"] = userCitoyen.UserId;
+
+                var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == userCitoyen.UserId);
+
+                if (userInfo != null)
+                {
+                    TempData["Profil"] = 1;
+                }
+                else
+                {
+                    TempData["Profil"] = null;
+                }
             }
             else
             {
                 TempData["UserID"] = null;
+                TempData["Profil"] = null;
             }
 
-            var profilCitoyen = await _context.UserCitoyens.Select(
-                userInfos => new User
+            var profilCitoyen = _context.UserCitoyens.Select(
+                userInfos => new
                 {
                     UserInfo = _context.UserInfos.First(u => u.FkUserId == userInfos.UserId),
-                    Addresses = _context.UserAdresses.Where(a => a.FkUserId == userInfos.UserId).ToList(),
-                    Allergies = _context.UserAllergies.Where(al => al.FkUserId == userInfos.UserId).ToList(),
+                    Addresses = _context.UserAdresses.Where(a => a.FkUserId == userInfos.UserId),
+                    Allergies = _context.UserAllergies.Where(al => al.FkUserId == userInfos.UserId),
                     Antecedent = _context.UserAntecedents.First(an => an.FkUserId == userInfos.UserId),
-                    Medications = _context.UserMedications.Where(m => m.FkUserId == userInfos.UserId).ToList(),
-                    Handicaps = _context.UserHandicaps.Where(h => h.FkUserId == userInfos.UserId).ToList()
-                }).ToListAsync();
+                    Medications = _context.UserMedications.Where(m => m.FkUserId == userInfos.UserId),
+                    Handicaps = _context.UserHandicaps.Where(h => h.FkUserId == userInfos.UserId)
+                });
 
-            return View(profilCitoyen);
+
+            return View();
         }
 
         public async Task<IActionResult> CreateId()
         {
             if (TempData["UserID"] != null)
             {
+                if (TempData["Profil"] == null)
+                { 
+                return RedirectToAction("create", new { id = TempData["UserID"] });
+                }
+                else
+                {
                 return RedirectToAction("Edit", new { id = TempData["UserID"] });
+                }
             }
             else
             {
@@ -72,9 +95,9 @@ namespace CVSante.Controllers
         }
 
 
-            // GET: ProfilCitoyen/Create
-            public async Task<IActionResult> Create(int id)
-            {
+        // GET: ProfilCitoyen/Create
+        public async Task<IActionResult> Create(int id)
+        {
 
             var user = new User
             {
@@ -87,7 +110,7 @@ namespace CVSante.Controllers
             };
 
             return View(user);
-            
+
         }
 
         // POST: ProfilCitoyen/Create
@@ -137,85 +160,94 @@ namespace CVSante.Controllers
             }
 
 
+            var validationResult = _UserValidation.ValidateUserProfile(userViewModel);
 
+            if (!validationResult.IsValid)
+            {
+                // Add errors to ModelState
+                foreach (var error in validationResult.Errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
 
+                return View(userViewModel);
+            }
 
             // Check if the model state is valid
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(userViewModel);
-            }
-
-            try
-            {
-                // Fetch the UserId from TempData
-                if (TempData["UserID"] == null)
+                try
                 {
-                    ModelState.AddModelError("", "User ID is missing. Unable to save the data.");
+                    // Fetch the UserId from TempData
+                    if (TempData["UserID"] == null)
+                    {
+                        ModelState.AddModelError("", "User ID is missing. Unable to save the data.");
+                        return View(userViewModel);
+                    }
+
+                    var userId = (int)TempData["UserID"];
+
+                    // Ensure UserInfo has the correct FkUserId and add to context
+                    if (userViewModel.UserInfo != null)
+                    {
+                        userViewModel.UserInfo.FkUserId = userId;
+                        _context.Add(userViewModel.UserInfo);
+                    }
+
+                    // Add Addresses
+                    foreach (var adresse in userViewModel.Addresses ?? Enumerable.Empty<UserAdresse>())
+                    {
+                        adresse.FkUserId = userId;
+                        _context.Add(adresse);
+                    }
+
+                    // Add Allergies
+                    foreach (var allergy in userViewModel.Allergies ?? Enumerable.Empty<UserAllergy>())
+                    {
+                        allergy.FkUserId = userId;
+                        _context.Add(allergy);
+                    }
+
+                    // Add Antecedent if it exists
+                    if (userViewModel.Antecedent != null)
+                    {
+                        userViewModel.Antecedent.FkUserId = userId;
+                        _context.Add(userViewModel.Antecedent);
+                    }
+
+                    // Add Medications
+                    foreach (var medication in userViewModel.Medications ?? Enumerable.Empty<UserMedication>())
+                    {
+                        medication.FkUserId = userId;
+                        _context.Add(medication);
+                    }
+
+                    // Add Handicaps
+                    foreach (var handicap in userViewModel.Handicaps ?? Enumerable.Empty<UserHandicap>())
+                    {
+                        handicap.FkUserId = userId;
+                        _context.Add(handicap);
+                    }
+
+                    // Save all changes
+                    await _context.SaveChangesAsync();
+
+                    // Redirect to the Edit page
+                    return RedirectToAction("Edit", new { id = userId });
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception (consider using a logging framework)
+                    ModelState.AddModelError("", "An error occurred while creating the profile. Please try again.");
                     return View(userViewModel);
                 }
-
-                var userId = (int)TempData["UserID"];
-
-                // Ensure UserInfo has the correct FkUserId and add to context
-                if (userViewModel.UserInfo != null)
-                {
-                    userViewModel.UserInfo.FkUserId = userId;
-                    _context.Add(userViewModel.UserInfo);
-                }
-
-                // Add Addresses
-                foreach (var adresse in userViewModel.Addresses ?? Enumerable.Empty<UserAdresse>())
-                {
-                    adresse.FkUserId = userId;
-                    _context.Add(adresse);
-                }
-
-                // Add Allergies
-                foreach (var allergy in userViewModel.Allergies ?? Enumerable.Empty<UserAllergy>())
-                {
-                    allergy.FkUserId = userId;
-                    _context.Add(allergy);
-                }
-
-                // Add Antecedent if it exists
-                if (userViewModel.Antecedent != null)
-                {
-                    userViewModel.Antecedent.FkUserId = userId;
-                    _context.Add(userViewModel.Antecedent);
-                }
-
-                // Add Medications
-                foreach (var medication in userViewModel.Medications ?? Enumerable.Empty<UserMedication>())
-                {
-                    medication.FkUserId = userId;
-                    _context.Add(medication);
-                }
-
-                // Add Handicaps
-                foreach (var handicap in userViewModel.Handicaps ?? Enumerable.Empty<UserHandicap>())
-                {
-                    handicap.FkUserId = userId;
-                    _context.Add(handicap);
-                }
-
-                // Save all changes
-                await _context.SaveChangesAsync();
-
-                // Redirect to the Edit page
-                return RedirectToAction("Edit", new { id = userId });
             }
-            catch (Exception ex)
-            {
-                // Log the exception (consider using a logging framework)
-                ModelState.AddModelError("", "An error occurred while creating the profile. Please try again.");
-                return View(userViewModel);
-            }
+            // If we got this far, something failed, redisplay the form
+            return View(userViewModel);
         }
 
 
 
-        // GET: ProfilCitoyen/Edit/5
         // GET: ProfilCitoyen/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -251,7 +283,7 @@ namespace CVSante.Controllers
         {
             if (id != userViewModel.UserInfo.FkUserId)
             {
-                return NotFound();  
+                return NotFound();
             }
 
             // Remove `FkUser` from ModelState if it exists to avoid validation errors
@@ -294,6 +326,18 @@ namespace CVSante.Controllers
                 }
             }
 
+            var validationResult = _UserValidation.ValidateUserProfile(userViewModel);
+
+            if (!validationResult.IsValid)
+            {
+                // Add errors to ModelState
+                foreach (var error in validationResult.Errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
+
+                return View(userViewModel);
+            }
 
             if (ModelState.IsValid)
             {
@@ -357,7 +401,7 @@ namespace CVSante.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserCitoyenExists(id))
+                    if (id == null)
                     {
                         return NotFound();
                     }
@@ -375,51 +419,48 @@ namespace CVSante.Controllers
 
         // GET: ProfilCitoyen/Delete/5
         public async Task<IActionResult> Delete(int? id)
+        {
+            ViewData["ID"] = id;
+            if (id == null)
             {
-                if (id == null)
-                {
-                    return NotFound();
-                }
-
-                var userCitoyen = await _context.UserInfos
-                    .Where(u => u.FkUserId == id)
-                    .Select(userInfo => new User
-                    {
-                        UserInfo = userInfo,
-                        Addresses = _context.UserAdresses.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
-                        Allergies = _context.UserAllergies.Where(a => a.FkUserId == userInfo.FkUserId).ToList(),
-                        Antecedent = _context.UserAntecedents.First(a => a.FkUserId == userInfo.FkUserId),
-                        Medications = _context.UserMedications.Where(m => m.FkUserId == userInfo.FkUserId).ToList(),
-                        Handicaps = _context.UserHandicaps.Where(h => h.FkUserId == userInfo.FkUserId).ToList()
-                    })
-                    .FirstOrDefaultAsync();
-
-                if (userCitoyen == null)
-                {
-                    return NotFound();
-                }
-
-                return View(userCitoyen);
+                return NotFound();
             }
 
-            // POST: ProfilCitoyen/Delete/5
-            [HttpPost, ActionName("Delete")]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> DeleteConfirmed(int id)
+            var user = new User
             {
-                var userCitoyen = await _context.UserInfos.FindAsync(id);
-                if (userCitoyen != null)
-                {
-                    _context.UserInfos.Remove(userCitoyen);
-                    await _context.SaveChangesAsync();
-                }
+                UserInfo = await _context.UserInfos.FirstAsync(u => u.FkUserId == id),
+                Addresses = await _context.UserAdresses.Where(a => a.FkUserId == id).ToListAsync(),
+                Allergies = await _context.UserAllergies.Where(a => a.FkUserId == id).ToListAsync(),
+                Antecedent = await _context.UserAntecedents.FirstAsync(a => a.FkUserId == id),
+                Medications = await _context.UserMedications.Where(m => m.FkUserId == id).ToListAsync(),
+                Handicaps = await _context.UserHandicaps.Where(h => h.FkUserId == id).ToListAsync()
+            };
 
-                return RedirectToAction(nameof(Bienvenue));
+            if (user.UserInfo == null)
+            {
+                return NotFound();
             }
 
-            private bool UserCitoyenExists(int id)
-            {
-                return _context.UserInfos.Any(e => e.FkUserId == id);
-            }
+            return View();
+        }
+
+        // POST: ProfilCitoyen/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int? id)
+        {
+            // Remove related entities except UserCitoyen
+            _context.UserAdresses.RemoveRange(_context.UserAdresses.Where(a => a.FkUserId == id));
+            _context.UserAllergies.RemoveRange(_context.UserAllergies.Where(a => a.FkUserId == id));
+            _context.UserAntecedents.RemoveRange(_context.UserAntecedents.Where(a => a.FkUserId == id));
+            _context.UserMedications.RemoveRange(_context.UserMedications.Where(m => m.FkUserId == id));
+            _context.UserHandicaps.RemoveRange(_context.UserHandicaps.Where(h => h.FkUserId == id));
+            _context.UserInfos.RemoveRange(_context.UserInfos.Where(u => u.FkUserId == id));
+
+            // Save changes
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Bienvenue));
         }
     }
+}

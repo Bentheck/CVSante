@@ -75,7 +75,7 @@ function updateAntecedentsString() {
     const manualEntryField = document.getElementById('autre-details');
 
     let antecedentsText = Array.from(checkedCheckboxes)
-        .map(checkbox => checkbox.value)
+        .map(checkbox => checkbox.value);
 
     if (document.querySelector('input[name="antecedents"][value="Autre"]').checked) {
         const manualEntryText = manualEntryField.value.trim();
@@ -85,6 +85,12 @@ function updateAntecedentsString() {
     }
 
     document.getElementById('antecedent-aggregate').value = antecedentsText.join('/');
+}
+
+// Function to be called on form submission
+function handleSubmit(event) {
+    updateAntecedentsString(); // Ensure antecedents are updated before form submission
+    // Optionally: You can add validation or other submission logic here
 }
 
 showSection(sections[0]);
@@ -97,6 +103,10 @@ document.querySelectorAll('input[name="antecedents"]').forEach(checkbox => {
 });
 
 document.getElementById('autre-details').addEventListener('input', updateAntecedentsString);
+
+// Add event listener to the form
+document.querySelector('form').addEventListener('submit', handleSubmit);
+
 
 
 //Fonctions assurant qu'une seule adresse primaire est cochée//
