@@ -12,21 +12,24 @@
     <div class="container">
         <div class="row">
             <div class="col-md-9">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="card-header text-danger">
+                </div>
                 <!-- User Info -->
+                </div>
                 <div id="userinfo" class="section">
                     <div class="card mb-3">
                         <div class="card-header">
                             <h4>User Info</h4>
                         </div>
                         <div class="card-body">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                             <!--- Nom --->
                             <div class="form-group row">
                                 <label asp-for="UserInfo.Nom" class="col-md-2 col-form-label">Nom</label>
                                 <div class="col-md-10">
                                     <input asp-for="UserInfo.Nom" class="form-control" />
-                                    <span asp-validation-for="UserInfo.Nom" class="text-danger"></span>
+                                    <span asp-validation-for="UserInfo.Nom" class="visually-hidden"></span>
                                 </div>
                             </div>
 
@@ -35,7 +38,7 @@
                                 <label asp-for="UserInfo.Prenom" class="col-md-2 col-form-label">Prenom</label>
                                 <div class="col-md-10">
                                     <input asp-for="UserInfo.Prenom" class="form-control" />
-                                    <span asp-validation-for="UserInfo.Prenom" class="text-danger"></span>
+                                    <span asp-validation-for="UserInfo.Prenom" class="visually-hidden"></span>
                                 </div>
                             </div>
 
@@ -44,7 +47,7 @@
                                 <label asp-for="UserInfo.DateNaissance" class="col-md-2 col-form-label">Date Naissance</label>
                                 <div class="col-md-10">
                                     <input asp-for="UserInfo.DateNaissance" class="form-control" type="date" />
-                                    <span asp-validation-for="UserInfo.DateNaissance" class="text-danger"></span>
+                                    <span asp-validation-for="UserInfo.DateNaissance" class="visually-hidden"></span>
                                 </div>
                             </div>
 
@@ -53,7 +56,7 @@
                                 <label asp-for="UserInfo.TelephoneCell" class="col-md-2 col-form-label">Téléphone Cell</label>
                                 <div class="col-md-10">
                                     <input asp-for="UserInfo.TelephoneCell" class="form-control" id="telephoneCell" />
-                                    <span asp-validation-for="UserInfo.TelephoneCell" class="text-danger"></span>
+                                    <span asp-validation-for="UserInfo.TelephoneCell" class="visually-hidden"></span>
                                 </div>
                             </div>
 
@@ -76,7 +79,7 @@
                                     <div class="form-group mb-0 ms-3" id="autrePrecisionGroup" style="display: none;">
                                         <input type="text" class="form-control" id="autrePrecision" name="UserInfo.AutrePrecision" placeholder="Précisez">
                                     </div>
-                                    <span asp-validation-for="UserInfo.Sexe" class="text-danger"></span>
+                                    <span asp-validation-for="UserInfo.Sexe" class="visually-hidden"></span>
                                 </div>
                             </div>
 
@@ -85,7 +88,7 @@
                                 <label asp-for="UserInfo.Pronoms" class="col-md-2 col-form-label">Pronoms</label>
                                 <div class="col-md-10">
                                     <input asp-for="UserInfo.Pronoms" class="form-control" />
-                                    <span asp-validation-for="UserInfo.Pronoms" class="text-danger"></span>
+                                    <span asp-validation-for="UserInfo.Pronoms" class="visually-hidden"></span>
                                 </div>
                             </div>
 
@@ -122,7 +125,7 @@
                                         <option value="O+">O+</option>
                                         <option value="O-">O-</option>
                                     </select>
-                                    <span asp-validation-for="UserInfo.TypeSanguin" class="text-danger"></span>
+                                    <span asp-validation-for="UserInfo.TypeSanguin"></span>
                                 </div>
                             </div>
                         </div>
