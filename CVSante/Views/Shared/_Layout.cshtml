@@ -1,52 +1,94 @@
 ﻿<!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CVSante</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CVSante</title>
+    <!-- Favicons -->
+    <link href="~/assets/img/favicon.png" rel="icon">
+    <link href="~/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-    <link href="~/css/styles.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-</head>
-<body>
-    <div>
-        <header>
-            <div class="header-container">
-                <nav id="navmenu" class="navmenu">
-                    <ul class="nav-list d-inline-flex">
-                        <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Accueil</a></li>
-                        <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Presentation">Présentation du projet</a></li>
-                        <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="MembreEquipe">Membre de l'équipe</a></li>
-                        <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="FAQ">FAQ</a></li>
-                        <li><a class="nav-link" asp-area="" asp-controller="ProfilCitoyen" asp-action="Bienvenue">Profil</a></li>
-                        <li class="nav-right d-inline-flex"><partial name="_LoginPartial" /></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
-        <div class="content">
-            <main class="container">
-                @RenderBody()
-            </main>
-        </div>
-        <footer>
-            <div class="container">
-                <p>&copy; 2024, cvsante.qc.ca</p>
-            </div>
-        </footer>
-    </div>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    
+    <!-- Vendor CSS Files -->
+    <link href="~/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="~/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="~/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-    <!-- Include jQuery and Inputmask libraries from CDN -->
+    <!-- Main CSS File -->
+    <link href="~/css/styles.css" rel="stylesheet">
+    <link href="~/css/site.css" rel="stylesheet">
+    <link href="~/css/main.css" rel="stylesheet">
+    
+    <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+
+</head>
+<body class="index-page">
+    <header id="header" class="header d-flex align-items-center fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top bg-white">
+        
+            <div class="container-fluid">
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand d-flex align-items-center">
+                    <img src="~/assets/img/C.png" alt="C" class="logo-img">
+                    <span class="vsante">VSANTE</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Presentation">Présentation du projet</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="MembreEquipe">Membre de l'équipe</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="FAQ">FAQ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="ProfilCitoyen" asp-action="Bienvenue">Profil</a>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="main">
+       
+        @RenderBody()
+    </main>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            <p>&copy; 2024, cvsante.qc.ca</p>
+        </div>
+    </footer>
+    <!-- Vendor JS Files -->
+    <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/vendor/php-email-form/validate.js"></script>
+    <script src="~/assets/vendor/aos/aos.js"></script>
+    <script src="~/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="~/assets/vendor/swiper/swiper-bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
-
-    <!-- Include local scripts -->
+    <!-- Main JS File -->
+   
     <script src="~/js/site.js" asp-append-version="true"></script>
+   
+    <script src="~/js/main.js" asp-append-version="true"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
-    @RenderSection("scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -12,15 +12,128 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-/*html {
+html {
   position: relative;
   min-height: 100%;
-}*/
+}
 
 body {
   margin-bottom: 60px;
 }
-.text-center {
-    text-align: center;
+
+main {
+    flex: 1;
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* Styles pour améliorer l'espacement dans la barre de navigation */
+.navbar {
+    padding: 0.5rem 1rem; /* Ajustez l'espacement autour de la barre de navigation */
 }
 
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 40px; /* Ajustez la taille de l'image du logo */
+    margin-right: 10px; /* Espacement entre le logo et le texte */
+}
+
+.vsante {
+    font-size: 1.5rem; /* Ajustez la taille du texte du logo */
+    font-weight: bold;
+}
+
+.navbar-nav {
+    margin-left: auto; /* Pousse les éléments de navigation à droite */
+}
+
+.nav-item {
+    margin-left: 15px; /* Espacement entre les éléments de navigation */
+}
+
+.nav-link {
+    padding: 0.5rem 0.75rem; /* Ajustez l'espacement autour des liens de navigation */
+}
+
+
+.sitename {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #000;
+}
+
+
+.logo-img {
+    height: 3rem;
+    width: auto;
+    margin-right: -1.2rem;
+}
+
+.vsante {
+    margin-left: -1.2rem;
+}
+.slogan-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    top: 20%;
+    transform: translateY(-50%);
+    padding: 0 40px;
+    text-align: center;
+    animation: fadeIn 3s ease-in-out;
+}
+
+
+.slogan-part1,
+.slogan-part2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(128, 128, 128, 0.7);
+    opacity: inherit;
+    margin: 0 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: moveIn 3s ease-in-out;
+}
+
+.slogan-part1 {
+    color: #3B21B8;
+    animation-delay: 0s;
+}
+
+.slogan-part2 {
+    color: #28A745;
+    animation-delay: 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes moveIn {
+    from {
+        transform: translateX(-50px);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
