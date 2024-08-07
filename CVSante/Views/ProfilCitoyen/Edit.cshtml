@@ -57,7 +57,7 @@
                             <div class="form-group row">
                                 <label asp-for="UserInfo.TelephoneCell" class="col-md-2 col-form-label">Téléphone Cell</label>
                                 <div class="col-md-10">
-                                    <input asp-for="UserInfo.TelephoneCell" class="form-control" id="telephoneCell" />
+                                    <input asp-for="UserInfo.TelephoneCell" class="form-control phone-mask" />
                                     <span asp-validation-for="UserInfo.TelephoneCell" class="visually-hidden"></span>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                             <div class="form-group row">
                                 <label asp-for="UserInfo.Poids" class="col-md-2 col-form-label">Poids</label>
                                 <div class="col-md-10">
-                                    <input asp-for="UserInfo.Poids" class="form-control" />
+                                    <input asp-for="UserInfo.Poids" class="form-control poid-mask" />
                                     <span asp-validation-for="UserInfo.Poids" class="visually-hidden"></span>
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
                             <div class="form-group row">
                                 <label asp-for="UserInfo.Taille" class="col-md-2 col-form-label">Taille</label>
                                 <div class="col-md-10">
-                                    <input asp-for="UserInfo.Taille" class="form-control" />
+                                    <input asp-for="UserInfo.Taille" class="form-control taille-mask" />
                                     <span asp-validation-for="UserInfo.Taille" class="visually-hidden"></span>
                                 </div>
                             </div>
@@ -179,7 +179,7 @@
                                             <div class="form-group row">
                                                 <label class="col-md-2 col-form-label">Code Postal</label>
                                                 <div class="col-md-10">
-                                                    <input type="text" name="Addresses[@i].CodePostal" class="form-control" value="@address.CodePostal" />
+                                                    <input type="text" name="Addresses[@i].CodePostal" class="form-control CP-mask" value="@address.CodePostal" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -191,7 +191,7 @@
                                             <div class="form-group row">
                                                 <label class="col-md-2 col-form-label">Téléphone filaire</label>
                                                 <div class="col-md-10">
-                                                    <input type="text" name="Addresses[@i].TelphoneAdresse" class="form-control" value="@address.TelphoneAdresse" />
+                                                    <input type="text" name="Addresses[@i].TelphoneAdresse" class="form-control phone-mask" value="@address.TelphoneAdresse" />
                                                 </div>
                                             </div>
                                             <div class="card-footer d-flex justify-content-between align-items-center">
