@@ -103,10 +103,10 @@ namespace CVSante.Controllers
             {
                 UserInfo = new UserInfo { FkUserId = id },
                 Addresses = new List<UserAdresse> { new UserAdresse { FkUserId = id } },
-                Allergies = new List<UserAllergy> { new UserAllergy { FkUserId = id } },
+                Allergies = new List<UserAllergy>(),
                 Antecedent = new UserAntecedent { FkUserId = id },
-                Medications = new List<UserMedication> { new UserMedication { FkUserId = id } },
-                Handicaps = new List<UserHandicap> { new UserHandicap { FkUserId = id } }
+                Medications = new List<UserMedication>(),
+                Handicaps = new List<UserHandicap>(),
             };
 
             return View(user);
