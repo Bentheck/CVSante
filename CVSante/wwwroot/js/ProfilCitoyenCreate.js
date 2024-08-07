@@ -1,13 +1,22 @@
 ﻿const sections = ['userinfo', 'address', 'antecedent', 'allergy', 'handicap', 'medication'];
 let currentSectionIndex = 0;
-let addressIndex = 1;
-let allergyIndex = 0;
-let handicapIndex = 0;
-let medicationIndex = 0;
+let addressIndex = addressCount;
+let allergyIndex = allergyCount;
+let handicapIndex = handicapCount;
+let medicationIndex = medicationCount;
 
 //Mask pour le numéro de téléphone//
-$(document).ready(function () {
-    $('#telephoneCell').inputmask('999-999-9999');
+
+function applyMasks() {
+    Inputmask({ "mask": "999-999-9999" }).mask(document.querySelectorAll('.phone-mask'));
+    Inputmask({ "mask": "A9A 9A9" }).mask(document.querySelectorAll('.CP-mask'));
+    Inputmask({ "mask": "9[9][9]" + ' Kg' }).mask(document.querySelectorAll('.poid-mask'));
+    Inputmask({ "mask": "9.9[9]" + ' Mètres' }).mask(document.querySelectorAll('.taille-mask'));
+}
+
+// Apply masks to existing fields on page load
+document.addEventListener("DOMContentLoaded", function () {
+    applyMasks();
 });
 
 //Fonction gérant les onglets//
@@ -215,12 +224,6 @@ function addDynamicField(type) {
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Ville</label>
-                                <div class="col-md-10">
-                                    <input asp-for="Addresses[${addressIndex}].Ville" type="text" name="Addresses[${addressIndex}].Ville" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Adresse Primaire</label>
                                 <div class="col-md-10">
                                     <input asp-for="Addresses[${addressIndex}].AdressePrimaire" type="checkbox" name="Addresses[${addressIndex}].AdressePrimaire" class="address-primary" value="true" />
@@ -248,13 +251,19 @@ function addDynamicField(type) {
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Code Postal</label>
                                 <div class="col-md-10">
-                                    <input asp-for="Addresses[${addressIndex}].CodePostal" type="text" name="Addresses[${addressIndex}].CodePostal" class="form-control" />
+                                    <input asp-for="Addresses[${addressIndex}].CodePostal" type="text" name="Addresses[${addressIndex}].CodePostal" class="form-control CP-mask" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Ville</label>
+                                <div class="col-md-10">
+                                    <input asp-for="Addresses[${addressIndex}].Ville" type="text" name="Addresses[${addressIndex}].Ville" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Téléphone filaire</label>
                                 <div class="col-md-10">
-                                    <input asp-for="Addresses[${addressIndex}].TelphoneAdresse" type="text" name="Addresses[${addressIndex}].TelphoneAdresse" class="form-control" id="telephoneCell" />
+                                    <input asp-for="Addresses[${addressIndex}].TelphoneAdresse" type="text" name="Addresses[${addressIndex}].TelphoneAdresse" class="form-control phone-mask" id="telephoneCell" />
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
@@ -410,7 +419,8 @@ function addDynamicField(type) {
 
     handlePrimaryAddressCheckbox();
     attachAllergyEventListeners();
-    attachMedicationEventListeners(); // Attach event listeners for new medication fields
+    attachMedicationEventListeners();
+    applyMasks();
 
     container.querySelector('.card:last-child').offsetHeight;
 }

@@ -28,7 +28,7 @@
     });
 
     // Vérifiez l'existence de l'élément avant d'ajouter l'écouteur d'événements
-    let closeButton = document.querySelector('.modal .close');
+    let closeButton = document.querySelector('.modals .close');
     if (closeButton) {
         closeButton.addEventListener('click', closeModal);
     }

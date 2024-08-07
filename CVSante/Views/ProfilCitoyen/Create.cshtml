@@ -13,16 +13,17 @@
         <div class="row">
             <div class="col-md-9">
                 <div class="card-body">
-                    <div asp-validation-summary="ModelOnly" class="card-header text-danger">
+                    <div asp-validation-summary="ModelOnly" class="card-header text-danger"></div>
                 </div>
                 <!-- User Info -->
-                </div>
                 <div id="userinfo" class="section">
                     <div class="card mb-3">
                         <div class="card-header">
                             <h4>User Info</h4>
                         </div>
                         <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="visually-hidden"></div>
+                            <input type="hidden" asp-for="UserInfo.FkUserId" />
 
                             <!--- Nom --->
                             <div class="form-group row">
@@ -55,7 +56,7 @@
                             <div class="form-group row">
                                 <label asp-for="UserInfo.TelephoneCell" class="col-md-2 col-form-label">Téléphone Cell</label>
                                 <div class="col-md-10">
-                                    <input asp-for="UserInfo.TelephoneCell" class="form-control" id="telephoneCell" />
+                                    <input asp-for="UserInfo.TelephoneCell" class="form-control phone-mask" />
                                     <span asp-validation-for="UserInfo.TelephoneCell" class="visually-hidden"></span>
                                 </div>
                             </div>
@@ -65,19 +66,19 @@
                                 <label class="col-md-2 col-form-label">Sexe à la naissance</label>
                                 <div class="col-md-10 d-flex align-items-center">
                                     <div class="form-check form-check-inline">
-                                        <input asp-for="UserInfo.Sexe" class="form-check-input" type="radio" id="sexeHomme" name="UserInfo.Sexe" value="Homme" />
+                                        <input class="form-check-input" type="radio" id="sexeHomme" name="UserInfo.Sexe" value="Homme" @(Model.UserInfo.Sexe == "Homme" ? "checked" : "") />
                                         <label class="form-check-label" for="sexeHomme">Homme</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input asp-for="UserInfo.Sexe" class="form-check-input" type="radio" id="sexeFemme" name="UserInfo.Sexe" value="Femme" />
+                                        <input class="form-check-input" type="radio" id="sexeFemme" name="UserInfo.Sexe" value="Femme" @(Model.UserInfo.Sexe == "Femme" ? "checked" : "") />
                                         <label class="form-check-label" for="sexeFemme">Femme</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input asp-for="UserInfo.Sexe" class="form-check-input" type="radio" id="sexeAutre" name="UserInfo.Sexe" value="Autre" />
+                                        <input class="form-check-input" type="radio" id="sexeAutre" name="UserInfo.Sexe" value="Autre" @(Model.UserInfo.Sexe == "Autre" ? "checked" : "") />
                                         <label class="form-check-label" for="sexeAutre">Autre</label>
                                     </div>
-                                    <div class="form-group mb-0 ms-3" id="autrePrecisionGroup" style="display: none;">
-                                        <input asp-for="UserInfo.AutrePrecision" type="text" class="form-control" id="autrePrecision" name="UserInfo.AutrePrecision" placeholder="Précisez">
+                                    <div class="form-group mb-0 ms-3" id="autrePrecisionGroup" @(Model.UserInfo.Sexe == "Autre" ? "style=display:block;" : "style=display:none;")>
+                                        <input type="text" class="form-control" id="autrePrecision" name="UserInfo.AutrePrecision" placeholder="Précisez" value="@Model.UserInfo.AutrePrecision" />
                                     </div>
                                     <span asp-validation-for="UserInfo.Sexe" class="visually-hidden"></span>
                                 </div>
@@ -96,7 +97,7 @@
                             <div class="form-group row">
                                 <label asp-for="UserInfo.Poids" class="col-md-2 col-form-label">Poids</label>
                                 <div class="col-md-10">
-                                    <input asp-for="UserInfo.Poids" class="form-control" />
+                                    <input asp-for="UserInfo.Poids" class="form-control poid-mask" />
                                     <span asp-validation-for="UserInfo.Poids" class="visually-hidden"></span>
                                 </div>
                             </div>
@@ -105,12 +106,12 @@
                             <div class="form-group row">
                                 <label asp-for="UserInfo.Taille" class="col-md-2 col-form-label">Taille</label>
                                 <div class="col-md-10">
-                                    <input asp-for="UserInfo.Taille" class="form-control" />
+                                    <input asp-for="UserInfo.Taille" class="form-control taille-mask" />
                                     <span asp-validation-for="UserInfo.Taille" class="visually-hidden"></span>
                                 </div>
                             </div>
 
-                            <!--- TypeSanguin --->
+                            <!-- TypeSanguin -->
                             <div class="form-group row">
                                 <label asp-for="UserInfo.TypeSanguin" class="col-md-2 col-form-label">Type Sanguin</label>
                                 <div class="col-md-10">
@@ -125,7 +126,7 @@
                                         <option value="O+">O+</option>
                                         <option value="O-">O-</option>
                                     </select>
-                                    <span asp-validation-for="UserInfo.TypeSanguin"></span>
+                                    <span asp-validation-for="UserInfo.TypeSanguin" class="visually-hidden"></span>
                                 </div>
                             </div>
                         </div>
@@ -140,54 +141,64 @@
                         </div>
                         <div class="card-body">
                             <div id="address-fields">
-                                <!-- Initial address field -->
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label">Adresse Primaire</label>
-                                            <div class="col-md-10">
-                                                <input asp-for="Addresses[0].AdressePrimaire" type="checkbox" name="Addresses[0].AdressePrimaire" class="address-primary" value="true"  />
-                                                <span style="display: none; color: red;">Adresse primaire déja sélectionnée</span>
+                                @for (var i = 0; i < Model.Addresses.Count; i++)
+                                {
+                                    var address = Model.Addresses[i];
+                                    <div class="card mb-3" data-address-id="@address.AdId">
+                                        <div class="card-body">
+                                            <!-- Hidden fields for Ids -->
+                                            <input type="hidden" name="Addresses[@i].FkUserId" value="@address.FkUserId" />
+                                            <input type="hidden" name="Addresses[@i].AdId" value="@address.AdId" />
+
+                                            <div class="form-group row">
+                                                <label class="col-md-2 col-form-label">Adresse Primaire</label>
+                                                <div class="col-md-10">
+                                                    <input type="checkbox" name="Addresses[@i].AdressePrimaire" value="true" class="address-primary" @(address.AdressePrimaire ? "checked" : "") />
+                                                    <span style="display: none; color: red;">Adresse primaire déjà sélectionnée</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label">Num Civic</label>
-                                            <div class="col-md-10">
-                                                <input asp-for="Addresses[0].NumCivic" type="text" name="Addresses[0].NumCivic" class="form-control" />
+                                            <div class="form-group row">
+                                                <label class="col-md-2 col-form-label">Num Civic</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" name="Addresses[@i].NumCivic" class="form-control" value="@address.NumCivic" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label">Rue</label>
-                                            <div class="col-md-10">
-                                                <input asp-for="Addresses[0].Rue" type="text" name="Addresses[0].Rue" class="form-control" />
+                                            <div class="form-group row">
+                                                <label class="col-md-2 col-form-label">Rue</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" name="Addresses[@i].Rue" class="form-control" value="@address.Rue" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label">Appartement</label>
-                                            <div class="col-md-10">
-                                                <input asp-for="Addresses[0].Appartement" type="text" name="Addresses[0].Appartement" class="form-control" />
+                                            <div class="form-group row">
+                                                <label class="col-md-2 col-form-label">Appartement</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" name="Addresses[@i].Appartement" class="form-control" value="@address.Appartement" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label">Code Postal</label>
-                                            <div class="col-md-10">
-                                                <input asp-for="Addresses[0].CodePostal" type="text" name="Addresses[0].CodePostal" class="form-control" />
+                                            <div class="form-group row">
+                                                <label class="col-md-2 col-form-label">Code Postal</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" name="Addresses[@i].CodePostal" class="form-control CP-mask" value="@address.CodePostal" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label">Ville</label>
-                                            <div class="col-md-10">
-                                                <input asp-for="Addresses[0].Ville" type="text" name="Addresses[0].Ville" class="form-control" />
+                                            <div class="form-group row">
+                                                <label class="col-md-2 col-form-label">Ville</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" name="Addresses[@i].Ville" class="form-control" value="@address.Ville" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label">Téléphone filaire</label>
-                                            <div class="col-md-10">
-                                                <input asp-for="Addresses[0].TelphoneAdresse" type="text" name="Addresses[0].TelphoneAdresse" class="form-control" id="telephoneCell" />
+                                            <div class="form-group row">
+                                                <label class="col-md-2 col-form-label">Téléphone filaire</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" name="Addresses[@i].TelphoneAdresse" class="form-control phone-mask" value="@address.TelphoneAdresse" />
+                                                </div>
+                                            </div>
+                                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                                <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                             </div>
                             <button type="button" class="btn btn-primary" onclick="addDynamicField('address')">Ajoutez Addresse</button>
                         </div>
@@ -202,37 +213,105 @@
                         </div>
                         <div class="card-body">
                             <div id="antecedent-checkboxes">
-                                <!-- Checkboxes for Antecedents -->
+                                @{
+                                    var antecedents = new string[0];
+                                    if (Model.Antecedent.Antecedent != null)
+                                    {
+                                    // Ensure Model.Antecedent is a string and split by '/'
+                                        var ant = Model.Antecedent.Antecedent.ToString();
+                                        antecedents = ant.Split('/');
+                                    }
+                                
                                 @foreach (var item in new[] { "Aucun", "Asthme", "AVC", "Diabète", "Hypertension", "Maladie cardiaque", "Hypercholestérolémie", "Problèmes abdominaux", "Néoplasie", "Psychiatrie", "Autre" })
                                 {
                                     <div class="form-group d-flex align-items-center">
-                                        <input type="checkbox" id="@item" name="antecedents" class="form-check-input" value="@item" onclick="updateAntecedentsString()" />
+                                        <input type="checkbox" id="@item" name="antecedents" class="form-check-input" value="@item"
+                                        @(antecedents.Contains(item) ? "checked" : "")
+                                               onclick="updateAntecedentsString()" />
                                         <label for="@item" class="form-check-label ml-2">@item</label>
                                     </div>
                                 }
+                                }
                             </div>
-                            <!-- Manual entry for "Autre" -->
-                            <div id="manual-entry" style="display:none;">
+                            <div id="manual-entry" @(antecedents.Contains("Autre") ? "style=display:block;" : "style=display:none;")>
                                 <div class="form-group">
                                     <label for="autre-details">Veuillez préciser :</label>
-                                    <input type="text" id="autre-details" name="autre-details" class="form-control" oninput="updateAntecedentsString()" />
+                                    <input type="text" id="autre-details" name="autre-details" class="form-control"
+                                           value="@(antecedents.LastOrDefault(x => x != "Autre") ?? "")"
+                                           oninput="updateAntecedentsString()" />
                                 </div>
                             </div>
-                            <!-- Hidden field to store combined antecedents -->
-                            <input type="hidden" id="antecedent-aggregate" name="antecedent.antecedent" />
+                            <input type="hidden" id="antecedent-aggregate" name="antecedent.antecedent" value="@Model.Antecedent" />
                         </div>
                     </div>
                 </div>
 
                 <!-- Allergies -->
-                <div id="allergy" class="section" style="display:none;">
+                <div id="allergy" class="section" style="display: none;">
                     <div class="card mb-3">
                         <div class="card-header">
                             <h4>Allergies</h4>
                         </div>
                         <div class="card-body">
                             <div id="allergy-fields">
-                                <!-- Placeholder for dynamically added allergy fields -->
+                                @{
+                                    int count;
+                                    if (Model.Allergies == null)
+                                    {
+                                        count = 0;
+                                    }
+                                    else
+                                    {
+                                        count = Model.Allergies.Count;
+                                    }
+                                    for (int i = 0; i < count; i++)
+                                    {
+                                        var allergy = Model.Allergies[i];
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Allergie ou Intolérance</label>
+                                                    <div class="col-md-10">
+                                                        <div class="d-flex flex-column flex-md-row align-items-start">
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Allergies[@i].AllergieIntolerance" value="Allergie" class="form-check-input allergy-intolerance-radio" id="allergie-@i" @(allergy.AllergieIntolerance == "Allergie" ? "checked" : "") />
+                                                                <label class="form-check-label" for="allergie-@i">Allergie</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="radio" name="Allergies[@i].AllergieIntolerance" value="Intolerance" class="form-check-input allergy-intolerance-radio" id="intolerance-@i" @(allergy.AllergieIntolerance == "Intolerance" ? "checked" : "") />
+                                                                <label class="form-check-label" for="intolerance-@i">Intolérance</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row severity-field" style="display: @(allergy.AllergieIntolerance == "Allergie" ? "block" : "none");">
+                                                    <label class="col-md-2 col-form-label">Sévérité</label>
+                                                    <div class="col-md-10">
+                                                        <div class="d-flex flex-column flex-md-row align-items-start">
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Allergies[@i].Gravite" value="Bénigne" class="form-check-input" id="benigne-@i" @(allergy.Gravite == "Bénigne" ? "checked" : "") />
+                                                                <label class="form-check-label" for="benigne-@i">Bénigne</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="radio" name="Allergies[@i].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-@i" @(allergy.Gravite == "Grave/Mortelle" ? "checked" : "") />
+                                                                <label class="form-check-label" for="grave-@i">Grave/Mortelle</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Produit</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Allergies[@i].Produit" class="form-control" value="@allergy.Produit" />
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
                             </div>
                             <button type="button" class="btn btn-primary" onclick="addDynamicField('allergy')">Ajoutez allergie/intolérance</button>
                         </div>
@@ -240,31 +319,139 @@
                 </div>
 
                 <!-- Handicaps -->
-                <div id="handicap" class="section" style="display:none;">
+                <div id="handicap" class="section" style="display: none;">
                     <div class="card mb-3">
                         <div class="card-header">
                             <h4>Handicaps</h4>
                         </div>
                         <div class="card-body">
                             <div id="handicap-fields">
-                                <!-- Placeholder for dynamically added handicap fields -->
+                                @{
+                                    if (Model.Handicaps == null)
+                                    {
+                                        count = 0;
+                                    }
+                                    else
+                                    {
+                                        count = Model.Handicaps.Count;
+                                    }
+
+                                    for (int i = 0; i < count; i++)
+                                    {
+                                        var handicap = Model.Handicaps[i];
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Type</label>
+                                                    <div class="col-md-10">
+                                                        <div class="d-flex flex-column flex-md-row align-items-start">
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Autisme" class="form-check-input" id="autisme-@i" @(handicap.Type == "Autisme" ? "checked" : "") />
+                                                                <label class="form-check-label" for="autisme-@i">Autisme</label>
+                                                            </div>
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Mobilité réduite" class="form-check-input" id="mobilite-reduite-@i" @(handicap.Type == "Mobilité réduite" ? "checked" : "") />
+                                                                <label class="form-check-label" for="mobilite-reduite-@i">Mobilité réduite</label>
+                                                            </div>
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Déficience auditive" class="form-check-input" id="deficience-auditive-@i" @(handicap.Type == "Déficience auditive" ? "checked" : "") />
+                                                                <label class="form-check-label" for="deficience-auditive-@i">Déficience auditive</label>
+                                                            </div>
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Déficience visuelle" class="form-check-input" id="deficience-visuelle-@i" @(handicap.Type == "Déficience visuelle" ? "checked" : "") />
+                                                                <label class="form-check-label" for="deficience-visuelle-@i">Déficience visuelle</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Autre" class="form-check-input" id="autre-@i" @(handicap.Type == "Autre" ? "checked" : "") />
+                                                                <label class="form-check-label" for="autre-@i">Autre</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Handicap</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Handicaps[@i].Definition" class="form-control" value="@handicap.Definition" />
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
                             </div>
                             <button type="button" class="btn btn-primary" onclick="addDynamicField('handicap')">Ajoutez Handicap</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Medication -->
-                <div id="medication" class="section" style="display:none;">
+                <!-- Medications -->
+                <div id="medication" class="section" style="display: none;">
                     <div class="card mb-3">
                         <div class="card-header">
                             <h4>Medications</h4>
                         </div>
                         <div class="card-body">
                             <div id="medication-fields">
-                                <!-- Placeholder for dynamically added medication fields -->
+                                @{
+                                    if (Model.Medications == null)
+                                    {
+                                        count = 0;
+                                    }
+                                    else
+                                    {
+                                        count = Model.Medications.Count;
+                                    }
+
+                                    for (int i = 0; i < count; i++)
+                                    {
+                                        var medication = Model.Medications[i];
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Type</label>
+                                                    <div class="col-md-10">
+                                                        <div class="d-flex flex-column flex-md-row align-items-start">
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Medications[@i].MedicamentProduitNat" value="Medicament" class="form-check-input" id="medicament-@i" @(medication.MedicamentProduitNat == "Medicament" ? "checked" : "") />
+                                                                <label class="form-check-label" for="medicament-@i">Médicament</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="radio" name="Medications[@i].MedicamentProduitNat" value="Produit Naturel" class="form-check-input" id="produitNaturel-@i" @(medication.MedicamentProduitNat == "Produit Naturel" ? "checked" : "") />
+                                                                <label class="form-check-label" for="produitNaturel-@i">Produit Naturel</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Nom</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Medications[@i].Nom" class="form-control" value="@medication.Nom" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label" id="posologieLabel-@i">Posologie</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Medications[@i].Posologie" class="form-control" value="@medication.Posologie" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row" id="raisonGroup-@i" style="display: @(medication.MedicamentProduitNat == "Medicament" ? "block" : "none");">
+                                                    <label class="col-md-2 col-form-label">Raison</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Medications[@i].Raison" class="form-control" value="@medication.Raison" />
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
                             </div>
-                            <button type="button" class="btn btn-primary" onclick="addDynamicField('medication')">Ajouté Médication/Produit Naturel</button>
+                            <button type="button" class="btn btn-primary" onclick="addDynamicField('medication')">Ajoutez Médication</button>
                         </div>
                     </div>
                 </div>
@@ -315,4 +502,15 @@
     </div>
 </form>
 
+<script>
+    let addressCount = @(@Model.Addresses?.Count ?? 0);
+    let allergyCount = @(@Model.Allergies?.Count ?? 0);
+    let handicapCount = @(@Model.Handicaps?.Count ?? 0);
+    let medicationCount = @(@Model.Medications?.Count ?? 0);
 
+    console.log(addressCount);
+    console.log(allergyCount);
+    console.log(handicapCount);
+    console.log(medicationCount);
+
+</script>
