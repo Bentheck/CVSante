@@ -5,47 +5,47 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="row">
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-primary text-white mb-4">
-            <div class="card-body">Ajouter Répondant</div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" asp-area="" asp-controller="Admin" asp-action="AddRespondent">Voir les détails</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-            </div>
-        </div>
+<h2>Gestion de la compagnie</h2>
+<form asp-action="SaveCompanyManagement" asp-controller="Admin" method="post" class="form-horizontal">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Employé</th>
+                <th>Matricule</th>
+                <th>Rôle</th>
+                <th>Actif</th>
+                <th>Retirer de la compagnie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
+                <tr>
+                    <td>@employee.Nom</td>
+                    <td>@employee.Matricule</td>
+                    <td>
+                        <select class="form-control" asp-for="@employee.SelectedRole">
+                            @foreach (var role in employee.FkRoles)
+                            {
+                                <option value="@role.FkRoles" @(employee.SelectedRole == role.RolesName ? "selected" : "")>@role.RolesName</option>
+                            }
+                        </select>
+                    </td>
+                    <td><input type="checkbox" asp-for="@employee.ParamIsActive" /></td>
+                    <td>
+                        <button type="submit" asp-action="RemoveFromCompany" asp-route-id="@employee.FkIdentityUserNavigation" class="btn btn-danger">Retirer</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+        <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Index", "Admin")'">Annuler</button>
+        <a asp-area="" asp-controller="Admin" asp-action="ManageRoles" class="btn btn-primary">Gestion des rôles</a>
     </div>
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-warning text-white mb-4">
-            <div class="card-body">Modifier Répondant</div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" asp-area="" asp-controller="Admin" asp-action="EditRespondent">Voir les détails</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-success text-white mb-4">
-            <div class="card-body">Historiques param</div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" asp-area="" asp-controller="Admin" asp-action="History">Voir les détails</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-danger text-white mb-4">
-            <div class="card-body">Gestion de la compagnie</div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" asp-area="" asp-controller="Admin" asp-action="ManageCompany">Voir les détails</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-            </div>
-        </div>
-    </div>
-</div>
+</form>
 
-
-    
 
 @* <h1>Index</h1>
 
