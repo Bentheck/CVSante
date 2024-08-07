@@ -254,7 +254,7 @@ function addDynamicField(type) {
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Téléphone filaire</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Addresses[${addressIndex}].TelphoneAdresse" class="form-control" />
+                                    <input type="text" name="Addresses[${addressIndex}].TelphoneAdresse" class="form-control" id="telephoneCell" />
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
