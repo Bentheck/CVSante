@@ -1,0 +1,164 @@
+﻿@model CVSante.Models.UserParamedic
+
+@{
+    ViewData["Title"] = "Modifier un Premier Répondant";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="form-container">
+    <form asp-action="Edit">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <!-- Rechercher Répondant -->
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Rechercher Répondant</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary">Rechercher</button>
+                        </div>
+                    </div>
+
+                    <!-- Nom -->
+                    <div class="form-group row">
+                        <label asp-for="Nom" class="col-md-2 col-form-label">Nom :</label>
+                        <div class="col-md-6">
+                            <input asp-for="Nom" class="form-control" />
+                            <span asp-validation-for="Nom" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-2">
+                            <input asp-for="ParamIsActive" class="form-check-input" type="checkbox" />
+                            <label asp-for="ParamIsActive" class="form-check-label">Premier répondant est actif</label>
+                            <span asp-validation-for="ParamIsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Prénom -->
+                    <div class="form-group row">
+                        <label asp-for="Prenom" class="col-md-2 col-form-label">Prénom :</label>
+                        <div class="col-md-6">
+                            <input asp-for="Prenom" class="form-control" />
+                            <span asp-validation-for="Prenom" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Numéro de matricule -->
+                    <div class="form-group row">
+                        <label asp-for="Matricule" class="col-md-2 col-form-label">Numéro de matricule :</label>
+                        <div class="col-md-6">
+                            <input asp-for="Matricule" class="form-control" readonly />
+                            <span asp-validation-for="Matricule" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-secondary">Modifier Matricule</button>
+                        </div>
+                    </div>
+
+                    <!-- Courriel -->
+                    <div class="form-group row">
+                        <label asp-for="Courriel" class="col-md-2 col-form-label">Courriel :</label>
+                        <div class="col-md-6">
+                            <input asp-for="Courriel" class="form-control" />
+                            <span asp-validation-for="Courriel" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Numéro de téléphone -->
+                    <div class="form-group row">
+                        <label asp-for="Telephone" class="col-md-2 col-form-label">Numéro de téléphone :</label>
+                        <div class="col-md-6">
+                            <input asp-for="Telephone" class="form-control" />
+                            <span asp-validation-for="Telephone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Mot de passe -->
+                    <div class="form-group row">
+                        <label asp-for="MotDePasse" class="col-md-2 col-form-label">Mot de passe :</label>
+                        <div class="col-md-6">
+                            <input asp-for="MotDePasse" class="form-control" type="password" />
+                            <span asp-validation-for="MotDePasse" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Confirmer mot de passe -->
+                    <div class="form-group row">
+                        <label asp-for="ConfirmerMotDePasse" class="col-md-2 col-form-label">Confirmer mot de passe :</label>
+                        <div class="col-md-6">
+                            <input asp-for="ConfirmerMotDePasse" class="form-control" type="password" />
+                            <span asp-validation-for="ConfirmerMotDePasse" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="form-group row">
+                        <div class="col-md-4 offset-md-2">
+                            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                            <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Retour à la liste</a>
+</div>
+@* <h1>Create</h1>
+
+<h4>UserParamedic</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nom" class="control-label"></label>
+                <input asp-for="Nom" class="form-control" />
+                <span asp-validation-for="Nom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prenom" class="control-label"></label>
+                <input asp-for="Prenom" class="form-control" />
+                <span asp-validation-for="Prenom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ville" class="control-label"></label>
+                <input asp-for="Ville" class="form-control" />
+                <span asp-validation-for="Ville" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Telephone" class="control-label"></label>
+                <input asp-for="Telephone" class="form-control" />
+                <span asp-validation-for="Telephone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Matricule" class="control-label"></label>
+                <input asp-for="Matricule" class="form-control" />
+                <span asp-validation-for="Matricule" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FkCompany" class="control-label"></label>
+                <select asp-for="FkCompany" class ="form-control" asp-items="ViewBag.FkCompany"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FkIdentityUser" class="control-label"></label>
+                <select asp-for="FkIdentityUser" class ="form-control" asp-items="ViewBag.FkIdentityUser"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+ *@
