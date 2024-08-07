@@ -315,4 +315,9 @@
     </div>
 </form>
 
-
+<script>
+    let addressCount = @Model.Addresses?.Count ?? 0;
+    let allergyCount = @Model.Allergies?.Count ?? 0;
+    let handicapCount = @Model.Handicaps?.Count ?? 0;
+    let medicationCount = @Model.Medications?.Count ?? 0;
+</script>

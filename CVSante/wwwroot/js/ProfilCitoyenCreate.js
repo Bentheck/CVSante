@@ -1,9 +1,9 @@
 ﻿const sections = ['userinfo', 'address', 'antecedent', 'allergy', 'handicap', 'medication'];
 let currentSectionIndex = 0;
-let addressIndex = 1;
-let allergyIndex = 0;
-let handicapIndex = 0;
-let medicationIndex = 0;
+let addressIndex = addressCount-1;
+let allergyIndex = allergyCount-1;
+let handicapIndex = handicapCount-1;
+let medicationIndex = medicationCount-1;
 
 //Mask pour le numéro de téléphone//
 $(document).ready(function () {
