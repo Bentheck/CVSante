@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\assets\img\hero-bg-light.webp" />
-    <None Include="wwwroot\assets\img\hero-services-img.webp" />
     <None Include="wwwroot\assets\vendor\aos\aos.cjs.js" />
     <None Include="wwwroot\assets\vendor\aos\aos.esm.js" />
     <None Include="wwwroot\assets\vendor\aos\aos.js" />

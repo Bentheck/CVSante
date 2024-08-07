@@ -850,7 +850,7 @@ section,
 --------------------------------------------------------------*/
 .hero {
     width: 100%;
-    min-height:70vh;
+    min-height: 70vh;
     position: relative;
     padding: 180px 0 40px 0;
     display: flex;
@@ -908,50 +908,46 @@ section,
 
 
 .hero .btn-watch-video {
-  font-size: 16px;
-  transition: 0.5s;
-  margin-left: 25px;
-  color: var(--default-color);
-  font-weight: 600;
+    font-size: 16px;
+    transition: 0.5s;
+    margin-left: 25px;
+    color: var(--default-color);
+    font-weight: 600;
 }
 
-.hero .btn-watch-video i {
-  color: var(--accent-color);
-  font-size: 32px;
-  transition: 0.3s;
-  line-height: 0;
-  margin-right: 8px;
-}
+    .hero .btn-watch-video i {
+        color: var(--accent-color);
+        font-size: 32px;
+        transition: 0.3s;
+        line-height: 0;
+        margin-right: 8px;
+    }
 
-.hero .btn-watch-video:hover {
-  color: var(--accent-color);
-}
+    .hero .btn-watch-video:hover {
+        color: var(--accent-color);
+    }
 
-.hero .btn-watch-video:hover i {
-  color: color-mix(in srgb, var(--accent-color), transparent 15%);
-}
+        .hero .btn-watch-video:hover i {
+            color: color-mix(in srgb, var(--accent-color), transparent 15%);
+        }
 
 @media (max-width: 640px) {
-  .hero h1 {
-    font-size: 28px;
-    line-height: 36px;
-  }
+    .hero h1 {
+        font-size: 28px;
+        line-height: 36px;
+    }
 
-  .hero p {
-    font-size: 18px;
-    line-height: 24px;
-    margin-bottom: 30px;
-  }
+    .hero p {
+        font-size: 18px;
+        line-height: 24px;
+        margin-bottom: 30px;
+    }
 
-  
-  .hero .btn-watch-video {
-    font-size: 13px;
-  }
+
+    .hero .btn-watch-video {
+        font-size: 13px;
+    }
 }
-
-
-
-
 
 
 

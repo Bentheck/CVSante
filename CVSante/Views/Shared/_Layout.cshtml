@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApplication8</title>
+    <title>@ViewData["Title"] - CVSante</title>
     <!-- Favicons -->
     <link href="~/assets/img/favicon.png" rel="icon">
     <link href="~/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -22,9 +22,10 @@
     <link href="~/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
     <!-- Main CSS File -->
-    
+    <link href="~/css/styles.css" rel="stylesheet">
     <link href="~/css/site.css" rel="stylesheet">
     <link href="~/css/main.css" rel="stylesheet">
+    
 
 </head>
 <body class="index-page">
@@ -68,7 +69,7 @@
     </main>
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - QuickStart - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <p>&copy; 2024, cvsante.qc.ca</p>
         </div>
     </footer>
     <!-- Vendor JS Files -->
@@ -82,7 +83,11 @@
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
     <!-- Main JS File -->
-    <script src="~/js/main.js"></script>
+   
+    <script src="~/js/site.js" asp-append-version="true"></script>
+   
+    <script src="~/js/main.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
