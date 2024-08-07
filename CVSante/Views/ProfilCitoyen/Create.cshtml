@@ -65,19 +65,19 @@
                                 <label class="col-md-2 col-form-label">Sexe à la naissance</label>
                                 <div class="col-md-10 d-flex align-items-center">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="sexeHomme" name="UserInfo.Sexe" value="Homme" />
+                                        <input asp-for="UserInfo.Sexe" class="form-check-input" type="radio" id="sexeHomme" name="UserInfo.Sexe" value="Homme" />
                                         <label class="form-check-label" for="sexeHomme">Homme</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="sexeFemme" name="UserInfo.Sexe" value="Femme" />
+                                        <input asp-for="UserInfo.Sexe" class="form-check-input" type="radio" id="sexeFemme" name="UserInfo.Sexe" value="Femme" />
                                         <label class="form-check-label" for="sexeFemme">Femme</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="sexeAutre" name="UserInfo.Sexe" value="Autre" />
+                                        <input asp-for="UserInfo.Sexe" class="form-check-input" type="radio" id="sexeAutre" name="UserInfo.Sexe" value="Autre" />
                                         <label class="form-check-label" for="sexeAutre">Autre</label>
                                     </div>
                                     <div class="form-group mb-0 ms-3" id="autrePrecisionGroup" style="display: none;">
-                                        <input type="text" class="form-control" id="autrePrecision" name="UserInfo.AutrePrecision" placeholder="Précisez">
+                                        <input asp-for="UserInfo.AutrePrecision" type="text" class="form-control" id="autrePrecision" name="UserInfo.AutrePrecision" placeholder="Précisez">
                                     </div>
                                     <span asp-validation-for="UserInfo.Sexe" class="visually-hidden"></span>
                                 </div>
@@ -159,31 +159,31 @@
                                         <div class="form-group row">
                                             <label class="col-md-2 col-form-label">Rue</label>
                                             <div class="col-md-10">
-                                                <input type="text" name="Addresses[0].Rue" class="form-control" />
+                                                <input asp-for="Addresses[0].Rue" type="text" name="Addresses[0].Rue" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-md-2 col-form-label">Appartement</label>
                                             <div class="col-md-10">
-                                                <input type="text" name="Addresses[0].Appartement" class="form-control" />
+                                                <input asp-for="Addresses[0].Appartement" type="text" name="Addresses[0].Appartement" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-md-2 col-form-label">Code Postal</label>
                                             <div class="col-md-10">
-                                                <input type="text" name="Addresses[0].CodePostal" class="form-control" />
+                                                <input asp-for="Addresses[0].CodePostal" type="text" name="Addresses[0].CodePostal" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-md-2 col-form-label">Ville</label>
                                             <div class="col-md-10">
-                                                <input type="text" name="Addresses[0].Ville" class="form-control" />
+                                                <input asp-for="Addresses[0].Ville" type="text" name="Addresses[0].Ville" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-md-2 col-form-label">Téléphone filaire</label>
                                             <div class="col-md-10">
-                                                <input type="text" name="Addresses[0].TelphoneAdresse" class="form-control" id="telephoneCell" />
+                                                <input asp-for="Addresses[0].TelphoneAdresse" type="text" name="Addresses[0].TelphoneAdresse" class="form-control" id="telephoneCell" />
                                             </div>
                                         </div>
                                     </div>

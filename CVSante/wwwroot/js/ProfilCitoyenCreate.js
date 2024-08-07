@@ -217,44 +217,44 @@ function addDynamicField(type) {
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Ville</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Addresses[${addressIndex}].Ville" class="form-control" />
+                                    <input asp-for="Addresses[${addressIndex}].Ville" type="text" name="Addresses[${addressIndex}].Ville" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Adresse Primaire</label>
                                 <div class="col-md-10">
-                                    <input type="checkbox" name="Addresses[${addressIndex}].AdressePrimaire" class="address-primary" value="true" />
+                                    <input asp-for="Addresses[${addressIndex}].AdressePrimaire" type="checkbox" name="Addresses[${addressIndex}].AdressePrimaire" class="address-primary" value="true" />
                                     <span style="display: none; color: red;">Adresse primaire déja sélectionnée</span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Num Civic</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Addresses[${addressIndex}].NumCivic" class="form-control" />
+                                    <input asp-for="Addresses[${addressIndex}].NumCivic" type="text" name="Addresses[${addressIndex}].NumCivic" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Rue</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Addresses[${addressIndex}].Rue" class="form-control" />
+                                    <input asp-for="Addresses[${addressIndex}].Rue" type="text" name="Addresses[${addressIndex}].Rue" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Appartement</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Addresses[${addressIndex}].Appartement" class="form-control" />
+                                    <input asp-for="Addresses[${addressIndex}].Appartement" type="text" name="Addresses[${addressIndex}].Appartement" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Code Postal</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Addresses[${addressIndex}].CodePostal" class="form-control" />
+                                    <input asp-for="Addresses[${addressIndex}].CodePostal" type="text" name="Addresses[${addressIndex}].CodePostal" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Téléphone filaire</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Addresses[${addressIndex}].TelphoneAdresse" class="form-control" id="telephoneCell" />
+                                    <input asp-for="Addresses[${addressIndex}].TelphoneAdresse" type="text" name="Addresses[${addressIndex}].TelphoneAdresse" class="form-control" id="telephoneCell" />
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
@@ -274,11 +274,11 @@ function addDynamicField(type) {
                                 <div class="col-md-10">
                                     <div class="d-flex flex-column flex-md-row align-items-start">
                                         <div class="me-3">
-                                            <input type="radio" name="Allergies[${allergyIndex}].AllergieIntolerance" value="Allergie" class="form-check-input allergy-intolerance-radio" id="allergie-${allergyIndex}" />
+                                            <input asp-for="Allergies[${allergyIndex}].AllergieIntolerance" type="radio" name="Allergies[${allergyIndex}].AllergieIntolerance" value="Allergie" class="form-check-input allergy-intolerance-radio" id="allergie-${allergyIndex}" />
                                             <label class="form-check-label" for="allergie-${allergyIndex}">Allergie</label>
                                         </div>
                                         <div>
-                                            <input type="radio" name="Allergies[${allergyIndex}].AllergieIntolerance" value="Intolerance" class="form-check-input allergy-intolerance-radio" id="intolerance-${allergyIndex}" />
+                                            <input asp-for="Allergies[${allergyIndex}].AllergieIntolerance" type="radio" name="Allergies[${allergyIndex}].AllergieIntolerance" value="Intolerance" class="form-check-input allergy-intolerance-radio" id="intolerance-${allergyIndex}" />
                                             <label class="form-check-label" for="intolerance-${allergyIndex}">Intolérance</label>
                                         </div>
                                     </div>
@@ -289,11 +289,11 @@ function addDynamicField(type) {
                                     <div class="col-md-10">
                                         <div class="d-flex flex-column flex-md-row align-items-start">
                                             <div class="me-3">
-                                                <input type="radio" name="Allergies[${allergyIndex}].Gravite" value="Bénigne" class="form-check-input" id="benigne-${allergyIndex}" />
+                                                <input asp-for="Allergies[${allergyIndex}].Gravite" type="radio" name="Allergies[${allergyIndex}].Gravite" value="Bénigne" class="form-check-input" id="benigne-${allergyIndex}" />
                                                 <label class="form-check-label" for="benigne-${allergyIndex}">Bénigne</label>
                                             </div>
                                             <div>
-                                                <input type="radio" name="Allergies[${allergyIndex}].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-${allergyIndex}" />
+                                                <input asp-for="Allergies[${allergyIndex}].Gravite" type="radio" name="Allergies[${allergyIndex}].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-${allergyIndex}" />
                                                 <label class="form-check-label" for="grave-${allergyIndex}">Grave/Mortelle</label>
                                             </div>
                                         </div>
@@ -302,7 +302,7 @@ function addDynamicField(type) {
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Produit</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Allergies[${allergyIndex}].Produit" class="form-control" />
+                                    <input asp-for="Allergies[${allergyIndex}].Produit" type="text" name="Allergies[${allergyIndex}].Produit" class="form-control" />
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
@@ -322,23 +322,23 @@ function addDynamicField(type) {
                                 <div class="col-md-10 d-flex flex-wrap">
                                     <!-- Flex container for horizontal alignment -->
                                     <div class="radio-container">
-                                        <input type="radio" id="autisme${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Autisme" class="form-check-input" />
+                                        <input asp-for="Handicaps[${handicapIndex}].Type" type="radio" id="autisme${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Autisme" class="form-check-input" />
                                         <label for="autisme${handicapIndex}" class="form-check-label">Autisme</label>
                                     </div>
                                     <div class="radio-container">
-                                        <input type="radio" id="mobilite-reduite${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Mobilité réduite" class="form-check-input" />
+                                        <input asp-for="Handicaps[${handicapIndex}].Type" type="radio" id="mobilite-reduite${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Mobilité réduite" class="form-check-input" />
                                         <label for="mobilite-reduite${handicapIndex}" class="form-check-label">Mobilité réduite</label>
                                     </div>
                                     <div class="radio-container">
-                                        <input type="radio" id="deficience-auditive${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Déficience auditive" class="form-check-input" />
+                                        <input asp-for="Handicaps[${handicapIndex}].Type" type="radio" id="deficience-auditive${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Déficience auditive" class="form-check-input" />
                                         <label for="deficience-auditive${handicapIndex}" class="form-check-label">Déficience auditive</label>
                                     </div>
                                     <div class="radio-container">
-                                        <input type="radio" id="deficience-visuelle${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Déficience visuelle" class="form-check-input" />
+                                        <input asp-for="Handicaps[${handicapIndex}].Type" type="radio" id="deficience-visuelle${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Déficience visuelle" class="form-check-input" />
                                         <label for="deficience-visuelle${handicapIndex}" class="form-check-label">Déficience visuelle</label>
                                     </div>
                                     <div class="radio-container">
-                                        <input type="radio" id="autre${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Autre" class="form-check-input" />
+                                        <input asp-for="Handicaps[${handicapIndex}].Type" type="radio" id="autre${handicapIndex}" name="Handicaps[${handicapIndex}].Type" value="Autre" class="form-check-input" />
                                         <label for="autre${handicapIndex}" class="form-check-label">Autre</label>
                                     </div>
                                 </div>
@@ -346,7 +346,7 @@ function addDynamicField(type) {
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Définition</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Handicaps[${handicapIndex}].Definition" class="form-control" />
+                                    <input asp-for="Handicaps[${handicapIndex}].Definition" type="text" name="Handicaps[${handicapIndex}].Definition" class="form-control" />
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
@@ -365,11 +365,11 @@ function addDynamicField(type) {
                         <label class="col-md-2 col-form-label">Type</label>
                         <div class="col-md-10">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="medicament${medicationIndex}" name="Medications[${medicationIndex}].MedicamentProduitNat" value="Medicament" />
+                                <input asp-for="Medications[${medicationIndex}].MedicamentProduitNat" class="form-check-input" type="radio" id="medicament${medicationIndex}" name="Medications[${medicationIndex}].MedicamentProduitNat" value="Medicament" />
                                 <label class="form-check-label" for="medicament${medicationIndex}">Médicament</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="produitNaturel${medicationIndex}" name="Medications[${medicationIndex}].MedicamentProduitNat" value="Produit Naturel" />
+                                <input asp-for="Medications[${medicationIndex}].MedicamentProduitNat" class="form-check-input" type="radio" id="produitNaturel${medicationIndex}" name="Medications[${medicationIndex}].MedicamentProduitNat" value="Produit Naturel" />
                                 <label class="form-check-label" for="produitNaturel${medicationIndex}">Produit Naturel</label>
                             </div>
                         </div>
@@ -378,21 +378,21 @@ function addDynamicField(type) {
                     <div class="form-group row">
                         <label class="col-md-2 col-form-label">Nom</label>
                         <div class="col-md-10">
-                            <input type="text" name="Medications[${medicationIndex}].Nom" class="form-control" />
+                            <input asp-for="Medications[${medicationIndex}].Nom" type="text" name="Medications[${medicationIndex}].Nom" class="form-control" />
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-md-2 col-form-label" id="posologieLabel${medicationIndex}">Posologie</label>
                         <div class="col-md-10">
-                            <input type="text" name="Medications[${medicationIndex}].Posologie" class="form-control" />
+                            <input asp-for="Medications[${medicationIndex}].Posologie" type="text" name="Medications[${medicationIndex}].Posologie" class="form-control" />
                         </div>
                     </div>
 
                     <div class="form-group row" id="raisonGroup${medicationIndex}" style="display: none;">
                         <label class="col-md-2 col-form-label">Raison</label>
                         <div class="col-md-10">
-                            <input type="text" name="Medications[${medicationIndex}].Raison" class="form-control" />
+                            <input asp-for="Medications[${medicationIndex}].Raison" type="text" name="Medications[${medicationIndex}].Raison" class="form-control" />
                         </div>
                     </div>
 
