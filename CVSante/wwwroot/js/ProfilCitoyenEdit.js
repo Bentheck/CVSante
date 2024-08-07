@@ -271,6 +271,30 @@ function addDynamicField(type) {
                     </div>
                 </div>`;
             break;
+        case 'handicap':
+            containerId = 'handicap-fields';
+            index = document.querySelectorAll(`#${containerId} .card`).length;
+            fieldHtml = `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Type</label>
+                            <div class="col-md-10">
+                                <input type="text" name="Handicaps[${index}].Type" class="form-control" />
+                            </div>
+                        </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Description</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="Handicaps[${index}].Description" class="form-control" />
+                                </div>
+                            </div>
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                        </div>
+                    </div>
+                </div>`;
+            break;
         case 'medication':
             containerId = 'medication-fields';
             index = document.querySelectorAll(`#${containerId} .card`).length;
