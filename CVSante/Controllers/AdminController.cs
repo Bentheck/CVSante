@@ -78,6 +78,10 @@ namespace CVSante.Controllers
 
             var userParamedic = await _context.UserParamedics
                 .FirstOrDefaultAsync(u => u.ParamId == id);
+            if (userParamedic.FkRoleNavigation.EditRole != true)
+            {
+                return NotFound();
+            }
 
             var viewModel = new ManageCompanyRoles
             {
