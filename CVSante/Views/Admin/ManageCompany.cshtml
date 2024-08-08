@@ -1,5 +1,11 @@
 ﻿@model CVSante.Models.Company
 
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
 <h4>Company</h4>
 <hr />
 <div class="row">
@@ -28,6 +34,7 @@
         </form>
     </div>
 </div>
+
 
 <div>
     <a asp-action="Index">Back to List</a>
