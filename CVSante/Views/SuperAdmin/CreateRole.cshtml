@@ -1,0 +1,59 @@
+﻿@model CVSante.Models.CompanyRole
+
+@{
+    ViewData["Title"] = "Create Role";
+}
+
+<h1>Create Role</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="CreateRole">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="CreateParamedic" class="control-label"></label>
+                <input asp-for="CreateParamedic" type="checkbox" class="form-check-input" />
+                <span asp-validation-for="CreateParamedic" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EditParamedic" class="control-label"></label>
+                <input asp-for="EditParamedic" type="checkbox" class="form-check-input" />
+                <span asp-validation-for="EditParamedic" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="GetHistorique" class="control-label"></label>
+                <input asp-for="GetHistorique" type="checkbox" class="form-check-input" />
+                <span asp-validation-for="GetHistorique" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="GetCitoyen" class="control-label"></label>
+                <input asp-for="GetCitoyen" type="checkbox" class="form-check-input" />
+                <span asp-validation-for="GetCitoyen" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EditRole" class="control-label"></label>
+                <input asp-for="EditRole" type="checkbox" class="form-check-input" />
+                <span asp-validation-for="EditRole" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FkCompany" class="control-label"></label>
+                <select asp-for="FkCompany" class="form-control" asp-items="ViewBag.FkCompany"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

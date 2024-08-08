@@ -22,6 +22,4 @@ public partial class CompanyRole
     public virtual Company? FkCompanyNavigation { get; set; }
 
     public virtual ICollection<UserParamedic> UserParamedics { get; set; } = new List<UserParamedic>();
-
-    public virtual ICollection<UserParamedic> FkParams { get; set; } = new List<UserParamedic>();
 }
