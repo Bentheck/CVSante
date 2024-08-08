@@ -113,6 +113,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Admin\" />
     <Folder Include="wwwroot\themesAdmin\img\" />
   </ItemGroup>
 

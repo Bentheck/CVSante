@@ -1,21 +1,91 @@
-﻿@model CVSante.Models.CompanyRole
+﻿@model CVSante.Models.UserParamedic
 
-<h4>CompanyRole</h4>
+@{
+    ViewData["Title"] = "Gestion des rôles";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+   
+}
+<h1>Gestion des rôles</h1>
+
+<form asp-action="SaveRoleManagement" asp-controller="Admin" method="post" class="form-horizontal">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Rôles</h3>
+            <ul id="rolesList" class="list-group">
+                @foreach (var role in Model.SelectMany(m => m.FkRoles).Distinct())
+                {
+                    <li class="list-group-item role-item" data-role="@role.RoleName">@role.RoleName</li>
+                }
+            </ul>
+            <button type="button" class="btn btn-primary" id="addBtn">Ajouter</button>
+            <button type="button" class="btn btn-warning" id="editBtn">Modifier</button>
+            <button type="button" class="btn btn-danger" id="deleteBtn">Supprimer</button>
+        </div>
+        <div class="col-md-6">
+            <h3>Droits</h3>
+            <div>
+                <input type="checkbox" id="createResponder" disabled> Créer nouveau répondant<br>
+                <input type="checkbox" id="viewHistory" disabled> Visionner historique<br>
+                <input type="checkbox" id="viewCitizenFile" disabled> Voir dossier citoyen<br>
+            </div>
+            <button type="button" class="btn btn-secondary" id="cancelBtn">Annuler</button>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12 text-center">
+            <button type="submit" class="btn btn-primary" id="saveBtn">Sauvegarder</button>
+            <button type="button" class="btn btn-secondary" id="returnBtn">Retour</button>
+        </div>
+    </div>
+</form>
+@* <h1>Edit</h1>
+
+<h4>UserParamedic</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="ManageRoles">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdRole" />
             <div class="form-group">
-                <label asp-for="RoleName" class="control-label"></label>
-                <input asp-for="RoleName" class="form-control" />
-                <span asp-validation-for="RoleName" class="text-danger"></span>
+                <label asp-for="Nom" class="control-label"></label>
+                <input asp-for="Nom" class="form-control" />
+                <span asp-validation-for="Nom" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RoleDroits" class="control-label"></label>
-                <input asp-for="RoleDroits" class="form-control" />
-                <span asp-validation-for="RoleDroits" class="text-danger"></span>
+                <label asp-for="Prenom" class="control-label"></label>
+                <input asp-for="Prenom" class="form-control" />
+                <span asp-validation-for="Prenom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ville" class="control-label"></label>
+                <input asp-for="Ville" class="form-control" />
+                <span asp-validation-for="Ville" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Telephone" class="control-label"></label>
+                <input asp-for="Telephone" class="form-control" />
+                <span asp-validation-for="Telephone" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="ParamId" />
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ParamIsActive" /> @Html.DisplayNameFor(model => model.ParamIsActive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Matricule" class="control-label"></label>
+                <input asp-for="Matricule" class="form-control" />
+                <span asp-validation-for="Matricule" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FkCompany" class="control-label"></label>
+                <select asp-for="FkCompany" class="form-control" asp-items="ViewBag.FkCompany"></select>
+                <span asp-validation-for="FkCompany" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FkIdentityUser" class="control-label"></label>
+                <select asp-for="FkIdentityUser" class="form-control" asp-items="ViewBag.FkIdentityUser"></select>
+                <span asp-validation-for="FkIdentityUser" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -28,3 +98,4 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+ *@
