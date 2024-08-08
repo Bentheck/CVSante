@@ -5,6 +5,8 @@ namespace CVSante.Models;
 
 public partial class UserAllergy
 {
+    public int AlId { get; set; }
+
     public int FkUserId { get; set; }
 
     public string AllergieIntolerance { get; set; } = null!;
@@ -12,8 +14,6 @@ public partial class UserAllergy
     public string? Gravite { get; set; }
 
     public string Produit { get; set; } = null!;
-
-    public int AlId { get; set; }
 
     public virtual UserCitoyen FkUser { get; set; } = null!;
 }
