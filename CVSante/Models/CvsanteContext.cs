@@ -188,10 +188,10 @@ public partial class CvsanteContext : DbContext
             entity.Property(e => e.IdRole).HasColumnName("ID_Role");
             entity.Property(e => e.CreateParamedic).HasColumnName("Create_Paramedic");
             entity.Property(e => e.EditParamedic).HasColumnName("Edit_Paramedic");
+            entity.Property(e => e.EditRole).HasColumnName("Edit_Role");
             entity.Property(e => e.FkCompany).HasColumnName("FK_COMPANY");
             entity.Property(e => e.GetCitoyen).HasColumnName("Get_Citoyen");
             entity.Property(e => e.GetHistorique).HasColumnName("Get_Historique");
-            entity.Property(e => e.EditRole).HasColumnName("Edit_Role");
             entity.Property(e => e.RoleName)
                 .HasMaxLength(450)
                 .HasColumnName("Role_Name");
@@ -331,6 +331,7 @@ public partial class CvsanteContext : DbContext
 
             entity.HasOne(d => d.FkIdentityUserNavigation).WithMany(p => p.UserCitoyens)
                 .HasForeignKey(d => d.FkIdentityUser)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserCitoyen_AspNetUsers");
         });
 
@@ -450,6 +451,7 @@ public partial class CvsanteContext : DbContext
                 .HasDefaultValue(true)
                 .HasColumnName("Param_Is_Active");
             entity.Property(e => e.Prenom).HasMaxLength(450);
+            entity.Property(e => e.Role).HasMaxLength(450);
             entity.Property(e => e.Telephone).HasMaxLength(450);
             entity.Property(e => e.Ville).HasMaxLength(450);
 
@@ -459,6 +461,7 @@ public partial class CvsanteContext : DbContext
 
             entity.HasOne(d => d.FkIdentityUserNavigation).WithMany(p => p.UserParamedics)
                 .HasForeignKey(d => d.FkIdentityUser)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserParamedic_AspNetUsers");
 
             entity.HasMany(d => d.FkRoles).WithMany(p => p.FkParams)

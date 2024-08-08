@@ -1,91 +1,52 @@
-﻿@model CVSante.Models.UserParamedic
+﻿@model CVSante.ViewModels.ManageCompanyRoles
 
-@{
-    ViewData["Title"] = "Gestion des rôles";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-   
-}
-<h1>Gestion des rôles</h1>
-
-<form asp-action="SaveRoleManagement" asp-controller="Admin" method="post" class="form-horizontal">
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Rôles</h3>
-            <ul id="rolesList" class="list-group">
-                @foreach (var role in Model.SelectMany(m => m.FkRoles).Distinct())
-                {
-                    <li class="list-group-item role-item" data-role="@role.RoleName">@role.RoleName</li>
-                }
-            </ul>
-            <button type="button" class="btn btn-primary" id="addBtn">Ajouter</button>
-            <button type="button" class="btn btn-warning" id="editBtn">Modifier</button>
-            <button type="button" class="btn btn-danger" id="deleteBtn">Supprimer</button>
-        </div>
-        <div class="col-md-6">
-            <h3>Droits</h3>
-            <div>
-                <input type="checkbox" id="createResponder" disabled> Créer nouveau répondant<br>
-                <input type="checkbox" id="viewHistory" disabled> Visionner historique<br>
-                <input type="checkbox" id="viewCitizenFile" disabled> Voir dossier citoyen<br>
-            </div>
-            <button type="button" class="btn btn-secondary" id="cancelBtn">Annuler</button>
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-12 text-center">
-            <button type="submit" class="btn btn-primary" id="saveBtn">Sauvegarder</button>
-            <button type="button" class="btn btn-secondary" id="returnBtn">Retour</button>
-        </div>
-    </div>
-</form>
-@* <h1>Edit</h1>
-
-<h4>UserParamedic</h4>
+<h4>Manage Company Roles</h4>
 <hr />
+
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <h5>Roles</h5>
+        <ul class="list-group">
+            @foreach (var role in Model.Roles)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    @Html.DisplayFor(modelItem => role.RoleName)
+                    <a asp-action="ManageRoles" asp-route-id="@role.IdRole" class="btn btn-sm btn-primary">Edit</a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="col-md-8">
+        <h5>@(Model.SelectedRole.IdRole == 0 ? "Add New Role" : "Edit Role")</h5>
+        <form asp-action="@(Model.SelectedRole.IdRole == 0 ? "CreateRole" : "EditRole")">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SelectedRole.IdRole" />
             <div class="form-group">
-                <label asp-for="Nom" class="control-label"></label>
-                <input asp-for="Nom" class="form-control" />
-                <span asp-validation-for="Nom" class="text-danger"></span>
+                <label asp-for="SelectedRole.RoleName" class="control-label"></label>
+                <input asp-for="SelectedRole.RoleName" class="form-control" />
+                <span asp-validation-for="SelectedRole.RoleName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Prenom" class="control-label"></label>
-                <input asp-for="Prenom" class="form-control" />
-                <span asp-validation-for="Prenom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ville" class="control-label"></label>
-                <input asp-for="Ville" class="form-control" />
-                <span asp-validation-for="Ville" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telephone" class="control-label"></label>
-                <input asp-for="Telephone" class="form-control" />
-                <span asp-validation-for="Telephone" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="ParamId" />
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="ParamIsActive" /> @Html.DisplayNameFor(model => model.ParamIsActive)
+                    <input class="form-check-input" asp-for="SelectedRole.CreateParamedic" /> @Html.DisplayNameFor(model => model.SelectedRole.CreateParamedic)
                 </label>
             </div>
-            <div class="form-group">
-                <label asp-for="Matricule" class="control-label"></label>
-                <input asp-for="Matricule" class="form-control" />
-                <span asp-validation-for="Matricule" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SelectedRole.EditParamedic" /> @Html.DisplayNameFor(model => model.SelectedRole.EditParamedic)
+                </label>
             </div>
-            <div class="form-group">
-                <label asp-for="FkCompany" class="control-label"></label>
-                <select asp-for="FkCompany" class="form-control" asp-items="ViewBag.FkCompany"></select>
-                <span asp-validation-for="FkCompany" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SelectedRole.GetHistorique" /> @Html.DisplayNameFor(model => model.SelectedRole.GetHistorique)
+                </label>
             </div>
-            <div class="form-group">
-                <label asp-for="FkIdentityUser" class="control-label"></label>
-                <select asp-for="FkIdentityUser" class="form-control" asp-items="ViewBag.FkIdentityUser"></select>
-                <span asp-validation-for="FkIdentityUser" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SelectedRole.GetCitoyen" /> @Html.DisplayNameFor(model => model.SelectedRole.GetCitoyen)
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -97,5 +58,3 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
- *@
