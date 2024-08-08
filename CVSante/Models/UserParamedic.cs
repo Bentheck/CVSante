@@ -5,6 +5,8 @@ namespace CVSante.Models;
 
 public partial class UserParamedic
 {
+    public int ParamId { get; set; }
+
     public string Nom { get; set; } = null!;
 
     public string Prenom { get; set; } = null!;
@@ -12,8 +14,6 @@ public partial class UserParamedic
     public string Ville { get; set; } = null!;
 
     public string Telephone { get; set; } = null!;
-
-    public int ParamId { get; set; }
 
     public bool ParamIsActive { get; set; }
 

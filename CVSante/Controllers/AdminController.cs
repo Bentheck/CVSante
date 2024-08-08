@@ -61,11 +61,6 @@ namespace CVSante.Controllers
             var userParamedic = await _context.UserParamedics
                 .FirstOrDefaultAsync(u => u.ParamId == id);
 
-            if (userParamedic != null && userParamedic.Role <= data[])
-            {
-                TempData["ErrorMessage"] = "Vous n'avez pas les droits pour accéder à cette page";
-                return RedirectToAction(nameof(Index));
-            }
 
             var historiqueParams = await _context.HistoriqueParams
                 .Include(p => p.FkParam)
@@ -74,6 +69,90 @@ namespace CVSante.Controllers
 
             return View(historiqueParams);
         }
+
+
+        // GET: Admin/Roles/ManageRoles/5
+        public async Task<IActionResult> ManageRoles(int? id)
+        {
+            var companyRoles = await _context.CompanyRoles.ToListAsync();
+
+            var userParamedic = await _context.UserParamedics
+                .FirstOrDefaultAsync(u => u.ParamId == id);
+
+            var viewModel = new ManageCompanyRoles
+            {
+                Roles = companyRoles,
+                SelectedRole = id.HasValue ? await _context.CompanyRoles.FindAsync(id.Value) : new CompanyRole(),
+                userParamedic = userParamedic
+            };
+
+            return View(viewModel);
+        }
+
+        // POST: Admin/Roles/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRole([Bind("RoleName,CreateParamedic,EditParamedic,GetHistorique,GetCitoyen,FkCompany")] CompanyRole companyRole)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(companyRole);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(ManageRoles));
+            }
+
+            var viewModel = new ManageCompanyRoles
+            {
+                Roles = await _context.CompanyRoles.ToListAsync(),
+                SelectedRole = companyRole
+            };
+            return View("ManageRoles", viewModel);
+        }
+
+        // POST: Admin/Roles/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditRole(int id, [Bind("IdRole,RoleName,CreateParamedic,EditParamedic,GetHistorique,GetCitoyen,FkCompany")] CompanyRole companyRole)
+        {
+            if (id != companyRole.IdRole)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(companyRole);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CompanyRoleExists(companyRole.IdRole))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(ManageRoles));
+            }
+
+            var viewModel = new ManageCompanyRoles
+            {
+                Roles = await _context.CompanyRoles.ToListAsync(),
+                SelectedRole = companyRole
+            };
+            return View("ManageRoles", viewModel);
+        }
+
+        private bool CompanyRoleExists(int id)
+        {
+            return _context.CompanyRoles.Any(e => e.IdRole == id);
+        }
+
 
         // GET: Admin/Create
         public IActionResult Create()

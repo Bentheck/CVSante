@@ -17,5 +17,11 @@ public partial class CompanyRole
 
     public bool GetCitoyen { get; set; }
 
+    public bool EditRole { get; set; }
+
+    public int FkCompany { get; set; }
+
+    public virtual Company FkCompanyNavigation { get; set; } = null!;
+
     public virtual ICollection<UserParamedic> FkParams { get; set; } = new List<UserParamedic>();
 }
