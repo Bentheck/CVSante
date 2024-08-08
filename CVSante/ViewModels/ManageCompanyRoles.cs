@@ -1,12 +1,12 @@
 ﻿using CVSante.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace CVSante.ViewModels
 {
-    internal class ManageCompanyRoles
+    public class ManageCompanyRoles
     {
-        public List<CompanyRole> Roles { get; set; } = new List<CompanyRole>();
-        public CompanyRole SelectedRole { get; set; } = new CompanyRole();
-        public  UserParamedic userParamedic { get; set; } = new UserParamedic();
+        public List<UserParamedic> Paramedics { get; set; }
+        public UserParamedic SelectedParamedic { get; set; }
+        public CompanyRole SelectedRole { get; set; }
+        public int CompanyId { get; set; }
     }
 }

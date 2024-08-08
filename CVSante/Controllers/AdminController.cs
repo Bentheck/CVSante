@@ -50,109 +50,112 @@ namespace CVSante.Controllers
             return View(profilAdmin);
         }
 
-        // GET: Admin/History/5
-        public async Task<IActionResult> History(int? id)
+        // GET: Admin/Roles/ManageRoles
+        public async Task<IActionResult> ManageRoles(int? paramedicId)
         {
-            if (id == null)
+            // Fetch all paramedics associated with the company
+            var paramedics = await _context.UserParamedics
+                .Include(u => u.FkRoleNavigation)
+                .ToListAsync();
+
+            // Select the current paramedic if paramedicId is provided, otherwise default to the first paramedic
+            var selectedParamedic = paramedicId.HasValue
+                ? paramedics.FirstOrDefault(p => p.ParamId == paramedicId.Value)
+                : paramedics.FirstOrDefault();
+
+            if (selectedParamedic == null)
             {
                 return NotFound();
             }
 
-            var userParamedic = await _context.UserParamedics
-                .FirstOrDefaultAsync(u => u.ParamId == id);
-
-
-            var historiqueParams = await _context.HistoriqueParams
-                .Include(p => p.FkParam)
-                .Include(u => u.FkUser)
-                .ToListAsync();
-
-            return View(historiqueParams);
-        }
-
-
-        // GET: Admin/Roles/ManageRoles/5
-        public async Task<IActionResult> ManageRoles(int? id)
-        {
-            var companyRoles = await _context.CompanyRoles.ToListAsync();
-
-            var userParamedic = await _context.UserParamedics
-                .FirstOrDefaultAsync(u => u.ParamId == id);
-
+            var companyId = selectedParamedic.FkCompany;
 
             var viewModel = new ManageCompanyRoles
             {
-                Roles = companyRoles,
-                SelectedRole = id.HasValue ? await _context.CompanyRoles.FindAsync(id.Value) : new CompanyRole(),
-                userParamedic = userParamedic
+                Paramedics = paramedics,
+                SelectedParamedic = selectedParamedic,
+                SelectedRole = selectedParamedic.FkRoleNavigation ?? new CompanyRole(),
+                CompanyId = (int)companyId
             };
 
             return View(viewModel);
         }
 
-        // POST: Admin/Roles/Create
+
+        //POST: Admin/Roles/ManageRoles
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRole([Bind("RoleName,CreateParamedic,EditParamedic,GetHistorique,GetCitoyen,FkCompany")] CompanyRole companyRole)
+        public async Task<IActionResult> EditRole(CompanyRole selectedRole, int selectedParamedicId)
         {
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
-                _context.Add(companyRole);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(ManageRoles));
+                // Log model state errors
+                Console.WriteLine("ModelState is not valid.");
+                foreach (var error in ModelState)
+                {
+                    Console.WriteLine($"Key: {error.Key}, Errors: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                }
+
+                // Retrieve required data to repopulate the view model
+                var paramedics = await _context.UserParamedics
+                    .Include(u => u.FkRoleNavigation)
+                    .ToListAsync();
+
+                var selectedParamedic = await _context.UserParamedics
+                    .Include(p => p.FkRoleNavigation)
+                    .FirstOrDefaultAsync(p => p.ParamId == selectedParamedicId);
+
+                var viewModel = new ManageCompanyRoles
+                {
+                    Paramedics = paramedics,
+                    SelectedParamedic = selectedParamedic,
+                    SelectedRole = selectedRole,
+                    CompanyId = selectedParamedic?.FkCompany ?? 0
+                };
+
+                // Return to the view with validation errors
+                return View("ManageRoles", viewModel);
             }
 
-            var viewModel = new ManageCompanyRoles
-            {
-                Roles = await _context.CompanyRoles.ToListAsync(),
-                SelectedRole = companyRole
-            };
-            return View("ManageRoles", viewModel);
-        }
+            // Find the role to update
+            var roleToUpdate = await _context.CompanyRoles
+                .FirstOrDefaultAsync(r => r.IdRole == selectedRole.IdRole);
 
-        // POST: Admin/Roles/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditRole(int id, [Bind("IdRole,RoleName,CreateParamedic,EditParamedic,GetHistorique,GetCitoyen,FkCompany")] CompanyRole companyRole)
-        {
-            if (id != companyRole.IdRole)
+            if (roleToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(companyRole);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CompanyRoleExists(companyRole.IdRole))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(ManageRoles));
-            }
+            // Update the role properties
+            roleToUpdate.CreateParamedic = selectedRole.CreateParamedic;
+            roleToUpdate.EditParamedic = selectedRole.EditParamedic;
+            roleToUpdate.GetHistorique = selectedRole.GetHistorique;
+            roleToUpdate.GetCitoyen = selectedRole.GetCitoyen;
+            roleToUpdate.EditRole = selectedRole.EditRole;
 
-            var viewModel = new ManageCompanyRoles
-            {
-                Roles = await _context.CompanyRoles.ToListAsync(),
-                SelectedRole = companyRole
-            };
-            return View("ManageRoles", viewModel);
+            _context.CompanyRoles.Update(roleToUpdate);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManageRoles", new { paramedicId = selectedParamedicId });
         }
 
-        private bool CompanyRoleExists(int id)
-        {
-            return _context.CompanyRoles.Any(e => e.IdRole == id);
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         // GET: Admin/Create
