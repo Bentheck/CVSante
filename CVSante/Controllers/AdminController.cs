@@ -29,7 +29,7 @@ namespace CVSante.Controllers
         // GET: Admin
         public async Task<IActionResult> Index()
         {
-            var currentUserId = _userManager.GetUserId(User);
+            var currentUserId = _userManager.GetUserId(User); // currentUserId is already a string
             var userParam = await _context.UserParamedics
                 .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
 
