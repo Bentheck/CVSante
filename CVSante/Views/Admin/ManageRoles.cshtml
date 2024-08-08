@@ -1,60 +1,80 @@
-﻿@* @model CVSante.ViewModels.ManageCompanyRoles
+﻿@model CVSante.ViewModels.ManageCompanyRoles
 
-<h4>Manage Company Roles</h4>
+<h4>Manage Paramedic Roles for Company</h4>
 <hr />
 
-
 <div class="row">
+    <!-- Left Side: List of Paramedics -->
     <div class="col-md-4">
-        <h5>Roles</h5>
+        <h5>Paramedics</h5>
         <ul class="list-group">
-            @foreach (var role in Model.Roles)
+            @foreach (var paramedic in Model.Paramedics)
             {
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    @Html.DisplayFor(modelItem => role.RoleName)
-                    <a asp-action="ManageRoles" asp-route-id="@role.IdRole" class="btn btn-sm btn-primary">Edit</a>
+                <li class="list-group-item @(paramedic.ParamId == Model.SelectedParamedic?.ParamId ? "active" : "")">
+                    <a asp-action="ManageRoles"
+                       asp-route-paramedicId="@paramedic.ParamId"
+                       class="btn btn-link">
+                        @paramedic.Nom, @paramedic.Prenom
+                    </a>
                 </li>
             }
         </ul>
     </div>
 
+    <!-- Right Side: Edit Selected Paramedic's Roles -->
     <div class="col-md-8">
-        <h5>@(Model.SelectedRole.IdRole == 0 ? "Add New Role" : "Edit Role")</h5>
-        <form asp-action="@(Model.SelectedRole.IdRole == 0 ? "CreateRole" : "EditRole")">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="SelectedRole.IdRole" />
-            <div class="form-group">
-                <label asp-for="SelectedRole.RoleName" class="control-label"></label>
-                <input asp-for="SelectedRole.RoleName" class="form-control" />
-                <span asp-validation-for="SelectedRole.RoleName" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SelectedRole.CreateParamedic" /> @Html.DisplayNameFor(model => model.SelectedRole.CreateParamedic)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SelectedRole.EditParamedic" /> @Html.DisplayNameFor(model => model.SelectedRole.EditParamedic)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SelectedRole.GetHistorique" /> @Html.DisplayNameFor(model => model.SelectedRole.GetHistorique)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SelectedRole.GetCitoyen" /> @Html.DisplayNameFor(model => model.SelectedRole.GetCitoyen)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        @if (Model.SelectedParamedic != null && Model.SelectedRole != null)
+        {
+            <h5>Edit Roles for @Model.SelectedParamedic.Nom, @Model.SelectedParamedic.Prenom</h5>
+            <form asp-action="EditRole" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <!-- Hidden input to carry IdRole and ParamId -->
+                <input type="hidden" asp-for="SelectedRole.IdRole" />
+                <input type="hidden" name="SelectedParamedicId" value="@Model.SelectedParamedic.ParamId" />
+
+                <!-- Checkbox for CreateParamedic -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.CreateParamedic" />
+                    <label class="form-check-label" asp-for="SelectedRole.CreateParamedic"></label>
+                </div>
+
+                <!-- Checkbox for EditParamedic -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.EditParamedic" />
+                    <label class="form-check-label" asp-for="SelectedRole.EditParamedic"></label>
+                </div>
+
+                <!-- Checkbox for GetHistorique -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.GetHistorique" />
+                    <label class="form-check-label" asp-for="SelectedRole.GetHistorique"></label>
+                </div>
+
+                <!-- Checkbox for GetCitoyen -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.GetCitoyen" />
+                    <label class="form-check-label" asp-for="SelectedRole.GetCitoyen"></label>
+                </div>
+
+                <!-- Checkbox for EditRole -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.EditRole" />
+                    <label class="form-check-label" asp-for="SelectedRole.EditRole"></label>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        }
+        else
+        {
+            <p>Select a paramedic to edit roles.</p>
+        }
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
-</div> *@
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
