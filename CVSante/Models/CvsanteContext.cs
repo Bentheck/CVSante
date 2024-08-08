@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CVSante.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace CVSante.Models;
@@ -184,6 +185,8 @@ public partial class CvsanteContext : DbContext
             entity.HasKey(e => e.IdRole);
 
             entity.ToTable("Company_Roles");
+
+            entity.HasIndex(e => e.FkCompany, "IX_Company_Roles_FK_COMPANY");
 
             entity.Property(e => e.IdRole).HasColumnName("ID_Role");
             entity.Property(e => e.CreateParamedic).HasColumnName("Create_Paramedic");
@@ -438,6 +441,8 @@ public partial class CvsanteContext : DbContext
 
             entity.HasIndex(e => e.FkIdentityUser, "IX_UserParamedic_FK_IDENTITY_USER");
 
+            entity.HasIndex(e => e.FkRole, "IX_UserParamedic_FK_ROLE");
+
             entity.Property(e => e.ParamId).HasColumnName("Param_ID");
             entity.Property(e => e.FkCompany).HasColumnName("FK_COMPANY");
             entity.Property(e => e.FkIdentityUser).HasColumnName("FK_IDENTITY_USER");
@@ -464,27 +469,8 @@ public partial class CvsanteContext : DbContext
                 .HasForeignKey(d => d.FkRole)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserParamedic_Company_Roles");
-
-            entity.HasMany(d => d.FkRoles).WithMany(p => p.FkParams)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserCompanyRoleId",
-                    r => r.HasOne<CompanyRole>().WithMany()
-                        .HasForeignKey("FkRoleId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_UserCompanyRoleID_Company_Roles"),
-                    l => l.HasOne<UserParamedic>().WithMany()
-                        .HasForeignKey("FkParamId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_UserCompanyRoleID_UserParamedic"),
-                    j =>
-                    {
-                        j.HasKey("FkParamId", "FkRoleId");
-                        j.ToTable("UserCompanyRoleID");
-                        j.HasIndex(new[] { "FkRoleId" }, "IX_UserCompanyRoleID_FK_ROLE_ID");
-                        j.IndexerProperty<int>("FkParamId").HasColumnName("FK_PARAM_ID");
-                        j.IndexerProperty<int>("FkRoleId").HasColumnName("FK_ROLE_ID");
-                    });
         });
+
 
         OnModelCreatingPartial(modelBuilder);
     }
