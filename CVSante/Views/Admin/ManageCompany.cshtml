@@ -5,46 +5,6 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Gestion de la compagnie</h2>
-<form asp-action="SaveCompanyManagement" asp-controller="Admin" method="post" class="form-horizontal">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Employé</th>
-                <th>Matricule</th>
-                <th>Rôle</th>
-                <th>Actif</th>
-                <th>Retirer de la compagnie</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var employee in Model)
-            {
-                <tr>
-                    <td>@employee.Nom</td>
-                    <td>@employee.Matricule</td>
-                    <td>
-                        <select class="form-control" asp-for="@employee.SelectedRole">
-                            @foreach (var role in employee.FkRoles)
-                            {
-                                <option value="@role.FkRoles" @(employee.SelectedRole == role.RolesName ? "selected" : "")>@role.RolesName</option>
-                            }
-                        </select>
-                    </td>
-                    <td><input type="checkbox" asp-for="@employee.ParamIsActive" /></td>
-                    <td>
-                        <button type="submit" asp-action="RemoveFromCompany" asp-route-id="@employee.FkIdentityUserNavigation" class="btn btn-danger">Retirer</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Sauvegarder</button>
-        <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Index", "Admin")'">Annuler</button>
-        <a asp-area="" asp-controller="Admin" asp-action="ManageRoles" class="btn btn-primary">Gestion des rôles</a>
-    </div>
-</form>
 
 
 @* <h1>Index</h1>
