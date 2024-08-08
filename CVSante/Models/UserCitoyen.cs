@@ -7,11 +7,11 @@ public partial class UserCitoyen
 {
     public int UserId { get; set; }
 
-    public string? FkIdentityUser { get; set; }
+    public string FkIdentityUser { get; set; } = null!;
 
     public virtual ICollection<Commentaire> Commentaires { get; set; } = new List<Commentaire>();
 
-    public virtual AspNetUser? FkIdentityUserNavigation { get; set; }
+    public virtual AspNetUser FkIdentityUserNavigation { get; set; } = null!;
 
     public virtual ICollection<HistoriqueParam> HistoriqueParams { get; set; } = new List<HistoriqueParam>();
 

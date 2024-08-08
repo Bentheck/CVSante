@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CVSante.Models.UserParamedic>
+﻿@model CVSante.Models.Company
 
 @{
     ViewData["Title"] = "Index";
@@ -6,75 +6,37 @@
 }
 
 
+<h4>Company</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ManageCompany">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdComp" />
+            <div class="form-group">
+                <label asp-for="CompName" class="control-label"></label>
+                <input asp-for="CompName" class="form-control" />
+                <span asp-validation-for="CompName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdLink" class="control-label"></label>
+                <input asp-for="AdLink" class="form-control" />
+                <span asp-validation-for="AdLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdId" class="control-label"></label>
+                <input asp-for="AdId" class="form-control" />
+                <span asp-validation-for="AdId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
 
-@* <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nom)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Prenom)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ville)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telephone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ParamIsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Matricule)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FkCompanyNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FkIdentityUserNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prenom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ville)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telephone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParamIsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Matricule)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FkCompanyNavigation.IdComp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FkIdentityUserNavigation.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ParamId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ParamId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ParamId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
- *@</table>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
