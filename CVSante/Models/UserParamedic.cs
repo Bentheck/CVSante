@@ -34,6 +34,4 @@ public partial class UserParamedic
     public virtual CompanyRole FkRoleNavigation { get; set; } = null!;
 
     public virtual ICollection<HistoriqueParam> HistoriqueParams { get; set; } = new List<HistoriqueParam>();
-
-    public virtual ICollection<CompanyRole> FkRoles { get; set; } = new List<CompanyRole>();
 }
