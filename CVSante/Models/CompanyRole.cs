@@ -9,7 +9,13 @@ public partial class CompanyRole
 
     public string RoleName { get; set; } = null!;
 
-    public string RoleDroits { get; set; } = null!;
+    public bool CreateParamedic { get; set; }
+
+    public bool EditParamedic { get; set; }
+
+    public bool GetHistorique { get; set; }
+
+    public bool GetCitoyen { get; set; }
 
     public virtual ICollection<UserParamedic> FkParams { get; set; } = new List<UserParamedic>();
 }

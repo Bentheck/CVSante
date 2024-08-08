@@ -6,27 +6,52 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CVSante.Models;
+using CVSante.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using CVSante.Services;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 
 namespace CVSante.Controllers
 {
     public class AdminController : Controller
     {
         private readonly CvsanteContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserValidation _UserValidation;
 
-        public AdminController(CvsanteContext context)
+        public AdminController(CvsanteContext context, UserManager<IdentityUser> userManager, UserValidation userValidation)
         {
             _context = context;
+            _userManager = userManager;
+            _UserValidation = userValidation;
         }
 
         // GET: Admin
         public async Task<IActionResult> Index()
         {
-            var cvsanteContext = _context.UserParamedics.Include(u => u.FkCompanyNavigation).Include(u => u.FkIdentityUserNavigation);
-            return View(await cvsanteContext.ToListAsync());
+            var currentUserId = _userManager.GetUserId(User);
+            var userParam = await _context.UserParamedics
+                .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
+
+            if (userParam == null)
+            {
+                return NotFound();
+            }
+
+            var profilAdmin = new Paramedic
+            {
+                paramInfo = userParam,
+                historique = _context.HistoriqueParams.Where(h => h.FkParamId == userParam.ParamId).ToList(),
+                compRole = _context.CompanyRoles.FirstOrDefault(c => c.IdRole == userParam.FkCompany),
+                company = _context.Companies.FirstOrDefault(c => c.IdComp == userParam.FkCompany),
+                commentaires = _context.Commentaires.Where(c => c.FkUserparamedic == userParam.ParamId).ToList()
+            };
+
+            return View(profilAdmin);
         }
 
-        // GET: Admin/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Admin/History/5
+        public async Task<IActionResult> History(int? id)
         {
             if (id == null)
             {
@@ -34,15 +59,20 @@ namespace CVSante.Controllers
             }
 
             var userParamedic = await _context.UserParamedics
-                .Include(u => u.FkCompanyNavigation)
-                .Include(u => u.FkIdentityUserNavigation)
-                .FirstOrDefaultAsync(m => m.ParamId == id);
-            if (userParamedic == null)
+                .FirstOrDefaultAsync(u => u.ParamId == id);
+
+            if (userParamedic != null && userParamedic.Role <= data[])
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Vous n'avez pas les droits pour accéder à cette page";
+                return RedirectToAction(nameof(Index));
             }
 
-            return View(userParamedic);
+            var historiqueParams = await _context.HistoriqueParams
+                .Include(p => p.FkParam)
+                .Include(u => u.FkUser)
+                .ToListAsync();
+
+            return View(historiqueParams);
         }
 
         // GET: Admin/Create

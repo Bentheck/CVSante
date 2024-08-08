@@ -23,6 +23,8 @@ public partial class UserParamedic
 
     public string? FkIdentityUser { get; set; }
 
+    public int Role { get; set; }
+
     public virtual ICollection<Commentaire> Commentaires { get; set; } = new List<Commentaire>();
 
     public virtual Company? FkCompanyNavigation { get; set; }
