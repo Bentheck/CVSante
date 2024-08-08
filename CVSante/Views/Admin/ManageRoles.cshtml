@@ -1,21 +1,62 @@
-﻿@model CVSante.Models.CompanyRole
+﻿@model CVSante.ViewModels.ManageCompanyRoles
 
-<h4>CompanyRole</h4>
+<h4>Manage Company Roles</h4>
 <hr />
+
+@{
+    // var roleEdit = Model.Roles.FirstOrDefault(c => c.FkCompany == Model.userParamedic.FkCompany && c.EditRole);
+
+    // if (roleEdit != null && Model.userParamedic.Role != roleEdit.Role)
+    // {
+    //     throw new UnauthorizedAccessException("Access Denied");
+    // }
+}
+
+
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="ManageRoles">
+        <h5>Roles</h5>
+        <ul class="list-group">
+            @foreach (var role in Model.Roles)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    @Html.DisplayFor(modelItem => role.RoleName)
+                    <a asp-action="ManageRoles" asp-route-id="@role.IdRole" class="btn btn-sm btn-primary">Edit</a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="col-md-8">
+        <h5>@(Model.SelectedRole.IdRole == 0 ? "Add New Role" : "Edit Role")</h5>
+        <form asp-action="@(Model.SelectedRole.IdRole == 0 ? "CreateRole" : "EditRole")">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdRole" />
+            <input type="hidden" asp-for="SelectedRole.IdRole" />
             <div class="form-group">
-                <label asp-for="RoleName" class="control-label"></label>
-                <input asp-for="RoleName" class="form-control" />
-                <span asp-validation-for="RoleName" class="text-danger"></span>
+                <label asp-for="SelectedRole.RoleName" class="control-label"></label>
+                <input asp-for="SelectedRole.RoleName" class="form-control" />
+                <span asp-validation-for="SelectedRole.RoleName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="RoleDroits" class="control-label"></label>
-                <input asp-for="RoleDroits" class="form-control" />
-                <span asp-validation-for="RoleDroits" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SelectedRole.CreateParamedic" /> @Html.DisplayNameFor(model => model.SelectedRole.CreateParamedic)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SelectedRole.EditParamedic" /> @Html.DisplayNameFor(model => model.SelectedRole.EditParamedic)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SelectedRole.GetHistorique" /> @Html.DisplayNameFor(model => model.SelectedRole.GetHistorique)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SelectedRole.GetCitoyen" /> @Html.DisplayNameFor(model => model.SelectedRole.GetCitoyen)
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -27,4 +68,3 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
