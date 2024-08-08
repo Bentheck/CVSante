@@ -74,7 +74,7 @@ public partial class CvsanteContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__AspNetRo__3214EC07EFA270EA");
 
-            entity.Property(e => e.RoleId).HasMaxLength(450);
+            entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
 
             entity.HasOne(d => d.Role).WithMany(p => p.AspNetRoleClaims)
                 .HasForeignKey(d => d.RoleId)
@@ -103,6 +103,7 @@ public partial class CvsanteContext : DbContext
                     {
                         j.HasKey("UserId", "RoleId").HasName("PK__AspNetUs__AF2760ADC25C17C5");
                         j.ToTable("AspNetUserRoles");
+                        j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
                     });
         });
 
@@ -110,7 +111,7 @@ public partial class CvsanteContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__AspNetUs__3214EC070A5BA62B");
 
-            entity.Property(e => e.UserId).HasMaxLength(450);
+            entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
 
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims)
                 .HasForeignKey(d => d.UserId)
@@ -121,7 +122,7 @@ public partial class CvsanteContext : DbContext
         {
             entity.HasKey(e => new { e.LoginProvider, e.ProviderKey }).HasName("PK__AspNetUs__2B2C5B5278600BD3");
 
-            entity.Property(e => e.UserId).HasMaxLength(450);
+            entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
 
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins)
                 .HasForeignKey(d => d.UserId)
@@ -139,6 +140,10 @@ public partial class CvsanteContext : DbContext
 
         modelBuilder.Entity<Commentaire>(entity =>
         {
+            entity.HasIndex(e => e.FkUserparamedic, "IX_Commentaires_FK_USERPARAMEDIC");
+
+            entity.HasIndex(e => e.FkUserId, "IX_Commentaires_FK_USER_ID");
+
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Comment).HasMaxLength(4000);
             entity.Property(e => e.Date).HasColumnType("smalldatetime");
@@ -181,10 +186,20 @@ public partial class CvsanteContext : DbContext
             entity.ToTable("Company_Roles");
 
             entity.Property(e => e.IdRole).HasColumnName("ID_Role");
-            entity.Property(e => e.RoleDroits).HasColumnName("Role_Droits");
+            entity.Property(e => e.CreateParamedic).HasColumnName("Create_Paramedic");
+            entity.Property(e => e.EditParamedic).HasColumnName("Edit_Paramedic");
+            entity.Property(e => e.FkCompany).HasColumnName("FK_COMPANY");
+            entity.Property(e => e.GetCitoyen).HasColumnName("Get_Citoyen");
+            entity.Property(e => e.GetHistorique).HasColumnName("Get_Historique");
+            entity.Property(e => e.EditRole).HasColumnName("Edit_Role");
             entity.Property(e => e.RoleName)
                 .HasMaxLength(450)
                 .HasColumnName("Role_Name");
+
+            entity.HasOne(d => d.FkCompanyNavigation).WithMany(p => p.CompanyRoles)
+                .HasForeignKey(d => d.FkCompany)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Company_Roles_Company");
         });
 
         modelBuilder.Entity<FamilyList>(entity =>
@@ -204,6 +219,8 @@ public partial class CvsanteContext : DbContext
             entity.HasKey(e => new { e.FkUserId, e.FkParamId });
 
             entity.ToTable("HistoriqueParam");
+
+            entity.HasIndex(e => e.FkParamId, "IX_HistoriqueParam_FK_PARAM_ID");
 
             entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
             entity.Property(e => e.FkParamId).HasColumnName("FK_PARAM_ID");
@@ -241,6 +258,8 @@ public partial class CvsanteContext : DbContext
 
             entity.ToTable("UserAdresse");
 
+            entity.HasIndex(e => e.FkUserId, "IX_UserAdresse_FK_USER_ID");
+
             entity.Property(e => e.AdId).HasColumnName("AdID");
             entity.Property(e => e.AdressePrimaire).HasColumnName("Adresse_Primaire");
             entity.Property(e => e.Appartement).HasMaxLength(450);
@@ -267,6 +286,8 @@ public partial class CvsanteContext : DbContext
         {
             entity.HasKey(e => e.AlId).HasName("PK_UserAllergies_1");
 
+            entity.HasIndex(e => e.FkUserId, "IX_UserAllergies_FK_USER_ID");
+
             entity.Property(e => e.AlId).HasColumnName("AlID");
             entity.Property(e => e.AllergieIntolerance)
                 .HasMaxLength(450)
@@ -285,6 +306,8 @@ public partial class CvsanteContext : DbContext
         {
             entity.HasKey(e => e.AnId);
 
+            entity.HasIndex(e => e.FkUserId, "IX_UserAntecedents_FK_USER_ID");
+
             entity.Property(e => e.AnId).HasColumnName("AnID");
             entity.Property(e => e.Antecedent).HasMaxLength(2500);
             entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
@@ -301,10 +324,10 @@ public partial class CvsanteContext : DbContext
 
             entity.ToTable("UserCitoyen");
 
+            entity.HasIndex(e => e.FkIdentityUser, "IX_UserCitoyen_FK_IDENTITY_USER");
+
             entity.Property(e => e.UserId).HasColumnName("User_ID");
-            entity.Property(e => e.FkIdentityUser)
-                .HasMaxLength(450)
-                .HasColumnName("FK_IDENTITY_USER");
+            entity.Property(e => e.FkIdentityUser).HasColumnName("FK_IDENTITY_USER");
 
             entity.HasOne(d => d.FkIdentityUserNavigation).WithMany(p => p.UserCitoyens)
                 .HasForeignKey(d => d.FkIdentityUser)
@@ -316,6 +339,8 @@ public partial class CvsanteContext : DbContext
             entity.HasKey(e => new { e.FkFamilyId, e.FkUserId });
 
             entity.ToTable("UserFamily");
+
+            entity.HasIndex(e => e.FkUserId, "IX_UserFamily_FK_USER_ID");
 
             entity.Property(e => e.FkFamilyId).HasColumnName("FK_FAMILY_ID");
             entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
@@ -340,6 +365,8 @@ public partial class CvsanteContext : DbContext
             entity.HasKey(e => e.HanId);
 
             entity.ToTable("UserHandicap");
+
+            entity.HasIndex(e => e.FkUserId, "IX_UserHandicap_FK_USER_ID");
 
             entity.Property(e => e.HanId).HasColumnName("HanID");
             entity.Property(e => e.Definition).HasMaxLength(2500);
@@ -387,6 +414,8 @@ public partial class CvsanteContext : DbContext
 
             entity.ToTable("UserMedication");
 
+            entity.HasIndex(e => e.FkUserId, "IX_UserMedication_FK_USER_ID");
+
             entity.Property(e => e.MedId).HasColumnName("MedID");
             entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
             entity.Property(e => e.MedicamentProduitNat)
@@ -408,11 +437,13 @@ public partial class CvsanteContext : DbContext
 
             entity.ToTable("UserParamedic");
 
+            entity.HasIndex(e => e.FkCompany, "IX_UserParamedic_FK_COMPANY");
+
+            entity.HasIndex(e => e.FkIdentityUser, "IX_UserParamedic_FK_IDENTITY_USER");
+
             entity.Property(e => e.ParamId).HasColumnName("Param_ID");
             entity.Property(e => e.FkCompany).HasColumnName("FK_COMPANY");
-            entity.Property(e => e.FkIdentityUser)
-                .HasMaxLength(450)
-                .HasColumnName("FK_IDENTITY_USER");
+            entity.Property(e => e.FkIdentityUser).HasColumnName("FK_IDENTITY_USER");
             entity.Property(e => e.Matricule).HasMaxLength(450);
             entity.Property(e => e.Nom).HasMaxLength(450);
             entity.Property(e => e.ParamIsActive)
@@ -445,6 +476,7 @@ public partial class CvsanteContext : DbContext
                     {
                         j.HasKey("FkParamId", "FkRoleId");
                         j.ToTable("UserCompanyRoleID");
+                        j.HasIndex(new[] { "FkRoleId" }, "IX_UserCompanyRoleID_FK_ROLE_ID");
                         j.IndexerProperty<int>("FkParamId").HasColumnName("FK_PARAM_ID");
                         j.IndexerProperty<int>("FkRoleId").HasColumnName("FK_ROLE_ID");
                     });
