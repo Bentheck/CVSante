@@ -192,14 +192,10 @@ public partial class CvsanteContext : DbContext
             entity.Property(e => e.FkCompany).HasColumnName("FK_COMPANY");
             entity.Property(e => e.GetCitoyen).HasColumnName("Get_Citoyen");
             entity.Property(e => e.GetHistorique).HasColumnName("Get_Historique");
-            entity.Property(e => e.RoleName)
-                .HasMaxLength(450)
-                .HasColumnName("Role_Name");
 
             entity.HasOne(d => d.FkCompanyNavigation).WithMany(p => p.CompanyRoles)
                 .HasForeignKey(d => d.FkCompany)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Company_Roles_Company");
+                .HasConstraintName("FK_Company_Roles_Company1");
         });
 
         modelBuilder.Entity<FamilyList>(entity =>
@@ -445,13 +441,13 @@ public partial class CvsanteContext : DbContext
             entity.Property(e => e.ParamId).HasColumnName("Param_ID");
             entity.Property(e => e.FkCompany).HasColumnName("FK_COMPANY");
             entity.Property(e => e.FkIdentityUser).HasColumnName("FK_IDENTITY_USER");
+            entity.Property(e => e.FkRole).HasColumnName("FK_ROLE");
             entity.Property(e => e.Matricule).HasMaxLength(450);
             entity.Property(e => e.Nom).HasMaxLength(450);
             entity.Property(e => e.ParamIsActive)
                 .HasDefaultValue(true)
                 .HasColumnName("Param_Is_Active");
             entity.Property(e => e.Prenom).HasMaxLength(450);
-            entity.Property(e => e.Role).HasMaxLength(450);
             entity.Property(e => e.Telephone).HasMaxLength(450);
             entity.Property(e => e.Ville).HasMaxLength(450);
 
@@ -463,6 +459,11 @@ public partial class CvsanteContext : DbContext
                 .HasForeignKey(d => d.FkIdentityUser)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserParamedic_AspNetUsers");
+
+            entity.HasOne(d => d.FkRoleNavigation).WithMany(p => p.UserParamedics)
+                .HasForeignKey(d => d.FkRole)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserParamedic_Company_Roles");
 
             entity.HasMany(d => d.FkRoles).WithMany(p => p.FkParams)
                 .UsingEntity<Dictionary<string, object>>(
