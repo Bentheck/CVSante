@@ -23,13 +23,15 @@ public partial class UserParamedic
 
     public string FkIdentityUser { get; set; } = null!;
 
-    public string Role { get; set; } = null!;
+    public int FkRole { get; set; }
 
     public virtual ICollection<Commentaire> Commentaires { get; set; } = new List<Commentaire>();
 
     public virtual Company? FkCompanyNavigation { get; set; }
 
     public virtual AspNetUser FkIdentityUserNavigation { get; set; } = null!;
+
+    public virtual CompanyRole FkRoleNavigation { get; set; } = null!;
 
     public virtual ICollection<HistoriqueParam> HistoriqueParams { get; set; } = new List<HistoriqueParam>();
 
