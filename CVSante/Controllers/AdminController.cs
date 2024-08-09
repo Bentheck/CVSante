@@ -51,6 +51,31 @@ namespace CVSante.Controllers
             return View(profilAdmin);
         }
 
+
+        // GET: Admin/History
+        public async Task<IActionResult> History()
+        {
+            var currentUserId = _userManager.GetUserId(User); // currentUserId is already a string
+            var userParam = await _context.UserParamedics
+                .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
+
+            if (userParam == null)
+            {
+                return NotFound();
+            }
+
+            var historique = _context.HistoriqueParams
+                .Include(h => h.FkParam)
+                .Include(h => h.FkUser)
+                .Where(h => h.FkParamId == userParam.ParamId)
+                .ToList();
+
+            return View(historique);
+        }
+
+
+
+
         // GET: Admin/Roles/ManageRoles
         public async Task<IActionResult> ManageRoles(int? paramedicId)
         {
