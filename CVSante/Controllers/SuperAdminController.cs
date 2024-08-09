@@ -42,7 +42,7 @@ namespace CVSante.Controllers
             {
                 _context.Companies.Add(company);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(CreateRole)); // Redirect to the list of companies or another relevant page
+                return RedirectToAction(nameof(Index)); // Redirect to the list of companies or another relevant page
             }
 
             // If there is an error, return the same view with the current model
@@ -66,7 +66,7 @@ namespace CVSante.Controllers
             {
                 _context.CompanyRoles.Add(role);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(CreateParamedic)); // Redirect to the list of roles or another relevant page
+                return RedirectToAction(nameof(Index)); // Redirect to the list of roles or another relevant page
             }
 
             // Populate ViewBag again in case of error to repopulate dropdowns

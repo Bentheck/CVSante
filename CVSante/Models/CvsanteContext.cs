@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CVSante.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace CVSante.Models;
@@ -190,6 +189,7 @@ public partial class CvsanteContext : DbContext
 
             entity.Property(e => e.IdRole).HasColumnName("ID_Role");
             entity.Property(e => e.CreateParamedic).HasColumnName("Create_Paramedic");
+            entity.Property(e => e.EditCompany).HasColumnName("Edit_Company");
             entity.Property(e => e.EditParamedic).HasColumnName("Edit_Paramedic");
             entity.Property(e => e.EditRole).HasColumnName("Edit_Role");
             entity.Property(e => e.FkCompany).HasColumnName("FK_COMPANY");
@@ -470,7 +470,6 @@ public partial class CvsanteContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserParamedic_Company_Roles");
         });
-
 
         OnModelCreatingPartial(modelBuilder);
     }

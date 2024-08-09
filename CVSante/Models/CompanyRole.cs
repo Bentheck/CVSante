@@ -19,6 +19,8 @@ public partial class CompanyRole
 
     public int? FkCompany { get; set; }
 
+    public bool EditCompany { get; set; }
+
     public virtual Company? FkCompanyNavigation { get; set; }
 
     public virtual ICollection<UserParamedic> UserParamedics { get; set; } = new List<UserParamedic>();

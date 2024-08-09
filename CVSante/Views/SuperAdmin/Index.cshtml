@@ -6,6 +6,14 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="CreateCompany">Create New</a>
-</p>
+<div class="btn-group row-cols-2" role="group">
+    <div>
+    <a asp-controller="SuperAdmin" asp-action="CreateCompany" class="btn btn-primary">Create Company</a>
+    </div>
+    <div>
+    <a asp-controller="SuperAdmin" asp-action="CreateRole" class="btn btn-primary">Create Role</a>
+    </div>
+    <div>
+    <a asp-controller="SuperAdmin" asp-action="CreateParamedic" class="btn btn-primary">Create Paramedic</a>
+    </div>
+</div>
