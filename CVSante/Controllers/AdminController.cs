@@ -143,21 +143,6 @@ namespace CVSante.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // GET: Admin/Create
         public IActionResult Create()
         {
