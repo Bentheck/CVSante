@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CVSante.Models;
-using CVSante.ViewModels;
 
 namespace CVSante.Controllers
 {
@@ -22,12 +20,14 @@ namespace CVSante.Controllers
         // GET: SuperAdmin
         public async Task<IActionResult> Index()
         {
-            var cvsanteContext = _context.UserParamedics.Include(u => u.FkCompanyNavigation).Include(u => u.FkIdentityUserNavigation).Include(u => u.FkRoleNavigation);
+            var cvsanteContext = _context.UserParamedics
+                .Include(u => u.FkCompanyNavigation)
+                .Include(u => u.FkIdentityUserNavigation)
+                .Include(u => u.FkRoleNavigation);
             return View(await cvsanteContext.ToListAsync());
         }
 
-
-        // GET: SuperAdmin/Create
+        // GET: SuperAdmin/CreateCompany
         public IActionResult CreateCompany()
         {
             return View();
@@ -42,10 +42,8 @@ namespace CVSante.Controllers
             {
                 _context.Companies.Add(company);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(CreateRole)); // Redirect to the list of companies or another relevant page
+                return RedirectToAction(nameof(Index)); // Redirect to the list of companies or another relevant page
             }
-
-            // If there is an error, return the same view with the current model
             return View(company);
         }
 
@@ -66,10 +64,8 @@ namespace CVSante.Controllers
             {
                 _context.CompanyRoles.Add(role);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(CreateParamedic)); // Redirect to the list of roles or another relevant page
+                return RedirectToAction(nameof(Index)); // Redirect to the list of roles or another relevant page
             }
-
-            // Populate ViewBag again in case of error to repopulate dropdowns
             ViewData["FkCompany"] = new SelectList(_context.Companies, "IdComp", "CompName", role.FkCompany);
             return View(role);
         }
@@ -77,19 +73,15 @@ namespace CVSante.Controllers
         // GET: SuperAdmin/CreateParamedic
         public IActionResult CreateParamedic()
         {
-            // Retrieve data for dropdowns
             var companies = _context.Companies.ToList();
             var users = _context.AspNetUsers.ToList();
             var roles = _context.CompanyRoles.ToList();
 
-            // Ensure the lists are not empty
             if (companies == null || users == null || roles == null)
             {
-                // Handle error (e.g., log the error, redirect, etc.)
                 throw new InvalidOperationException("Data not found for dropdowns.");
             }
 
-            // Populate dropdown lists
             ViewBag.FkCompany = new SelectList(companies, "IdComp", "CompName");
             ViewBag.FkIdentityUser = new SelectList(users, "Id", "UserName");
             ViewBag.FkRole = new SelectList(roles, "IdRole", "IdRole");
@@ -113,15 +105,12 @@ namespace CVSante.Controllers
                 return RedirectToAction(nameof(Index)); // Redirect to the list of paramedics or another relevant page
             }
 
-            // Repopulate dropdowns in case of validation errors
             var companies = _context.Companies.ToList();
             var users = _context.AspNetUsers.ToList();
             var roles = _context.CompanyRoles.ToList();
 
-            // Ensure the lists are not empty
             if (companies == null || users == null || roles == null)
             {
-                // Handle error (e.g., log the error, redirect, etc.)
                 throw new InvalidOperationException("Data not found for dropdowns.");
             }
 
@@ -132,5 +121,114 @@ namespace CVSante.Controllers
             return View(userParamedic);
         }
 
+        // GET: SuperAdmin/CreateIdentityRole
+        public IActionResult CreateIdentityRole()
+        {
+            return View();
+        }
+
+        // POST: SuperAdmin/CreateIdentityRole
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateIdentityRole([Bind("Name")] AspNetRole role)
+        {
+            ModelState.Remove("Id");
+
+            if (ModelState.IsValid)
+            {
+                role.Id = Guid.NewGuid().ToString();
+                role.NormalizedName = role.Name?.ToUpper();
+                role.ConcurrencyStamp = Guid.NewGuid().ToString();
+
+                _context.AspNetRoles.Add(role);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index)); // Redirect to the list of roles or another relevant page
+            }
+            return View(role);
+        }
+
+        // GET: SuperAdmin/ListRoles
+        public async Task<IActionResult> ListRoles()
+        {
+            var roles = await _context.AspNetRoles.ToListAsync();
+            return View(roles);
+        }
+
+        // GET: SuperAdmin/EditIdentityRole/5
+        public async Task<IActionResult> EditIdentityRole(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var role = await _context.AspNetRoles.FindAsync(id);
+            if (role == null)
+            {
+                return NotFound();
+            }
+            return View(role);
+        }
+
+        // POST: SuperAdmin/EditIdentityRole/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditIdentityRole(string id, [Bind("Id,Name")] AspNetRole role)
+        {
+            if (id != role.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingRole = await _context.AspNetRoles.FindAsync(id);
+                    if (existingRole != null)
+                    {
+                        existingRole.Name = role.Name;
+                        existingRole.NormalizedName = role.Name?.ToUpper();
+                        existingRole.ConcurrencyStamp = Guid.NewGuid().ToString(); // Update concurrency stamp
+
+                        _context.Update(existingRole);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AspNetRoleExists(role.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(ListRoles)); // Redirect to the list of roles
+            }
+            return View(role);
+        }
+
+        private bool AspNetRoleExists(string id)
+        {
+            return _context.AspNetRoles.Any(e => e.Id == id);
+        }
+
+        // POST: SuperAdmin/DeleteIdentityRole/5
+        [HttpPost, ActionName("DeleteIdentityRole")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteIdentityRoleConfirmed(string id)
+        {
+            var role = await _context.AspNetRoles.FindAsync(id);
+            if (role != null)
+            {
+                _context.AspNetRoles.Remove(role);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(ListRoles)); // Redirect to the list of roles
+        }
     }
 }

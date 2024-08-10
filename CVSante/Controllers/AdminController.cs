@@ -10,6 +10,7 @@ using CVSante.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using CVSante.Services;
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
+using System.Security.Claims;
 
 namespace CVSante.Controllers
 {
@@ -50,12 +51,57 @@ namespace CVSante.Controllers
             return View(profilAdmin);
         }
 
+
+        // GET: Admin/History
+        public async Task<IActionResult> History()
+        {
+            var currentUserId = _userManager.GetUserId(User); // currentUserId is already a string
+            var userParam = await _context.UserParamedics
+                .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
+
+            if (userParam == null)
+            {
+                return NotFound();
+            }
+
+            var historique = _context.HistoriqueParams
+                .Include(h => h.FkParam)
+                .Include(h => h.FkUser)
+                .Where(h => h.FkParamId == userParam.ParamId)
+                .ToList();
+
+            return View(historique);
+        }
+
+
+
+
         // GET: Admin/Roles/ManageRoles
         public async Task<IActionResult> ManageRoles(int? paramedicId)
         {
+            // Get the current user's ID (assuming this is how you identify the current user)
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Fetch the current user's paramedic details
+            var currentUser = await _context.UserParamedics
+                .Include(u => u.FkRoleNavigation)
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the current user has the EditRole permission
+            if (!currentUser.FkRoleNavigation.EditRole)
+            {
+                return RedirectToAction("ManageCompany", "Admin");
+            }
+
             // Fetch all paramedics associated with the company
             var paramedics = await _context.UserParamedics
                 .Include(u => u.FkRoleNavigation)
+                .Where(u => u.FkCompany == currentUser.FkCompany)
                 .ToListAsync();
 
             // Select the current paramedic if paramedicId is provided, otherwise default to the first paramedic
@@ -82,7 +128,7 @@ namespace CVSante.Controllers
         }
 
 
-        //POST: Admin/Roles/ManageRoles
+        //POST: Admin/Roles/ManageRoles/EditRole
         [HttpPost]
         public async Task<IActionResult> EditRole(CompanyRole selectedRole, int selectedParamedicId)
         {
@@ -104,6 +150,8 @@ namespace CVSante.Controllers
                 var selectedParamedic = await _context.UserParamedics
                     .Include(p => p.FkRoleNavigation)
                     .FirstOrDefaultAsync(p => p.ParamId == selectedParamedicId);
+
+
 
                 var viewModel = new ManageCompanyRoles
                 {
@@ -132,6 +180,7 @@ namespace CVSante.Controllers
             roleToUpdate.GetHistorique = selectedRole.GetHistorique;
             roleToUpdate.GetCitoyen = selectedRole.GetCitoyen;
             roleToUpdate.EditRole = selectedRole.EditRole;
+            roleToUpdate.EditCompany = selectedRole.EditCompany;
 
             _context.CompanyRoles.Update(roleToUpdate);
             await _context.SaveChangesAsync();
@@ -141,142 +190,294 @@ namespace CVSante.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // GET: Admin/Create
-        public IActionResult Create()
+        // GET: Admin/ManageCompany
+        public async Task<IActionResult> ManageCompany()
         {
-            ViewData["FkCompany"] = new SelectList(_context.Companies, "IdComp", "IdComp");
-            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id");
-            return View();
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // currentUserId is already a string
+            var currentUser = await _context.UserParamedics
+                .Include(u => u.FkRoleNavigation)
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            if (!currentUser.FkRoleNavigation.EditCompany)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(c => c.IdComp == currentUser.FkCompany);
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            var paramedics = await _context.UserParamedics
+                .Where(p => p.FkCompany == company.IdComp)
+                .ToListAsync();
+
+            var viewModel = new ManageCompany
+            {
+                Company = company,
+                Paramedics = paramedics
+            };
+
+            return View(viewModel);
         }
 
-        // POST: Admin/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        // POST: Admin/ManageCompany/RemoveFromCompany
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nom,Prenom,Ville,Telephone,ParamId,ParamIsActive,Matricule,FkCompany,FkIdentityUser")] UserParamedic userParamedic)
+        public async Task<IActionResult> ManageCompany(ManageCompany viewModel, int? removeParamedicId)
         {
-            if (ModelState.IsValid)
+            if (removeParamedicId.HasValue)
             {
-                _context.Add(userParamedic);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["FkCompany"] = new SelectList(_context.Companies, "IdComp", "IdComp", userParamedic.FkCompany);
-            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", userParamedic.FkIdentityUser);
-            return View(userParamedic);
-        }
+                var paramedicToRemove = await _context.UserParamedics
+                    .Include(p => p.FkRoleNavigation)
+                    .FirstOrDefaultAsync(p => p.ParamId == removeParamedicId.Value);
 
-        // GET: Admin/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var userParamedic = await _context.UserParamedics.FindAsync(id);
-            if (userParamedic == null)
-            {
-                return NotFound();
-            }
-            ViewData["FkCompany"] = new SelectList(_context.Companies, "IdComp", "IdComp", userParamedic.FkCompany);
-            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", userParamedic.FkIdentityUser);
-            return View(userParamedic);
-        }
-
-        // POST: Admin/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Nom,Prenom,Ville,Telephone,ParamId,ParamIsActive,Matricule,FkCompany,FkIdentityUser")] UserParamedic userParamedic)
-        {
-            if (id != userParamedic.ParamId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (paramedicToRemove != null)
                 {
-                    _context.Update(userParamedic);
+                    // Set the paramedic's FkCompany to null (remove from company)
+                    paramedicToRemove.FkCompany = null;
+
+                    // Set the paramedic as inactive
+                    paramedicToRemove.ParamIsActive = false;
+
+                    // Set all roles to false
+                    var role = paramedicToRemove.FkRoleNavigation;
+                    if (role != null)
+                    {
+                        role.CreateParamedic = false;
+                        role.EditParamedic = false;
+                        role.GetHistorique = false;
+                        role.GetCitoyen = false;
+                        role.EditRole = false;
+                        role.EditCompany = false;
+                    }
+
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                return RedirectToAction("ManageCompany");
+            }
+
+            if (viewModel.Paramedics != null)
+            {
+                // Save changes to the paramedics
+                foreach (var paramedic in viewModel.Paramedics)
                 {
-                    if (!UserParamedicExists(userParamedic.ParamId))
+                    var existingParamedic = await _context.UserParamedics.FindAsync(paramedic.ParamId);
+                    if (existingParamedic != null)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        existingParamedic.ParamIsActive = paramedic.ParamIsActive;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                await _context.SaveChangesAsync();
             }
-            ViewData["FkCompany"] = new SelectList(_context.Companies, "IdComp", "IdComp", userParamedic.FkCompany);
-            ViewData["FkIdentityUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", userParamedic.FkIdentityUser);
-            return View(userParamedic);
+            else
+            {
+                // Handle the case where Paramedics is null
+                ModelState.AddModelError("", "Paramedics data is missing.");
+            }
+
+            return RedirectToAction("ManageCompany");
         }
 
-        // GET: Admin/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        // GET: Admin/ManageCompany/AddRespondent
+        public async Task<IActionResult> AddRespondent()
         {
-            if (id == null)
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _context.UserParamedics
+                .Include(u => u.FkRoleNavigation)
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            if (currentUser == null)
             {
                 return NotFound();
             }
 
-            var userParamedic = await _context.UserParamedics
-                .Include(u => u.FkCompanyNavigation)
-                .Include(u => u.FkIdentityUserNavigation)
-                .FirstOrDefaultAsync(m => m.ParamId == id);
-            if (userParamedic == null)
+            if (!currentUser.FkRoleNavigation.CreateParamedic)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(c => c.IdComp == currentUser.FkCompany);
+
+            if (company == null)
             {
                 return NotFound();
             }
 
-            return View(userParamedic);
+            var viewModel = new AddRespondent
+            {
+                CompanyId = company.IdComp,
+                CompanyName = company.CompName
+            };
+
+            return View(viewModel);
         }
 
-        // POST: Admin/Delete/5
-        [HttpPost, ActionName("Delete")]
+
+        // POST: Admin/ManageCompany/AddRespondent
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> AddRespondent(AddRespondent viewModel)
         {
-            var userParamedic = await _context.UserParamedics.FindAsync(id);
-            if (userParamedic != null)
+            ModelState.Remove("UserParamedic.FkRoleNavigation");
+            ModelState.Remove("UserParamedic.FkIdentityUser");
+            ModelState.Remove("UserParamedic.FkIdentityUserNavigation");
+            ModelState.Remove("CompanyName");
+
+            if (ModelState.IsValid)
             {
-                _context.UserParamedics.Remove(userParamedic);
+                var user = await _userManager.FindByEmailAsync(viewModel.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("Email", "Aucun utilisateur n'a été trouvé avec cet email.");
+                    return View(viewModel);
+                }
+
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Contains("Paramedic"))
+                {
+                    ModelState.AddModelError("Email", "L'utilisateur est déjà un paramédic. Veuillez l'ajouter en utilisant son matricule.");
+                    return View(viewModel);
+                }
+
+                var existingParamedic = await _context.UserParamedics
+                    .FirstOrDefaultAsync(p => p.FkIdentityUser == user.Id);
+
+                if (existingParamedic != null)
+                {
+                    ModelState.AddModelError("Email", "L'utilisateur est déjà enregistré en tant que paramédic. Veuillez l'ajouter en utilisant son matricule.");
+                    return View(viewModel);
+                }
+
+                var newRole = new CompanyRole
+                {
+                    CreateParamedic = false,
+                    EditParamedic = false,
+                    GetHistorique = false,
+                    GetCitoyen = false,
+                    EditRole = false,
+                    EditCompany = false,
+                    FkCompany = viewModel.CompanyId
+                };
+
+                _context.CompanyRoles.Add(newRole);
+                await _context.SaveChangesAsync();
+
+                var newRoleId = newRole.IdRole;
+
+                var newParamedic = viewModel.UserParamedic;
+                newParamedic.FkCompany = viewModel.CompanyId;
+                newParamedic.FkIdentityUser = user.Id;
+                newParamedic.FkRole = newRoleId;
+
+                _context.UserParamedics.Add(newParamedic);
+                await _context.SaveChangesAsync();
+
+                await _userManager.AddToRoleAsync(user, "Paramedic");
+
+                return RedirectToAction("ManageCompany");
             }
+
+            return View(viewModel);
+        }
+
+        // POST: Admin/ManageCompany/AddByMatricule
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddByMatricule(AddRespondent viewModel)
+        {
+            var existingParamedic = await _context.UserParamedics
+                .Include(p => p.FkIdentityUserNavigation)
+                .FirstOrDefaultAsync(p => p.Matricule == viewModel.UserParamedic.Matricule);
+
+            if (existingParamedic == null)
+            {
+                //ModelState.AddModelError("Matricule", "Aucun paramédic trouvé avec ce matricule dans cette entreprise.");
+                return View("AddRespondent", viewModel);
+            }
+            
+            if (existingParamedic.FkCompany != null)
+            {
+                ModelState.AddModelError("Matricule", "Le paramédic appartient à une autre entreprise.");
+                return View("AddRespondent", viewModel);
+            }
+
+            existingParamedic.FkCompany = viewModel.CompanyId;
+            existingParamedic.ParamIsActive = true;
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("ManageCompany");
         }
 
-        private bool UserParamedicExists(int id)
-        {
-            return _context.UserParamedics.Any(e => e.ParamId == id);
-        }
+
+
+
+
+
+        //// GET: Admin/ManageCompany/EditRespondent
+        //public async Task<IActionResult> EditRespondent(int? paramedicId)
+        //{
+        //    if (!paramedicId.HasValue)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var paramedic = await _context.UserParamedics
+        //        .Include(p => p.FkRoleNavigation)
+        //        .FirstOrDefaultAsync(p => p.ParamId == paramedicId.Value);
+
+        //    if (paramedic == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var viewModel = new EditRespondent
+        //    {
+        //        Paramedic = paramedic
+        //    };
+
+        //    return View(viewModel);
+        //}
+
+        //// POST: Admin/ManageCompany/EditRespondent
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> EditRespondent(EditRespondent viewModel)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var paramedic = await _context.UserParamedics
+        //            .Include(p => p.FkRoleNavigation)
+        //            .FirstOrDefaultAsync(p => p.ParamId == viewModel.Paramedic.ParamId);
+
+        //        if (paramedic == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        paramedic.ParamIsActive = viewModel.Paramedic.ParamIsActive;
+
+        //        await _context.SaveChangesAsync();
+
+        //        return RedirectToAction("ManageCompany");
+        //    }
+
+        //    return View(viewModel);
+        //}
+
     }
 }
+

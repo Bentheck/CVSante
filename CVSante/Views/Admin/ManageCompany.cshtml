@@ -1,42 +1,48 @@
-﻿@model CVSante.Models.Company
+﻿@model CVSante.ViewModels.ManageCompany
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Manage Company";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h4>Company</h4>
+<h4>@Model.Company.CompName</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="ManageCompany">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdComp" />
-            <div class="form-group">
-                <label asp-for="CompName" class="control-label"></label>
-                <input asp-for="CompName" class="form-control" />
-                <span asp-validation-for="CompName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdLink" class="control-label"></label>
-                <input asp-for="AdLink" class="form-control" />
-                <span asp-validation-for="AdLink" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdId" class="control-label"></label>
-                <input asp-for="AdId" class="form-control" />
-                <span asp-validation-for="AdId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<form asp-action="ManageCompany" method="post">
+    <input type="hidden" asp-for="Company.IdComp" />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Employé</th>
+                <th>Matricule</th>
+                <th>Actif</th>
+                <th>Retirer de la compagnie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.Paramedics.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Paramedics[i].Nom</td>
+                    <td>@Model.Paramedics[i].Matricule</td>
+                    <td>
+                        <input asp-for="Paramedics[i].ParamId" type="hidden" />
+                        <input asp-for="Paramedics[i].ParamIsActive" type="checkbox" />
+                    </td>
+                    <td>
+                        <button type="submit" name="removeParamedicId" value="@Model.Paramedics[i].ParamId" class="btn btn-link" onclick="return confirm('Voulez-vous vraiment retirer cet employé de la compagnie ?');">Retirer</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+        <a asp-action="Index" class="btn btn-secondary">Annuler</a>
     </div>
-</div>
 
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+    <div class="form-group">
+        <a asp-action="ManageRoles" class="btn btn-secondary">Gestion des rôles</a>
+    </div>
+</form>
