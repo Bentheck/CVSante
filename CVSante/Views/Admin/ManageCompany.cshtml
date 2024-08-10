@@ -7,7 +7,9 @@
 
 <h4>@Model.Company.CompName</h4>
 <hr />
-<form asp-action="ManageCompany">
+<form asp-action="ManageCompany" method="post">
+    <input type="hidden" asp-for="Company.IdComp" />
+
     <table class="table">
         <thead>
             <tr>
@@ -18,16 +20,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var paramedic in Model.Paramedics)
+            @for (var i = 0; i < Model.Paramedics.Count; i++)
             {
                 <tr>
-                    <td>@paramedic.Nom</td>
-                    <td>@paramedic.Matricule</td>
+                    <td>@Model.Paramedics[i].Nom</td>
+                    <td>@Model.Paramedics[i].Matricule</td>
                     <td>
-                        <input type="checkbox" asp-for="@paramedic.ParamIsActive" />
+                        <input asp-for="Paramedics[i].ParamId" type="hidden" />
+                        <input asp-for="Paramedics[i].ParamIsActive" type="checkbox" />
                     </td>
                     <td>
-                        <button type="submit" name="removeParamedicId" value="@paramedic.ParamId" class="btn btn-link" onclick="return confirm('Voulez-vous vraiment retiré cet employé de la compagnie?');">Retirer</button>
+                        <button type="submit" name="removeParamedicId" value="@Model.Paramedics[i].ParamId" class="btn btn-link" onclick="return confirm('Voulez-vous vraiment retirer cet employé de la compagnie ?');">Retirer</button>
                     </td>
                 </tr>
             }

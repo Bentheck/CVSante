@@ -128,7 +128,7 @@ namespace CVSante.Controllers
         }
 
 
-        //POST: Admin/Roles/ManageRoles
+        //POST: Admin/Roles/ManageRoles/EditRole
         [HttpPost]
         public async Task<IActionResult> EditRole(CompanyRole selectedRole, int selectedParamedicId)
         {
@@ -151,7 +151,7 @@ namespace CVSante.Controllers
                     .Include(p => p.FkRoleNavigation)
                     .FirstOrDefaultAsync(p => p.ParamId == selectedParamedicId);
 
-                
+
 
                 var viewModel = new ManageCompanyRoles
                 {
@@ -216,17 +216,21 @@ namespace CVSante.Controllers
                 return NotFound();
             }
 
+            var paramedics = await _context.UserParamedics
+                .Where(p => p.FkCompany == company.IdComp)
+                .ToListAsync();
+
             var viewModel = new ManageCompany
             {
                 Company = company,
-                Paramedics = _context.UserParamedics.Where(p => p.FkCompany == company.IdComp).ToList()
+                Paramedics = paramedics
             };
 
             return View(viewModel);
         }
 
 
-        // POST: Admin/ManageCompany
+        // POST: Admin/ManageCompany/RemoveFromCompany
         [HttpPost]
         public async Task<IActionResult> ManageCompany(ManageCompany viewModel, int? removeParamedicId)
         {
@@ -262,7 +266,7 @@ namespace CVSante.Controllers
                 return RedirectToAction("ManageCompany");
             }
 
-            if (ModelState.IsValid)
+            if (viewModel.Paramedics != null)
             {
                 // Save changes to the paramedics
                 foreach (var paramedic in viewModel.Paramedics)
@@ -275,16 +279,205 @@ namespace CVSante.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
             }
+            else
+            {
+                // Handle the case where Paramedics is null
+                ModelState.AddModelError("", "Paramedics data is missing.");
+            }
+
+            return RedirectToAction("ManageCompany");
+        }
+
+
+        // GET: Admin/ManageCompany/AddRespondent
+        public async Task<IActionResult> AddRespondent()
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _context.UserParamedics
+                .Include(u => u.FkRoleNavigation)
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            if (!currentUser.FkRoleNavigation.CreateParamedic)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(c => c.IdComp == currentUser.FkCompany);
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new AddRespondent
+            {
+                CompanyId = company.IdComp,
+                CompanyName = company.CompName
+            };
 
             return View(viewModel);
         }
 
 
-        
+        // POST: Admin/ManageCompany/AddRespondent
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddRespondent(AddRespondent viewModel)
+        {
+            ModelState.Remove("UserParamedic.FkRoleNavigation");
+            ModelState.Remove("UserParamedic.FkIdentityUser");
+            ModelState.Remove("UserParamedic.FkIdentityUserNavigation");
+            ModelState.Remove("CompanyName");
+
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(viewModel.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("Email", "Aucun utilisateur n'a été trouvé avec cet email.");
+                    return View(viewModel);
+                }
+
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Contains("Paramedic"))
+                {
+                    ModelState.AddModelError("Email", "L'utilisateur est déjà un paramédic. Veuillez l'ajouter en utilisant son matricule.");
+                    return View(viewModel);
+                }
+
+                var existingParamedic = await _context.UserParamedics
+                    .FirstOrDefaultAsync(p => p.FkIdentityUser == user.Id);
+
+                if (existingParamedic != null)
+                {
+                    ModelState.AddModelError("Email", "L'utilisateur est déjà enregistré en tant que paramédic. Veuillez l'ajouter en utilisant son matricule.");
+                    return View(viewModel);
+                }
+
+                var newRole = new CompanyRole
+                {
+                    CreateParamedic = false,
+                    EditParamedic = false,
+                    GetHistorique = false,
+                    GetCitoyen = false,
+                    EditRole = false,
+                    EditCompany = false,
+                    FkCompany = viewModel.CompanyId
+                };
+
+                _context.CompanyRoles.Add(newRole);
+                await _context.SaveChangesAsync();
+
+                var newRoleId = newRole.IdRole;
+
+                var newParamedic = viewModel.UserParamedic;
+                newParamedic.FkCompany = viewModel.CompanyId;
+                newParamedic.FkIdentityUser = user.Id;
+                newParamedic.FkRole = newRoleId;
+
+                _context.UserParamedics.Add(newParamedic);
+                await _context.SaveChangesAsync();
+
+                await _userManager.AddToRoleAsync(user, "Paramedic");
+
+                return RedirectToAction("ManageCompany");
+            }
+
+            return View(viewModel);
+        }
+
+        // POST: Admin/ManageCompany/AddByMatricule
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddByMatricule(AddRespondent viewModel)
+        {
+            var existingParamedic = await _context.UserParamedics
+                .Include(p => p.FkIdentityUserNavigation)
+                .FirstOrDefaultAsync(p => p.Matricule == viewModel.UserParamedic.Matricule);
+
+            if (existingParamedic == null)
+            {
+                //ModelState.AddModelError("Matricule", "Aucun paramédic trouvé avec ce matricule dans cette entreprise.");
+                return View("AddRespondent", viewModel);
+            }
+            
+            if (existingParamedic.FkCompany != null)
+            {
+                ModelState.AddModelError("Matricule", "Le paramédic appartient à une autre entreprise.");
+                return View("AddRespondent", viewModel);
+            }
+
+            existingParamedic.FkCompany = viewModel.CompanyId;
+            existingParamedic.ParamIsActive = true;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManageCompany");
+        }
 
 
+
+
+
+
+        //// GET: Admin/ManageCompany/EditRespondent
+        //public async Task<IActionResult> EditRespondent(int? paramedicId)
+        //{
+        //    if (!paramedicId.HasValue)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var paramedic = await _context.UserParamedics
+        //        .Include(p => p.FkRoleNavigation)
+        //        .FirstOrDefaultAsync(p => p.ParamId == paramedicId.Value);
+
+        //    if (paramedic == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var viewModel = new EditRespondent
+        //    {
+        //        Paramedic = paramedic
+        //    };
+
+        //    return View(viewModel);
+        //}
+
+        //// POST: Admin/ManageCompany/EditRespondent
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> EditRespondent(EditRespondent viewModel)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var paramedic = await _context.UserParamedics
+        //            .Include(p => p.FkRoleNavigation)
+        //            .FirstOrDefaultAsync(p => p.ParamId == viewModel.Paramedic.ParamId);
+
+        //        if (paramedic == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        paramedic.ParamIsActive = viewModel.Paramedic.ParamIsActive;
+
+        //        await _context.SaveChangesAsync();
+
+        //        return RedirectToAction("ManageCompany");
+        //    }
+
+        //    return View(viewModel);
+        //}
 
     }
 }
+
