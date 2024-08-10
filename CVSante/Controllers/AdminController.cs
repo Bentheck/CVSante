@@ -30,26 +30,29 @@ namespace CVSante.Controllers
         // GET: Admin
         public async Task<IActionResult> Index()
         {
-            var currentUserId = _userManager.GetUserId(User); // currentUserId is already a string
+            var currentUserId = _userManager.GetUserId(User);
+
+            // Fetch the current user's paramedic details
             var userParam = await _context.UserParamedics
                 .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
 
-            if (userParam == null)
+            // Check if the current user is in the "Paramedic" role
+            var currentUser = await _userManager.FindByIdAsync(currentUserId);
+            bool isParamedic = await _userManager.IsInRoleAsync(currentUser, "Paramedic");
+            bool isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SuperAdmin");
+
+            if (isSuperAdmin || isParamedic && userParam != null)
             {
-                return NotFound();
+                return View();
             }
-
-            var profilAdmin = new Paramedic
+            else
             {
-                paramInfo = userParam,
-                historique = _context.HistoriqueParams.Where(h => h.FkParamId == userParam.ParamId).ToList(),
-                compRole = _context.CompanyRoles.FirstOrDefault(c => c.IdRole == userParam.FkCompany),
-                company = _context.Companies.FirstOrDefault(c => c.IdComp == userParam.FkCompany),
-                commentaires = _context.Commentaires.Where(c => c.FkUserparamedic == userParam.ParamId).ToList()
-            };
-
-            return View(profilAdmin);
+                // Redirect to Home if the user is not a "Paramedic" or userParam is null
+                return RedirectToAction("Index", "Home");
+            }
         }
+
+
 
 
         // GET: Admin/History
@@ -62,6 +65,12 @@ namespace CVSante.Controllers
             if (userParam == null)
             {
                 return NotFound();
+            }
+
+            // Check if the current user has the EditRole permission
+            if (!userParam.FkRoleNavigation.GetHistorique)
+            {
+                return RedirectToAction("ManageCompany", "Admin");
             }
 
             var historique = _context.HistoriqueParams
@@ -440,6 +449,11 @@ namespace CVSante.Controllers
             if (currentUser == null)
             {
                 return NotFound();
+            }
+
+            if (!currentUser.FkRoleNavigation.EditParamedic)
+            {
+                return RedirectToAction("ManageCompany", "Admin");
             }
 
             var currentCompanyId = currentUser.FkCompany;

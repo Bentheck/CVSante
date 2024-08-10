@@ -2,70 +2,32 @@
 
 <div>
     <h4>UserParamedic</h4>
-    <hr />
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
-    }
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.paramInfo.Nom)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.paramInfo.Nom)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.paramInfo.Prenom)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.paramInfo.Prenom)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.paramInfo.Ville)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.paramInfo.Ville)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.paramInfo.Telephone)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.paramInfo.Telephone)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.paramInfo.ParamIsActive)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.paramInfo.ParamIsActive)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.paramInfo.Matricule)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.paramInfo.Matricule)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.paramInfo.FkCompanyNavigation)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.paramInfo.FkCompany)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.paramInfo.FkIdentityUserNavigation)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.paramInfo.FkIdentityUserNavigation.Id)
-        </dd>
-    </dl>
-</div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.paramInfo.ParamId">Edit</a>
-    <a asp-action="AddRespondent" asp-route-id="@Model?.paramInfo.ParamId">Add Respondent</a>
-    <a asp-action="EditRespondent" asp-route-id="@Model?.paramInfo.ParamId">Edit Respondent</a>
-    <a asp-action="History" asp-route-id="@Model?.paramInfo.ParamId">History</a>
-    <a asp-action="ManageCompany" asp-route-id="@Model?.paramInfo.ParamId">ManageCompany</a>
-    <a asp-action="ManageRoles" asp-route-id="@Model?.paramInfo.ParamId">ManageRoles</a>
-    <a asp-action="Index">Back to List</a>
+    <form asp-action="Edit" method="get" style="display:inline;">
+        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
+        <button type="submit" class="btn btn-primary">Edit</button>
+    </form>
+    <form asp-action="AddRespondent" method="get" style="display:inline;">
+        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
+        <button type="submit" class="btn btn-success">Add Respondent</button>
+    </form>
+    <form asp-action="EditRespondent" method="get" style="display:inline;">
+        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
+        <button type="submit" class="btn btn-warning">Edit Respondent</button>
+    </form>
+    <form asp-action="History" method="get" style="display:inline;">
+        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
+        <button type="submit" class="btn btn-info">History</button>
+    </form>
+    <form asp-action="ManageCompany" method="get" style="display:inline;">
+        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
+        <button type="submit" class="btn btn-secondary">Manage Company</button>
+    </form>
+    <form asp-action="ManageRoles" method="get" style="display:inline;">
+        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
+        <button type="submit" class="btn btn-danger">Manage Roles</button>
+    </form>
+    <form asp-action="Index" method="get" style="display:inline;">
+        <button type="submit" class="btn btn-light">Back to List</button>
+    </form>
 </div>

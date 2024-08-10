@@ -24,6 +24,7 @@ html {
 main {
     padding: 2rem;
     /*position: relative;*/
+    padding-top: 70px;
     z-index: 2;
     min-height: calc(100vh - 104px);
 }
