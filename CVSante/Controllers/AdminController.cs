@@ -427,56 +427,112 @@ namespace CVSante.Controllers
 
 
 
-        //// GET: Admin/ManageCompany/EditRespondent
-        //public async Task<IActionResult> EditRespondent(int? paramedicId)
-        //{
-        //    if (!paramedicId.HasValue)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Admin/ManageCompany/EditRespondent
+        public async Task<IActionResult> EditRespondent(int? paramedicId)
+        {
+            // Get the current user's ID (assuming you have this from the authentication context)
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        //    var paramedic = await _context.UserParamedics
-        //        .Include(p => p.FkRoleNavigation)
-        //        .FirstOrDefaultAsync(p => p.ParamId == paramedicId.Value);
+            // Fetch the current user's paramedic details
+            var currentUser = await _context.UserParamedics
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
 
-        //    if (paramedic == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
 
-        //    var viewModel = new EditRespondent
-        //    {
-        //        Paramedic = paramedic
-        //    };
+            var currentCompanyId = currentUser.FkCompany;
 
-        //    return View(viewModel);
-        //}
+            // Fetch paramedics belonging to the same company as the current user
+            var paramedics = await _context.UserParamedics
+                .Where(p => p.FkCompany == currentCompanyId)
+                .ToListAsync();
 
-        //// POST: Admin/ManageCompany/EditRespondent
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> EditRespondent(EditRespondent viewModel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var paramedic = await _context.UserParamedics
-        //            .Include(p => p.FkRoleNavigation)
-        //            .FirstOrDefaultAsync(p => p.ParamId == viewModel.Paramedic.ParamId);
+            ViewBag.Paramedics = paramedics;
 
-        //        if (paramedic == null)
-        //        {
-        //            return NotFound();
-        //        }
+            // Retrieve the paramedic to edit if paramedicId is provided
+            UserParamedic paramedic = null;
+            if (paramedicId.HasValue)
+            {
+                paramedic = await _context.UserParamedics
+                    .Include(p => p.FkRoleNavigation)
+                    .FirstOrDefaultAsync(p => p.ParamId == paramedicId.Value && p.FkCompany == currentCompanyId);
 
-        //        paramedic.ParamIsActive = viewModel.Paramedic.ParamIsActive;
+                if (paramedic == null)
+                {
+                    return NotFound();
+                }
+            }
 
-        //        await _context.SaveChangesAsync();
+            return View(paramedic);
+        }
 
-        //        return RedirectToAction("ManageCompany");
-        //    }
 
-        //    return View(viewModel);
-        //}
+        // POST: Admin/ManageCompany/EditRespondent
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditRespondent(UserParamedic paramedic)
+        {
+            // Remove validation for fields that are not part of the form
+            ModelState.Remove("FkRoleNavigation");
+            ModelState.Remove("FkIdentityUserNavigation");
+
+            if (ModelState.IsValid)
+            {
+                // Get the current user's ID
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                // Fetch the current user's paramedic details
+                var currentUser = await _context.UserParamedics
+                    .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+                if (currentUser == null)
+                {
+                    return NotFound();
+                }
+
+                var currentCompanyId = currentUser.FkCompany;
+
+                // Fetch the existing paramedic entity within the same company
+                var existingParamedic = await _context.UserParamedics
+                    .Include(p => p.FkRoleNavigation)
+                    .FirstOrDefaultAsync(p => p.ParamId == paramedic.ParamId && p.FkCompany == currentCompanyId);
+
+                if (existingParamedic == null)
+                {
+                    return NotFound();
+                }
+
+                // Update only the allowed fields
+                existingParamedic.Nom = paramedic.Nom;
+                existingParamedic.Prenom = paramedic.Prenom;
+                existingParamedic.Ville = paramedic.Ville;
+                existingParamedic.Telephone = paramedic.Telephone;
+                existingParamedic.Matricule = paramedic.Matricule;
+                existingParamedic.ParamIsActive = paramedic.ParamIsActive;
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("ManageCompany");
+            }
+
+            // Re-populate the ViewBag with the filtered list of paramedics
+            var currentUserAgain = await _context.UserParamedics
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (currentUserAgain != null)
+            {
+                var currentCompanyId = currentUserAgain.FkCompany;
+                ViewBag.Paramedics = await _context.UserParamedics
+                    .Where(p => p.FkCompany == currentCompanyId)
+                    .ToListAsync();
+            }
+
+            return View(paramedic);
+        }
+
+
 
     }
 }
