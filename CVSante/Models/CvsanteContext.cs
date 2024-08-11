@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CVSante.Models;
+
+
 
 public partial class CvsanteContext : DbContext
 {

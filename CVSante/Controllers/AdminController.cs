@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using CVSante.Services;
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CVSante.Controllers
 {
@@ -27,37 +28,40 @@ namespace CVSante.Controllers
             _UserValidation = userValidation;
         }
 
+
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin
         public async Task<IActionResult> Index()
         {
-            var currentUserId = _userManager.GetUserId(User);
+            //var currentUserId = _userManager.GetUserId(User);
 
-            // Fetch the current user's paramedic details
-            var userParam = await _context.UserParamedics
-                .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
+            //// Fetch the current user's paramedic details
+            //var userParam = await _context.UserParamedics
+            //    .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
 
-            // Check if the current user is in the "Paramedic" role
-            var currentUser = await _userManager.FindByIdAsync(currentUserId);
-            bool isParamedic = await _userManager.IsInRoleAsync(currentUser, "Paramedic");
-            bool isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SuperAdmin");
+            //// Check if the current user is in the "Paramedic" role
+            //var currentUser = await _userManager.FindByIdAsync(currentUserId);
+            //bool isParamedic = await _userManager.IsInRoleAsync(currentUser, "Paramedic");
+            //bool isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SuperAdmin");
 
-            if (isSuperAdmin || isParamedic && userParam != null)
-            {
+            //if (isSuperAdmin || isParamedic && userParam != null)
+            //{
                 return View();
-            }
-            else
-            {
-                // Redirect to Home if the user is not a "Paramedic" or userParam is null
-                return RedirectToAction("Index", "Home");
-            }
+            //}
+            //else
+            //{
+            //    // Redirect to Home if the user is not a "Paramedic" or userParam is null
+            //    return RedirectToAction("Index", "Home");
+            //}
         }
 
 
 
-
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin/History
         public async Task<IActionResult> History()
         {
+
             var currentUserId = _userManager.GetUserId(User); // currentUserId is already a string
             var userParam = await _context.UserParamedics
                 .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
@@ -84,7 +88,7 @@ namespace CVSante.Controllers
 
 
 
-
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin/Roles/ManageRoles
         public async Task<IActionResult> ManageRoles(int? paramedicId)
         {
@@ -137,6 +141,7 @@ namespace CVSante.Controllers
         }
 
 
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         //POST: Admin/Roles/ManageRoles/EditRole
         [HttpPost]
         public async Task<IActionResult> EditRole(CompanyRole selectedRole, int selectedParamedicId)
@@ -198,7 +203,7 @@ namespace CVSante.Controllers
         }
 
 
-
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin/ManageCompany
         public async Task<IActionResult> ManageCompany()
         {
@@ -239,6 +244,7 @@ namespace CVSante.Controllers
         }
 
 
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // POST: Admin/ManageCompany/RemoveFromCompany
         [HttpPost]
         public async Task<IActionResult> ManageCompany(ManageCompany viewModel, int? removeParamedicId)
@@ -299,6 +305,7 @@ namespace CVSante.Controllers
         }
 
 
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin/ManageCompany/AddRespondent
         public async Task<IActionResult> AddRespondent()
         {
@@ -335,6 +342,7 @@ namespace CVSante.Controllers
         }
 
 
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // POST: Admin/ManageCompany/AddRespondent
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -402,6 +410,8 @@ namespace CVSante.Controllers
             return View(viewModel);
         }
 
+
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // POST: Admin/ManageCompany/AddByMatricule
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -435,7 +445,7 @@ namespace CVSante.Controllers
 
 
 
-
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin/ManageCompany/EditRespondent
         public async Task<IActionResult> EditRespondent(int? paramedicId)
         {
@@ -482,7 +492,7 @@ namespace CVSante.Controllers
             return View(paramedic);
         }
 
-
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // POST: Admin/ManageCompany/EditRespondent
         [HttpPost]
         [ValidateAntiForgeryToken]

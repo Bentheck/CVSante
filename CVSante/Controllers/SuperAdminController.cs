@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using CVSante.Models;
 using Microsoft.AspNetCore.Identity;
 using CVSante.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CVSante.Controllers
 {
@@ -19,6 +20,8 @@ namespace CVSante.Controllers
             _context = context;
         }
 
+
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin
         public async Task<IActionResult> Index()
         {
@@ -29,12 +32,14 @@ namespace CVSante.Controllers
             return View(await cvsanteContext.ToListAsync());
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/CreateCompany
         public IActionResult CreateCompany()
         {
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/CreateCompany
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -49,6 +54,7 @@ namespace CVSante.Controllers
             return View(company);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/CreateRole
         public IActionResult CreateRole()
         {
@@ -57,6 +63,7 @@ namespace CVSante.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/CreateRole
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -72,6 +79,7 @@ namespace CVSante.Controllers
             return View(role);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/CreateParamedic
         public IActionResult CreateParamedic()
         {
@@ -91,6 +99,7 @@ namespace CVSante.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/CreateParamedic
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -123,12 +132,14 @@ namespace CVSante.Controllers
             return View(userParamedic);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/CreateIdentityRole
         public IActionResult CreateIdentityRole()
         {
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/CreateIdentityRole
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -149,6 +160,7 @@ namespace CVSante.Controllers
             return View(role);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/ListRoles
         public async Task<IActionResult> ListRoles()
         {
@@ -156,6 +168,7 @@ namespace CVSante.Controllers
             return View(roles);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/EditIdentityRole/5
         public async Task<IActionResult> EditIdentityRole(string id)
         {
@@ -172,6 +185,7 @@ namespace CVSante.Controllers
             return View(role);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/EditIdentityRole/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -218,6 +232,7 @@ namespace CVSante.Controllers
             return _context.AspNetRoles.Any(e => e.Id == id);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/DeleteIdentityRole/5
         [HttpPost, ActionName("DeleteIdentityRole")]
         [ValidateAntiForgeryToken]
@@ -234,7 +249,7 @@ namespace CVSante.Controllers
         }
 
 
-
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/ASPUserRolesAndEdit
         public async Task<IActionResult> ASPUserRolesAndEdit(string userId)
         {
@@ -299,7 +314,7 @@ namespace CVSante.Controllers
         }
 
 
-
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/EditUserRoles
         [HttpPost]
         [ValidateAntiForgeryToken]

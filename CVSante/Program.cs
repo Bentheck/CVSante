@@ -52,22 +52,29 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-InitializeDatabase(app);// a decommenter pour initialiser une nouvelle base de données avec certaines données
+InitializeDatabaseAsync(app);// a decommenter pour initialiser une nouvelle base de données avec certaines données
 
-void InitializeDatabase(WebApplication app)
+async Task InitializeDatabaseAsync(WebApplication app)
 {
     using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
-        var dbContext = services.GetRequiredService<CvsanteContext>();
 
-        // Assurez-vous que la base de données est créée
-        dbContext.Database.EnsureCreated();
+        // Get the UserManager and RoleManager
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        // Ensure the database is created
+        var dbContext = services.GetRequiredService<CvsanteContext>();
+        await dbContext.Database.EnsureCreatedAsync();
+
+        // Seed roles and users
+        await DbSeeder.SeedAsync(userManager, roleManager);
     }
 }
 
 
-        // Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
