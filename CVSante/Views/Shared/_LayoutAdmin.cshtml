@@ -50,11 +50,11 @@
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" asp-area="" asp-controller="Layouts" asp-action="AddRespondant">AddRespondant</a>
-                                <a class="nav-link" asp-area="" asp-controller="Layouts" asp-action="EditRespondent">Edit Respondent</a>
-                                <a class="nav-link" asp-area="" asp-controller="Layouts" asp-action="History">History</a>
-                                <a class="nav-link" asp-area="" asp-controller="Layouts" asp-action="ManageCompany">ManageCompany</a>
-                                <a class="nav-link" asp-area="" asp-controller="Layouts" asp-action="ManageRoles">ManageRoles</a>
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AddRespondant">AddRespondant</a>
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EditRespondent">Edit Respondent</a>
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="History">History</a>
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ManageCompany">ManageCompany</a>
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ManageRoles">ManageRoles</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -69,8 +69,15 @@
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
                                 <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav bg-white">
-                                        <partial name="_LoginPartial" />
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <!-- Envelopper le partial avec un lien généré par Razor -->
+                                        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="text-white d-block">
+                                            Manage Account
+                                        </a>
+                                        <a asp-area="Identity" asp-page="/Account/Login" class="text-white d-block sidebar-partial">
+                                            <partial name="_LoginPartial" />
+                                        </a>
+                                
                                     </nav>
                                 </div>
                             </nav>
@@ -79,10 +86,7 @@
                 </div>
             </nav>
         </div>
-        <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
-            Admin
-        </div>
+        
     </div>
     <div id="layoutSidenav_content" class="d-flex flex-column flex-grow-1">
         <main class="flex-grow-1">
@@ -90,13 +94,12 @@
                 @RenderBody()
             </div>
         </main>
-        <footer class="py-4 bg-light mt-auto bg-black">
+        <footer class="py-4 navbar-dark-blue mt-auto">
             <div class="container-fluid px-4">
-                <div class="d-flex align-items-center justify-content-between small">
-                <p>&copy; 2024, cvsante.qc.ca</p>
+                <div class="d-flex align-items-center justify-content-center small">
+                    <p class="text-center">&copy; 2024, cvsante.qc.ca</p>
+                </div>
             </div>
-            </div>
-  
         </footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
