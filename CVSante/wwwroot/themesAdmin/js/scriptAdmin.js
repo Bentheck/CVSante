@@ -1,12 +1,10 @@
-/*!
-    * Start Bootstrap - SB Admin v7.0.7 (https://startbootstrap.com/template/sb-admin)
-    * Copyright 2013-2023 Start Bootstrap
-    * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-sb-admin/blob/master/LICENSE)
-    */
-    // 
+
 // Scripts
 // 
-
+//document.getElementById('sidebarToggle').addEventListener('click', function () {
+//    document.getElementById('layoutSidenav_nav').classList.toggle('sb-sidenav-toggled');
+//    document.body.classList.toggle('sb-sidenav-toggled');
+//});
 window.addEventListener('DOMContentLoaded', event => {
 
     // Toggle the side navigation
@@ -23,6 +21,16 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     }
 
+});
+document.querySelectorAll('.nav-link.collapsed').forEach(function (element) {
+    element.addEventListener('click', function () {
+        const targetId = this.getAttribute('data-bs-target');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+            targetElement.classList.toggle('show');
+        }
+    });
 });
 document.addEventListener('DOMContentLoaded', function () {
     const rolesList = document.getElementById('rolesList');
@@ -57,12 +65,27 @@ document.addEventListener('DOMContentLoaded', function () {
         window.history.back();
     });
 });
+//document.getElementById('themeToggle').addEventListener('click', function () {
+//    const body = document.body;
+//    const sunIcon = document.getElementById('sunIcon');
+//    const moonIcon = document.getElementById('moonIcon');
+
+//    body.classList.toggle('dark-mode');
+
+//    if (body.classList.contains('dark-mode')) {
+//        sunIcon.classList.add('d-none');
+//        moonIcon.classList.remove('d-none');
+//    } else {
+//        sunIcon.classList.remove('d-none');
+//        moonIcon.classList.add('d-none');
+//    }
+//});
 document.addEventListener("DOMContentLoaded", function () {
     const themeToggle = document.getElementById("themeToggle");
     const sunIcon = document.getElementById("sunIcon");
     const moonIcon = document.getElementById("moonIcon");
 
-    // Vérifiez le mode actuel du thème à partir de localStorage ou d'une autre source
+    // Vérifier le mode actuel du thème à partir de localStorage ou d'une autre source
     const isDarkMode = localStorage.getItem("darkMode") === "true";
 
     if (isDarkMode) {
@@ -79,11 +102,11 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.toggle("dark-mode");
         const darkModeEnabled = document.body.classList.contains("dark-mode");
 
-        // Mettez à jour les icônes
+        // Mettre à jour les icônes
         moonIcon.classList.toggle("d-none", !darkModeEnabled);
         sunIcon.classList.toggle("d-none", darkModeEnabled);
 
-        // Enregistrez le mode actuel dans localStorage
+        // Enregistrer le mode actuel dans localStorage
         localStorage.setItem("darkMode", darkModeEnabled);
     });
 });

@@ -1,6 +1,140 @@
 ﻿@model CVSante.ViewModels.Paramedic
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+    .card {
+        border-radius: 15px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
 
-<div>
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+    .card-header {
+        font-weight: bold;
+        font-size: 1.5rem;
+        background-color: #007bff;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        transition: background-color 0.3s;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+    .btn-light {
+        background-color: #f8f9fa;
+        border-color: #f8f9fa;
+        transition: background-color 0.3s;
+    }
+
+        .btn-light:hover {
+            background-color: #e2e6ea;
+            border-color: #dae0e5;
+        }
+</style>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="text-primary">User Paramedic Details</h2>
+    </div>
+
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Paramedic Information</h5>
+        </div>
+        <div class="card-body">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <dl class="row">
+                <dt class="col-sm-3 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.paramInfo.Nom)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.paramInfo.Nom)
+                </dd>
+                <dt class="col-sm-3 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.paramInfo.Prenom)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.paramInfo.Prenom)
+                </dd>
+                <dt class="col-sm-3 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.paramInfo.Ville)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.paramInfo.Ville)
+                </dd>
+                <dt class="col-sm-3 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.paramInfo.Telephone)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.paramInfo.Telephone)
+                </dd>
+                <dt class="col-sm-3 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.paramInfo.ParamIsActive)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.paramInfo.ParamIsActive)
+                </dd>
+                <dt class="col-sm-3 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.paramInfo.Matricule)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.paramInfo.Matricule)
+                </dd>
+                <dt class="col-sm-3 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.paramInfo.FkCompanyNavigation)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.paramInfo.FkCompany)
+                </dd>
+                <dt class="col-sm-3 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.paramInfo.FkIdentityUserNavigation)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.paramInfo.FkIdentityUserNavigation.Id)
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a asp-action="Edit" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-primary mx-1">Edit</a>
+        <a asp-action="AddRespondant" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">Add Respondant</a>
+        <a asp-action="EditRespondent" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">Edit Respondent</a>
+        <a asp-action="History" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">History</a>
+        <a asp-action="ManageCompany" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">Manage Company</a>
+        <a asp-action="ManageRoles" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">Manage Roles</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-light mx-1">Back to List</a>
+    </div>
+</div>
+
+@* <div>
     <h4>UserParamedic</h4>
     <hr />
     @if (TempData["ErrorMessage"] != null)
@@ -69,3 +203,4 @@
     <a asp-action="ManageRoles" asp-route-id="@Model?.paramInfo.ParamId">ManageRoles</a>
     <a asp-action="Index">Back to List</a>
 </div>
+ *@
