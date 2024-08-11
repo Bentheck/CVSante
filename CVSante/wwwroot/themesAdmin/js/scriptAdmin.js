@@ -109,4 +109,5 @@ document.addEventListener("DOMContentLoaded", function () {
         // Enregistrer le mode actuel dans localStorage
         localStorage.setItem("darkMode", darkModeEnabled);
     });
+ 
 });
