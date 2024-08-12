@@ -3,8 +3,83 @@
 @{
     ViewData["Title"] = "Create Paramedic";
 }
-
 <div class="container mt-5">
+    <h1 class="mb-4 text-center">@ViewData["Title"]</h1>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form asp-action="CreateParamedic">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Nom" class="form-label"></label>
+                            <input asp-for="Nom" class="form-control" />
+                            <span asp-validation-for="Nom" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Prenom" class="form-label"></label>
+                            <input asp-for="Prenom" class="form-control" />
+                            <span asp-validation-for="Prenom" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Ville" class="form-label"></label>
+                            <input asp-for="Ville" class="form-control" />
+                            <span asp-validation-for="Ville" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Telephone" class="control-label"></label>
+                            <input asp-for="Telephone" class="form-control" />
+                            <span asp-validation-for="Telephone" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="ParamIsActive" type="checkbox" class="form-check-input" id="paramIsActive" />
+                            <label asp-for="ParamIsActive" class="form-check-label"></label>
+                            <span asp-validation-for="ParamIsActive" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Matricule" class="form-label"></label>
+                            <input asp-for="Matricule" class="form-control" />
+                            <span asp-validation-for="Matricule" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FkCompany" class="form-label"></label>
+                            <select asp-for="FkCompany" class="form-select"></select>
+                            <span asp-validation-for="FkCompany" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FkIdentityUser" class="form-label"></label>
+                            <select asp-for="FkIdentityUser" class="form-select" asp-items="ViewBag.FkIdentityUser"></select>
+                            <span asp-validation-for="FkIdentityUser" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FkRole" class="form-label"></label>
+                            <select asp-for="FkRole" class="form-select" asp-items="ViewBag.FkRole"></select>
+                            <span asp-validation-for="FkRole" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <input type="submit" value="Créer" class="btn btn-primary btn-lg" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="mt-3">
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+@* <div class="container mt-5">
     <h1 class="mb-4 text-center">@ViewData["Title"]</h1>
     <hr />
     <div class="row justify-content-center">
@@ -74,4 +149,4 @@
 
 <div>
     <a asp-action="Index">Back to List</a>
-</div>
+</div> *@
