@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CVSante.Models;
+using Microsoft.AspNetCore.Identity;
+using CVSante.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CVSante.Controllers
 {
@@ -17,6 +20,8 @@ namespace CVSante.Controllers
             _context = context;
         }
 
+
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin
         public async Task<IActionResult> Index()
         {
@@ -27,12 +32,14 @@ namespace CVSante.Controllers
             return View(await cvsanteContext.ToListAsync());
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/CreateCompany
         public IActionResult CreateCompany()
         {
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/CreateCompany
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -47,6 +54,7 @@ namespace CVSante.Controllers
             return View(company);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/CreateRole
         public IActionResult CreateRole()
         {
@@ -55,6 +63,7 @@ namespace CVSante.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/CreateRole
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -70,6 +79,7 @@ namespace CVSante.Controllers
             return View(role);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/CreateParamedic
         public IActionResult CreateParamedic()
         {
@@ -89,6 +99,7 @@ namespace CVSante.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/CreateParamedic
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -121,12 +132,14 @@ namespace CVSante.Controllers
             return View(userParamedic);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/CreateIdentityRole
         public IActionResult CreateIdentityRole()
         {
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/CreateIdentityRole
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -147,6 +160,7 @@ namespace CVSante.Controllers
             return View(role);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/ListRoles
         public async Task<IActionResult> ListRoles()
         {
@@ -154,6 +168,7 @@ namespace CVSante.Controllers
             return View(roles);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/EditIdentityRole/5
         public async Task<IActionResult> EditIdentityRole(string id)
         {
@@ -170,6 +185,7 @@ namespace CVSante.Controllers
             return View(role);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/EditIdentityRole/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -216,6 +232,7 @@ namespace CVSante.Controllers
             return _context.AspNetRoles.Any(e => e.Id == id);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         // POST: SuperAdmin/DeleteIdentityRole/5
         [HttpPost, ActionName("DeleteIdentityRole")]
         [ValidateAntiForgeryToken]
@@ -229,6 +246,109 @@ namespace CVSante.Controllers
             }
 
             return RedirectToAction(nameof(ListRoles)); // Redirect to the list of roles
+        }
+
+
+        [Authorize(Roles = "SuperAdmin")]
+        // GET: SuperAdmin/ASPUserRolesAndEdit
+        public async Task<IActionResult> ASPUserRolesAndEdit(string userId)
+        {
+            var model = new ASPUserRolesAndEdit();
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                // Fetch all users and roles
+                var users = await _context.AspNetUsers.ToListAsync();
+                var roles = await _context.AspNetRoles.ToListAsync();
+
+                // Fetch user roles for each user without overlapping DbContext usage
+                var userRoles = new List<ASPUserRoles>();
+                foreach (var user in users)
+                {
+                    var roleIds = await _context.AspNetUserRoles
+                        .Where(ur => ur.UserId == user.Id)
+                        .Select(ur => ur.RoleId)
+                        .ToListAsync();
+
+                    var roleNames = await _context.AspNetRoles
+                        .Where(r => roleIds.Contains(r.Id))
+                        .Select(r => r.Name)
+                        .ToListAsync();
+
+                    userRoles.Add(new ASPUserRoles
+                    {
+                        UserId = user.Id,
+                        UserName = user.UserName,
+                        Roles = roleNames
+                    });
+                }
+
+                model.Users = userRoles;
+                model.AllRoles = roles;
+            }
+            else
+            {
+                // Fetch specific user's roles for editing
+                var user = await _context.AspNetUsers.FindAsync(userId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                var userRoles = await _context.AspNetUserRoles
+                    .Where(ur => ur.UserId == userId)
+                    .Select(ur => ur.RoleId)
+                    .ToListAsync();
+
+                var allRoles = await _context.AspNetRoles.ToListAsync();
+                model.EditUserRoles = new EditASPUserRoles
+                {
+                    UserId = userId,
+                    UserName = user.UserName,
+                    AllRoles = allRoles,
+                    SelectedRoles = userRoles
+                };
+            }
+
+            return View(model);
+        }
+
+
+        [Authorize(Roles = "SuperAdmin")]
+        // POST: SuperAdmin/EditUserRoles
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUserRoles(EditASPUserRoles model)
+        {
+            ModelState.Remove("UserName");
+            ModelState.Remove("AllRoles");
+
+            if (!ModelState.IsValid)
+            {
+                var allRoles = await _context.AspNetRoles.ToListAsync();
+                model.AllRoles = allRoles;
+                return View("ASPUserRolesAndEdit", new ASPUserRolesAndEdit { EditUserRoles = model, AllRoles = allRoles });
+            }
+
+            var existingUserRoles = await _context.AspNetUserRoles
+                .Where(ur => ur.UserId == model.UserId)
+                .ToListAsync();
+
+            // Remove existing roles
+            _context.AspNetUserRoles.RemoveRange(existingUserRoles);
+
+            // Add selected roles
+            if (model.SelectedRoles != null)
+            {
+                var newRoles = model.SelectedRoles
+                    .Select(roleId => new AspNetUserRole { UserId = model.UserId, RoleId = roleId });
+
+                await _context.AspNetUserRoles.AddRangeAsync(newRoles);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(ASPUserRolesAndEdit)); // Redirect to refresh the view
         }
     }
 }
