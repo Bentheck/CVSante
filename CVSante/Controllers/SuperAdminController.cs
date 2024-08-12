@@ -67,7 +67,7 @@ namespace CVSante.Controllers
         // POST: SuperAdmin/CreateRole
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRole([Bind("IdRole,CreateParamedic,EditParamedic,GetHistorique,GetCitoyen,EditRole,FkCompany")] CompanyRole role)
+        public async Task<IActionResult> CreateRole([Bind("IdRole,CreateParamedic,EditParamedic,GetHistorique,GetCitoyen,EditRole,EditCompany,FkCompany")] CompanyRole role)
         {
             if (ModelState.IsValid)
             {
