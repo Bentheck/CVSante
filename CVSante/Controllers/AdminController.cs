@@ -64,7 +64,8 @@ namespace CVSante.Controllers
 
             var currentUserId = _userManager.GetUserId(User); // currentUserId is already a string
             var userParam = await _context.UserParamedics
-                .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
+                .Include(u => u.FkRoleNavigation)
+                .FirstAsync(up => up.FkIdentityUser == currentUserId);
 
             if (userParam == null)
             {
@@ -454,6 +455,7 @@ namespace CVSante.Controllers
 
             // Fetch the current user's paramedic details
             var currentUser = await _context.UserParamedics
+                .Include(u => u.FkRoleNavigation)
                 .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
 
             if (currentUser == null)
