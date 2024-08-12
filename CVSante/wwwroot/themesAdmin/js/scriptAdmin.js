@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const sunIcon = document.getElementById("sunIcon");
     const moonIcon = document.getElementById("moonIcon");
 
-    // Vérifier le mode actuel du thème à partir de localStorage ou d'une autre source
+    // Check the current theme mode from localStorage or another source
     const isDarkMode = localStorage.getItem("darkMode") === "true";
 
     if (isDarkMode) {
@@ -102,12 +102,42 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.toggle("dark-mode");
         const darkModeEnabled = document.body.classList.contains("dark-mode");
 
-        // Mettre à jour les icônes
+        // Update icons
         moonIcon.classList.toggle("d-none", !darkModeEnabled);
         sunIcon.classList.toggle("d-none", darkModeEnabled);
 
-        // Enregistrer le mode actuel dans localStorage
+        // Save the current mode to localStorage
         localStorage.setItem("darkMode", darkModeEnabled);
     });
- 
 });
+//document.addEventListener("DOMContentLoaded", function () {
+//    const themeToggle = document.getElementById("themeToggle");
+//    const sunIcon = document.getElementById("sunIcon");
+//    const moonIcon = document.getElementById("moonIcon");
+
+//    // Vérifier le mode actuel du thème à partir de localStorage ou d'une autre source
+//    const isDarkMode = localStorage.getItem("darkMode") === "true";
+
+//    if (isDarkMode) {
+//        document.body.classList.add("dark-mode");
+//        moonIcon.classList.remove("d-none");
+//        sunIcon.classList.add("d-none");
+//    } else {
+//        document.body.classList.remove("dark-mode");
+//        moonIcon.classList.add("d-none");
+//        sunIcon.classList.remove("d-none");
+//    }
+
+//    themeToggle.addEventListener("click", function () {
+//        document.body.classList.toggle("dark-mode");
+//        const darkModeEnabled = document.body.classList.contains("dark-mode");
+
+//        // Mettre à jour les icônes
+//        moonIcon.classList.toggle("d-none", !darkModeEnabled);
+//        sunIcon.classList.toggle("d-none", darkModeEnabled);
+
+//        // Enregistrer le mode actuel dans localStorage
+//        localStorage.setItem("darkMode", darkModeEnabled);
+//    });
+ 
+//});
