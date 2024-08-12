@@ -3,10 +3,6 @@
 <div>
     <h4>UserParamedic</h4>
 <div>
-    <form asp-action="Edit" method="get" style="display:inline;">
-        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
-        <button type="submit" class="btn btn-primary">Edit</button>
-    </form>
     <form asp-action="AddRespondent" method="get" style="display:inline;">
         <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
         <button type="submit" class="btn btn-success">Add Respondent</button>
