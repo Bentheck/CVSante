@@ -12,6 +12,7 @@ using CVSante.Services;
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using CVSante.Tools;
 
 namespace CVSante.Controllers
 {
@@ -59,7 +60,7 @@ namespace CVSante.Controllers
 
         [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin/History
-        public async Task<IActionResult> History()
+        public async Task<IActionResult> History(int? id, int? pageNumber, int? pageSize)
         {
 
             var currentUserId = _userManager.GetUserId(User); // currentUserId is already a string
@@ -81,10 +82,11 @@ namespace CVSante.Controllers
             var historique = _context.HistoriqueParams
                 .Include(h => h.FkParam)
                 .Include(h => h.FkUser)
-                .Where(h => h.FkParamId == userParam.ParamId)
-                .ToList();
+                .Where(h => h.FkParamId == userParam.ParamId);
 
-            return View(historique);
+            return View(await PaginatedList<HistoriqueParam>.CreateAsync(historique, pageNumber ?? 1, pageSize ?? 10));
+            //return View(historique);
+            
         }
 
 
