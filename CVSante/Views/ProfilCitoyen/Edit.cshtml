@@ -13,9 +13,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-9">
-                <div class="card-body">
-                    <div asp-validation-summary="ModelOnly" class="card-header text-danger"></div>
-                </div>
+
                 <!-- User Info -->
                 <div id="userinfo" class="section">
                     <div class="card mb-3">
@@ -260,53 +258,53 @@
                                     {
                                         count = Model.Allergies.Count;
                                     }
-                                for (int i = 0; i < count; i++)
-                                {
-                                    var allergy = Model.Allergies[i];
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="form-group row">
-                                                <label class="col-md-2 col-form-label">Allergie ou Intolérance</label>
-                                                <div class="col-md-10">
-                                                    <div class="d-flex flex-column flex-md-row align-items-start">
-                                                        <div class="me-3">
-                                                            <input type="radio" name="Allergies[@i].AllergieIntolerance" value="Allergie" class="form-check-input allergy-intolerance-radio" id="allergie-@i" @(allergy.AllergieIntolerance == "Allergie" ? "checked" : "") />
-                                                            <label class="form-check-label" for="allergie-@i">Allergie</label>
-                                                        </div>
-                                                        <div>
-                                                            <input type="radio" name="Allergies[@i].AllergieIntolerance" value="Intolerance" class="form-check-input allergy-intolerance-radio" id="intolerance-@i" @(allergy.AllergieIntolerance == "Intolerance" ? "checked" : "") />
-                                                            <label class="form-check-label" for="intolerance-@i">Intolérance</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row severity-field" style="display: @(allergy.AllergieIntolerance == "Allergie" ? "block" : "none");">
-                                                <label class="col-md-2 col-form-label">Sévérité</label>
-                                                <div class="col-md-10">
-                                                    <div class="d-flex flex-column flex-md-row align-items-start">
-                                                        <div class="me-3">
-                                                            <input type="radio" name="Allergies[@i].Gravite" value="Bénigne" class="form-check-input" id="benigne-@i" @(allergy.Gravite == "Bénigne" ? "checked" : "") />
-                                                            <label class="form-check-label" for="benigne-@i">Bénigne</label>
-                                                        </div>
-                                                        <div>
-                                                            <input type="radio" name="Allergies[@i].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-@i" @(allergy.Gravite == "Grave/Mortelle" ? "checked" : "") />
-                                                            <label class="form-check-label" for="grave-@i">Grave/Mortelle</label>
+                                    for (int i = 0; i < count; i++)
+                                    {
+                                        var allergy = Model.Allergies[i];
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Allergie ou Intolérance</label>
+                                                    <div class="col-md-10">
+                                                        <div class="d-flex flex-column flex-md-row align-items-start">
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Allergies[@i].AllergieIntolerance" value="Allergie" class="form-check-input allergy-intolerance-radio" id="allergie-@i" @(allergy.AllergieIntolerance == "Allergie" ? "checked" : "") />
+                                                                <label class="form-check-label" for="allergie-@i">Allergie</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="radio" name="Allergies[@i].AllergieIntolerance" value="Intolerance" class="form-check-input allergy-intolerance-radio" id="intolerance-@i" @(allergy.AllergieIntolerance == "Intolerance" ? "checked" : "") />
+                                                                <label class="form-check-label" for="intolerance-@i">Intolérance</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-2 col-form-label">Produit</label>
-                                                <div class="col-md-10">
-                                                    <input type="text" name="Allergies[@i].Produit" class="form-control" value="@allergy.Produit" />
+                                                <div class="form-group row severity-field" style="display: @(allergy.AllergieIntolerance == "Allergie" ? "block" : "none");">
+                                                    <label class="col-md-2 col-form-label">Sévérité</label>
+                                                    <div class="col-md-10">
+                                                        <div class="d-flex flex-column flex-md-row align-items-start">
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Allergies[@i].Gravite" value="Bénigne" class="form-check-input" id="benigne-@i" @(allergy.Gravite == "Bénigne" ? "checked" : "") />
+                                                                <label class="form-check-label" for="benigne-@i">Bénigne</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="radio" name="Allergies[@i].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-@i" @(allergy.Gravite == "Grave/Mortelle" ? "checked" : "") />
+                                                                <label class="form-check-label" for="grave-@i">Grave/Mortelle</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-footer d-flex justify-content-between align-items-center">
-                                                <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Produit</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Allergies[@i].Produit" class="form-control" value="@allergy.Produit" />
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
                                 }
                             </div>
                             <button type="button" class="btn btn-primary" onclick="addDynamicField('allergy')">Ajoutez allergie/intolérance</button>
@@ -334,47 +332,47 @@
 
                                     for (int i = 0; i < count; i++)
                                     {
-                                    var handicap = Model.Handicaps[i];
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="form-group row">
-                                                <label class="col-md-2 col-form-label">Type</label>
-                                                <div class="col-md-10">
-                                                    <div class="d-flex flex-column flex-md-row align-items-start">
-                                                        <div class="me-3">
-                                                            <input type="radio" name="Handicaps[@i].Type" value="Autisme" class="form-check-input" id="autisme-@i" @(handicap.Type == "Autisme" ? "checked" : "") />
-                                                            <label class="form-check-label" for="autisme-@i">Autisme</label>
-                                                        </div>
-                                                        <div class="me-3">
-                                                            <input type="radio" name="Handicaps[@i].Type" value="Mobilité réduite" class="form-check-input" id="mobilite-reduite-@i" @(handicap.Type == "Mobilité réduite" ? "checked" : "") />
-                                                            <label class="form-check-label" for="mobilite-reduite-@i">Mobilité réduite</label>
-                                                        </div>
-                                                        <div class="me-3">
-                                                            <input type="radio" name="Handicaps[@i].Type" value="Déficience auditive" class="form-check-input" id="deficience-auditive-@i" @(handicap.Type == "Déficience auditive" ? "checked" : "") />
-                                                            <label class="form-check-label" for="deficience-auditive-@i">Déficience auditive</label>
-                                                        </div>
-                                                        <div class="me-3">
-                                                            <input type="radio" name="Handicaps[@i].Type" value="Déficience visuelle" class="form-check-input" id="deficience-visuelle-@i" @(handicap.Type == "Déficience visuelle" ? "checked" : "") />
-                                                            <label class="form-check-label" for="deficience-visuelle-@i">Déficience visuelle</label>
-                                                        </div>
-                                                        <div>
-                                                            <input type="radio" name="Handicaps[@i].Type" value="Autre" class="form-check-input" id="autre-@i" @(handicap.Type == "Autre" ? "checked" : "") />
-                                                            <label class="form-check-label" for="autre-@i">Autre</label>
+                                        var handicap = Model.Handicaps[i];
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Type</label>
+                                                    <div class="col-md-10">
+                                                        <div class="d-flex flex-column flex-md-row align-items-start">
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Autisme" class="form-check-input" id="autisme-@i" @(handicap.Type == "Autisme" ? "checked" : "") />
+                                                                <label class="form-check-label" for="autisme-@i">Autisme</label>
+                                                            </div>
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Mobilité réduite" class="form-check-input" id="mobilite-reduite-@i" @(handicap.Type == "Mobilité réduite" ? "checked" : "") />
+                                                                <label class="form-check-label" for="mobilite-reduite-@i">Mobilité réduite</label>
+                                                            </div>
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Déficience auditive" class="form-check-input" id="deficience-auditive-@i" @(handicap.Type == "Déficience auditive" ? "checked" : "") />
+                                                                <label class="form-check-label" for="deficience-auditive-@i">Déficience auditive</label>
+                                                            </div>
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Déficience visuelle" class="form-check-input" id="deficience-visuelle-@i" @(handicap.Type == "Déficience visuelle" ? "checked" : "") />
+                                                                <label class="form-check-label" for="deficience-visuelle-@i">Déficience visuelle</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="radio" name="Handicaps[@i].Type" value="Autre" class="form-check-input" id="autre-@i" @(handicap.Type == "Autre" ? "checked" : "") />
+                                                                <label class="form-check-label" for="autre-@i">Autre</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-2 col-form-label">Handicap</label>
-                                                <div class="col-md-10">
-                                                    <input type="text" name="Handicaps[@i].Definition" class="form-control" value="@handicap.Definition" />
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Handicap</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Handicaps[@i].Definition" class="form-control" value="@handicap.Definition" />
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
                                                 </div>
                                             </div>
-                                            <div class="card-footer d-flex justify-content-between align-items-center">
-                                                <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
-                                            </div>
                                         </div>
-                                    </div>
                                     }
                                 }
                             </div>
@@ -399,51 +397,51 @@
                                     else
                                     {
                                         count = Model.Medications.Count;
-                                    }                                  
-                                    
+                                    }
+
                                     for (int i = 0; i < count; i++)
                                     {
-                                    var medication = Model.Medications[i];
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="form-group row">
-                                                <label class="col-md-2 col-form-label">Type</label>
-                                                <div class="col-md-10">
-                                                    <div class="d-flex flex-column flex-md-row align-items-start">
-                                                        <div class="me-3">
-                                                            <input type="radio" name="Medications[@i].MedicamentProduitNat" value="Medicament" class="form-check-input" id="medicament-@i" @(medication.MedicamentProduitNat == "Medicament" ? "checked" : "") />
-                                                            <label class="form-check-label" for="medicament-@i">Médicament</label>
-                                                        </div>
-                                                        <div>
-                                                            <input type="radio" name="Medications[@i].MedicamentProduitNat" value="Produit Naturel" class="form-check-input" id="produitNaturel-@i" @(medication.MedicamentProduitNat == "Produit Naturel" ? "checked" : "") />
-                                                            <label class="form-check-label" for="produitNaturel-@i">Produit Naturel</label>
+                                        var medication = Model.Medications[i];
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Type</label>
+                                                    <div class="col-md-10">
+                                                        <div class="d-flex flex-column flex-md-row align-items-start">
+                                                            <div class="me-3">
+                                                                <input type="radio" name="Medications[@i].MedicamentProduitNat" value="Medicament" class="form-check-input" id="medicament-@i" @(medication.MedicamentProduitNat == "Medicament" ? "checked" : "") />
+                                                                <label class="form-check-label" for="medicament-@i">Médicament</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="radio" name="Medications[@i].MedicamentProduitNat" value="Produit Naturel" class="form-check-input" id="produitNaturel-@i" @(medication.MedicamentProduitNat == "Produit Naturel" ? "checked" : "") />
+                                                                <label class="form-check-label" for="produitNaturel-@i">Produit Naturel</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-2 col-form-label">Nom</label>
-                                                <div class="col-md-10">
-                                                    <input type="text" name="Medications[@i].Nom" class="form-control" value="@medication.Nom" />
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label">Nom</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Medications[@i].Nom" class="form-control" value="@medication.Nom" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-2 col-form-label" id="posologieLabel-@i">Posologie</label>
-                                                <div class="col-md-10">
-                                                    <input type="text" name="Medications[@i].Posologie" class="form-control" value="@medication.Posologie" />
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label" id="posologieLabel-@i">Posologie</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Medications[@i].Posologie" class="form-control" value="@medication.Posologie" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row" id="raisonGroup-@i" style="display: @(medication.MedicamentProduitNat == "Medicament" ? "block" : "none");">
-                                                <label class="col-md-2 col-form-label">Raison</label>
-                                                <div class="col-md-10">
-                                                    <input type="text" name="Medications[@i].Raison" class="form-control" value="@medication.Raison" />
+                                                <div class="form-group row" id="raisonGroup-@i" style="display: @(medication.MedicamentProduitNat == "Medicament" ? "block" : "none");">
+                                                    <label class="col-md-2 col-form-label">Raison</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" name="Medications[@i].Raison" class="form-control" value="@medication.Raison" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-footer d-flex justify-content-between align-items-center">
-                                                <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                     }
                                 }
                             </div>
@@ -453,50 +451,54 @@
                 </div>
             </div>
 
-                    <!-- Navigation List Box and Buttons -->
-                    <div class="col-md-3">
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                <h4>Navigation</h4>
-                            </div>
-                            <div class="card-body">
-                                <ul class="nav nav-pills flex-column">
-                                    <li class="nav-item">
-                                        <a id="nav-userinfo" class="nav-link active" href="#" onclick="showSection('userinfo')">User Info</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a id="nav-address" class="nav-link" href="#" onclick="showSection('address')">Addresses</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a id="nav-antecedent" class="nav-link" href="#" onclick="showSection('antecedent')">Antécédents</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a id="nav-allergy" class="nav-link" href="#" onclick="showSection('allergy')">Allergies</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a id="nav-handicap" class="nav-link" href="#" onclick="showSection('handicap')">Handicaps</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a id="nav-medication" class="nav-link" href="#" onclick="showSection('medication')">Medications</a>
-                                    </li>
-                                </ul>
-                            </div>
+            <!-- Navigation List Box and Buttons -->
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h4>Navigation</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a id="nav-userinfo" class="nav-link active" href="#" onclick="showSection('userinfo')">User Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-address" class="nav-link" href="#" onclick="showSection('address')">Addresses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-antecedent" class="nav-link" href="#" onclick="showSection('antecedent')">Antécédents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-allergy" class="nav-link" href="#" onclick="showSection('allergy')">Allergies</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-handicap" class="nav-link" href="#" onclick="showSection('handicap')">Handicaps</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="nav-medication" class="nav-link" href="#" onclick="showSection('medication')">Medications</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons and Save Button -->
+                <div class="card">
+                    <div class="card-body text-center">
+                        <button id="prev-btn" type="button" class="btn btn-primary" onclick="previousSection()">Previous</button>
+                        <button id="next-btn" type="button" class="btn btn-primary" onclick="nextSection()">Next</button>
+                        <div class="mt-3">
+                            <button id="save-btn" type="submit" class="btn btn-primary">Save</button>
                         </div>
 
-                        <!-- Navigation Buttons and Save Button -->
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <button id="prev-btn" type="button" class="btn btn-primary" onclick="previousSection()">Previous</button>
-                                <button id="next-btn" type="button" class="btn btn-primary" onclick="nextSection()">Next</button>
-                                <div class="mt-3">
-                                <button id="save-btn" type="submit" class="btn btn-primary">Save</button>
-                                </div>
-                                <div class="mt-3">
+                        <div class="mt-3">
                             <button class="btn btn-danger" type="button" onclick="location.href='@Url.Action("Delete", "ProfilCitoyen", new { id = Model.UserInfo.FkUserId })'">Supprimer Profil</button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="card-header text-danger"></div>
+                </div>
             </div>
+        </div>
+    </div>
 </form>
