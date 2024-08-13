@@ -82,8 +82,7 @@ namespace CVSante.Controllers
             var historique = _context.HistoriqueParams
                 .Include(h => h.FkParam)
                 .Include(h => h.FkUser)
-                .Where(h => h.FkParamId == userParam.ParamId)
-                .ToList();
+                .Where(h => h.FkParamId == userParam.ParamId);
 
             return View(await PaginatedList<HistoriqueParam>.CreateAsync(historique, pageNumber ?? 1, pageSize ?? 10));
             //return View(historique);
