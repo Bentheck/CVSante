@@ -111,6 +111,11 @@
                                 <label class="form-check-label" asp-for="SelectedRole.EditRole">Edit Role</label>
                             </div>
 
+                            <div class="form-group form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="SelectedRole.EditCompany" />
+                                <label class="form-check-label" asp-for="SelectedRole.EditCompany"></label>
+                            </div>
+
                             <div class="form-group">
                                 <button type="button" class="btn btn-light text-primary" onclick="confirmSave()">Save</button>
                             </div>
@@ -168,9 +173,10 @@
         // Ferme la modal lorsque le bouton "Cancel" est cliqué
         $('#confirmModal').on('hidden.bs.modal', function (e) {
             $('#confirmModal').modal('hide');
+            location.reload(); // Recharge la page pour annuler les modifications
         });
 
-        
+
         $('.close, .btn-secondary').click(function () {
             $('#confirmModal').modal('hide');
         });
