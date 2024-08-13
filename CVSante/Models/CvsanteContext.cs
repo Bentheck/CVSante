@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using CVSante.ViewModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CVSante.Models;
+
+
 
 public partial class CvsanteContext : DbContext
 {
@@ -19,6 +21,8 @@ public partial class CvsanteContext : DbContext
     public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
 
     public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
+
+    public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
 
     public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
 
@@ -66,77 +70,103 @@ public partial class CvsanteContext : DbContext
         modelBuilder.Entity<AspNetRole>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__AspNetRo__3214EC07679ACB59");
-
             entity.Property(e => e.Name).HasMaxLength(256);
             entity.Property(e => e.NormalizedName).HasMaxLength(256);
-        });
 
-        modelBuilder.Entity<AspNetRoleClaim>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__AspNetRo__3214EC07EFA270EA");
+            entity.HasMany(e => e.AspNetUserRoles)
+                  .WithOne(e => e.Role)
+                  .HasForeignKey(e => e.RoleId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetRoles_AspNetUserRoles_RoleId");
 
-            entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.AspNetRoleClaims)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK__AspNetRol__RoleI__1332DBDC");
+            entity.HasMany(e => e.AspNetRoleClaims)
+                  .WithOne(e => e.Role)
+                  .HasForeignKey(e => e.RoleId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetRoles_AspNetRoleClaims_RoleId");
         });
 
         modelBuilder.Entity<AspNetUser>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__AspNetUs__3214EC07C0010FD5");
-
             entity.Property(e => e.Email).HasMaxLength(256);
             entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
             entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
             entity.Property(e => e.UserName).HasMaxLength(256);
 
-            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                    "AspNetUserRole",
-                    r => r.HasOne<AspNetRole>().WithMany()
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("FK__AspNetUse__RoleI__07C12930"),
-                    l => l.HasOne<AspNetUser>().WithMany()
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK__AspNetUse__UserI__06CD04F7"),
-                    j =>
-                    {
-                        j.HasKey("UserId", "RoleId").HasName("PK__AspNetUs__AF2760ADC25C17C5");
-                        j.ToTable("AspNetUserRoles");
-                        j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
-                    });
+            entity.HasMany(e => e.AspNetUserRoles)
+                  .WithOne(e => e.User)
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetUsers_AspNetUserRoles_UserId");
+
+            entity.HasMany(e => e.AspNetUserClaims)
+                  .WithOne(e => e.User)
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetUsers_AspNetUserClaims_UserId");
+
+            entity.HasMany(e => e.AspNetUserLogins)
+                  .WithOne(e => e.User)
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetUsers_AspNetUserLogins_UserId");
+
+            entity.HasMany(e => e.AspNetUserTokens)
+                  .WithOne(e => e.User)
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetUsers_AspNetUserTokens_UserId");
+        });
+
+        modelBuilder.Entity<AspNetUserRole>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.RoleId }).HasName("PK__AspNetUs__AF2760ADC25C17C5");
+            entity.ToTable("AspNetUserRoles");
+            entity.HasIndex(e => e.RoleId, "IX_AspNetUserRoles_RoleId");
+        });
+
+        modelBuilder.Entity<AspNetRoleClaim>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__AspNetRo__3214EC07EFA270EA");
+            entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
+            entity.HasOne(d => d.Role)
+                  .WithMany(p => p.AspNetRoleClaims)
+                  .HasForeignKey(d => d.RoleId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetRoleClaims_AspNetRoles_RoleId");
         });
 
         modelBuilder.Entity<AspNetUserClaim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__AspNetUs__3214EC070A5BA62B");
-
             entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
-
-            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__AspNetUse__UserI__0A9D95DB");
+            entity.HasOne(d => d.User)
+                  .WithMany(p => p.AspNetUserClaims)
+                  .HasForeignKey(d => d.UserId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetUserClaims_AspNetUsers_UserId");
         });
 
         modelBuilder.Entity<AspNetUserLogin>(entity =>
         {
             entity.HasKey(e => new { e.LoginProvider, e.ProviderKey }).HasName("PK__AspNetUs__2B2C5B5278600BD3");
-
             entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
-
-            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__AspNetUse__UserI__0D7A0286");
+            entity.HasOne(d => d.User)
+                  .WithMany(p => p.AspNetUserLogins)
+                  .HasForeignKey(d => d.UserId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetUserLogins_AspNetUsers_UserId");
         });
 
         modelBuilder.Entity<AspNetUserToken>(entity =>
         {
             entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name }).HasName("PK__AspNetUs__8CC49841C5BE8CB4");
-
-            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__AspNetUse__UserI__10566F31");
+            entity.HasOne(d => d.User)
+                  .WithMany(p => p.AspNetUserTokens)
+                  .HasForeignKey(d => d.UserId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_AspNetUserTokens_AspNetUsers_UserId");
         });
 
         modelBuilder.Entity<Commentaire>(entity =>
@@ -190,6 +220,7 @@ public partial class CvsanteContext : DbContext
 
             entity.Property(e => e.IdRole).HasColumnName("ID_Role");
             entity.Property(e => e.CreateParamedic).HasColumnName("Create_Paramedic");
+            entity.Property(e => e.EditCompany).HasColumnName("Edit_Company");
             entity.Property(e => e.EditParamedic).HasColumnName("Edit_Paramedic");
             entity.Property(e => e.EditRole).HasColumnName("Edit_Role");
             entity.Property(e => e.FkCompany).HasColumnName("FK_COMPANY");
@@ -470,7 +501,6 @@ public partial class CvsanteContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserParamedic_Company_Roles");
         });
-
 
         OnModelCreatingPartial(modelBuilder);
     }

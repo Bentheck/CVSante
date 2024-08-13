@@ -1,4 +1,5 @@
-﻿@model CVSante.Models.UserParamedic
+
+﻿@model CVSante.ViewModels.AddRespondent
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
@@ -107,51 +108,96 @@
 </div>
 @* <h4>UserParamedic</h4>
 <hr />
+
+
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="View">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nom" class="control-label"></label>
-                <input asp-for="Nom" class="form-control" />
-                <span asp-validation-for="Nom" class="text-danger"></span>
+    <!-- Add New Paramedic Card -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3>Ajouté nouvel employé</h3>
             </div>
-            <div class="form-group">
-                <label asp-for="Prenom" class="control-label"></label>
-                <input asp-for="Prenom" class="form-control" />
-                <span asp-validation-for="Prenom" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="AddRespondent" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserParamedic.Nom"></label>
+                        <input asp-for="UserParamedic.Nom" class="form-control" />
+                        <span asp-validation-for="UserParamedic.Nom" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserParamedic.Prenom"></label>
+                        <input asp-for="UserParamedic.Prenom" class="form-control" />
+                        <span asp-validation-for="UserParamedic.Prenom" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserParamedic.Ville"></label>
+                        <input asp-for="UserParamedic.Ville" class="form-control" />
+                        <span asp-validation-for="UserParamedic.Ville" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserParamedic.Telephone"></label>
+                        <input asp-for="UserParamedic.Telephone" class="form-control" />
+                        <span asp-validation-for="UserParamedic.Telephone" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserParamedic.Matricule">Numéro de matricule</label>
+                        <input asp-for="UserParamedic.Matricule" class="form-control" />
+                        <span asp-validation-for="UserParamedic.Matricule" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserParamedic.ParamIsActive">Employé Actif</label>
+                        <input asp-for="UserParamedic.ParamIsActive" type="checkbox" />
+                        <span asp-validation-for="UserParamedic.ParamIsActive" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" asp-for="CompanyId" />
+
+                    <button type="submit" class="btn btn-primary">Add New Paramedic</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Ville" class="control-label"></label>
-                <input asp-for="Ville" class="form-control" />
-                <span asp-validation-for="Ville" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Add Existing Paramedic by Matricule Card -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3>Ajouté employé existant</h3>
             </div>
-            <div class="form-group">
-                <label asp-for="Telephone" class="control-label"></label>
-                <input asp-for="Telephone" class="form-control" />
-                <span asp-validation-for="Telephone" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="AddByMatricule" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label asp-for="UserParamedic.Matricule">Numéro de matricule</label>
+                        <input asp-for="UserParamedic.Matricule" class="form-control" />
+                        <span asp-validation-for="UserParamedic.Matricule" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" asp-for="CompanyId" />
+
+                    <button type="submit" class="btn btn-primary">Add by Matricule</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Matricule" class="control-label"></label>
-                <input asp-for="Matricule" class="form-control" />
-                <span asp-validation-for="Matricule" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FkCompany" class="control-label"></label>
-                <select asp-for="FkCompany" class ="form-control" asp-items="ViewBag.FkCompany"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="FkIdentityUser" class="control-label"></label>
-                <select asp-for="FkIdentityUser" class ="form-control" asp-items="ViewBag.FkIdentityUser"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div> *@
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 

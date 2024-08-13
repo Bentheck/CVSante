@@ -1,0 +1,62 @@
+﻿@model CVSante.ViewModels.ASPUserRolesAndEdit
+
+@{
+    ViewData["Title"] = "User Roles Management";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.EditUserRoles != null)
+{
+    <h2>Edit User Roles for @Model.EditUserRoles.UserName</h2>
+
+    <form asp-action="EditUserRoles" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="UserId" value="@Model.EditUserRoles.UserId" />
+
+        <div>
+            @foreach (var role in Model.EditUserRoles.AllRoles)
+            {
+                <div>
+                    <input type="checkbox" name="SelectedRoles" value="@role.Id"
+                    @(Model.EditUserRoles.SelectedRoles.Contains(role.Id) ? "checked" : "") />
+                    <label>@role.Name</label>
+                </div>
+            }
+        </div>
+
+        <button type="submit">Save Changes</button>
+    </form>
+}
+else
+{
+    <h2>All Users and Their Roles</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Roles</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>
+                        @foreach (var role in user.Roles)
+                        {
+                            <span>@role</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="ASPUserRolesAndEdit" asp-route-userId="@user.UserId">Edit Roles</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

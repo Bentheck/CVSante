@@ -9,6 +9,7 @@
         transition: transform 0.2s;
     }
 
+
         .card:hover {
             transform: scale(1.02);
         }
@@ -123,60 +124,101 @@
     </div>
 </div>
 @* <h4>UserParamedic</h4>
+
+<h4>Edit Respondent</h4>
+
 <hr />
 <div class="row">
+    <!-- Left side: List of Paramedics -->
     <div class="col-md-4">
-        <form asp-action="EditRespondent">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nom" class="control-label"></label>
-                <input asp-for="Nom" class="form-control" />
-                <span asp-validation-for="Nom" class="text-danger"></span>
+        <div class="card">
+            <div class="card-header">
+                <h5>Paramedics</h5>
             </div>
-            <div class="form-group">
-                <label asp-for="Prenom" class="control-label"></label>
-                <input asp-for="Prenom" class="form-control" />
-                <span asp-validation-for="Prenom" class="text-danger"></span>
+            <ul class="list-group list-group-flush">
+                @if (ViewBag.Paramedics != null && ViewBag.Paramedics.Count > 0)
+                {
+                    @foreach (var paramedic in ViewBag.Paramedics as List<CVSante.Models.UserParamedic>)
+                    {
+                        <li class="list-group-item">
+                            <a asp-action="EditRespondent" asp-route-paramedicId="@paramedic.ParamId">
+                                @paramedic.Nom @paramedic.Prenom
+                            </a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="list-group-item">No paramedics found.</li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- Right side: Edit Form -->
+    <div class="col-md-8">
+        @if (Model != null)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h5>Edit Paramedic</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="EditRespondent">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Nom" class="control-label"></label>
+                            <input asp-for="Nom" class="form-control" />
+                            <span asp-validation-for="Nom" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Prenom" class="control-label"></label>
+                            <input asp-for="Prenom" class="form-control" />
+                            <span asp-validation-for="Prenom" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Ville" class="control-label"></label>
+                            <input asp-for="Ville" class="form-control" />
+                            <span asp-validation-for="Ville" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Telephone" class="control-label"></label>
+                            <input asp-for="Telephone" class="form-control" />
+                            <span asp-validation-for="Telephone" class="text-danger"></span>
+                        </div>
+                        <input type="hidden" asp-for="ParamId" />
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="ParamIsActive" /> @Html.DisplayNameFor(model => model.ParamIsActive)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Matricule" class="control-label"></label>
+                            <input asp-for="Matricule" class="form-control" />
+                            <span asp-validation-for="Matricule" class="text-danger"></span>
+                        </div>
+                        <!-- Hidden field for FkCompany, since it should not change -->
+                        <input type="hidden" asp-for="FkCompany" />
+                        <!-- Hidden field for FkIdentityUser, since it should not change -->
+                        <input type="hidden" asp-for="FkIdentityUser" />
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Ville" class="control-label"></label>
-                <input asp-for="Ville" class="form-control" />
-                <span asp-validation-for="Ville" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telephone" class="control-label"></label>
-                <input asp-for="Telephone" class="form-control" />
-                <span asp-validation-for="Telephone" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="ParamId" />
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="ParamIsActive" /> @Html.DisplayNameFor(model => model.ParamIsActive)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Matricule" class="control-label"></label>
-                <input asp-for="Matricule" class="form-control" />
-                <span asp-validation-for="Matricule" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FkCompany" class="control-label"></label>
-                <select asp-for="FkCompany" class="form-control" asp-items="ViewBag.FkCompany"></select>
-                <span asp-validation-for="FkCompany" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FkIdentityUser" class="control-label"></label>
-                <select asp-for="FkIdentityUser" class="form-control" asp-items="ViewBag.FkIdentityUser"></select>
-                <span asp-validation-for="FkIdentityUser" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        }
+        else
+        {
+            <div class="alert alert-info">Please select a paramedic to edit.</div>
+        }
     </div>
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
  *@
+
+
