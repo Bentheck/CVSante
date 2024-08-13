@@ -11093,16 +11093,96 @@ body {
             color: rgba(255, 255, 255, 1);
         }
 
+/* Mode sombre */
+/*.sidebar-partial .nav-link {
+    color: #ffffff !important;*/ /* Force le texte à être blanc */
+/*}
+
+.sidebar-partial .btn-link {
+    color: #ffffff !important;*/ /* Force les boutons à être blancs */
+/*}
+body {
+    background-color: #ffffff;
+    color: #000000;
+    transition: background-color 0.5s, color 0.5s;
+}
+body.dark-mode {
+    color: #ffffff;*/ /* Mettre le texte en blanc */
+/*}*/
+ 
+
+    /* Pour les éléments spécifiques comme les cartes */
+    /*body.dark-mode .card,
+    body.dark-mode .card-header,
+    body.dark-mode .btn {
+        background-color: #555;*/ /* Couleur de fond des boutons et des cartes */
+        /*color: #fff;*/ /* Couleur du texte */
+        /*border-color: #555;*/ /* Couleur des bordures */
+        /*transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+    }*/
+
+    /* Assurez-vous que les liens sont également visibles */
+    /*body.dark-mode a {
+        color: #fff;*/ /* Couleur des liens en mode sombre */
+    /*}*/
+
+    /* Pour le footer */
+    /*body.dark-mode footer {
+        background-color: #1c1c1c;
+        color: #fff;
+    }*/
+
+    /* Pour les titres et autres textes importants */
+    /*body.dark-mode h1,
+    body.dark-mode h2,
+    body.dark-mode h3,
+    body.dark-mode h4,
+    body.dark-mode h5,
+    body.dark-mode h6 {
+        color: #fff;
+    }*/
+
+    /* Icônes */
+    /*body.dark-mode i {
+        color: #fff;
+    }*/
 body.dark-mode {
     background-color: #333;
     color: #fff;
 }
 
-/* les styles pour les boutons en mode sombre */
-.dark-mode .btn-light {
-    background-color: #555;
-    color: #fff;
-}
+    body.dark-mode .container-fluid,
+    body.dark-mode .navbar,
+    body.dark-mode .sb-sidenav,
+    
+ ,
+    body.dark-mode .card {
+        background-color: #1c1c1c;
+        color: #fff;
+    }
+
+   
+
+        body.dark-mode .sb-sidenav-dark-blue .nav-link,
+        body.dark-mode .sb-sidenav-dark-blue .sb-sidenav-menu-heading {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+            body.dark-mode .sb-sidenav-dark-blue .nav-link:hover {
+                color: rgba(255, 255, 255, 1);
+            }
+    body.dark-mode .card {
+        background-color: #424242;
+        color: #fff;
+    }
+
+    body.dark-mode a {
+        color: #fff;
+    }
+
+    body.dark-mode i {
+        color: #fff;
+    }
 
 .datatable-wrapper .datatable-container {
   font-size: 0.875rem;
