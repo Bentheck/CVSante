@@ -1,10 +1,115 @@
+
 ﻿@model CVSante.ViewModels.AddRespondent
-
 @{
-    ViewData["Title"] = "Add Respondent";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+<style>
+    .card {
+        border-radius: 10px;
+        transition: transform 0.2s;
+    }
 
-<h2>@ViewData["Title"]</h2>
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+    .card-header {
+        font-weight: bold;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .btn-link {
+        color: #007bff; /* Light blue link color */
+    }
+
+        .btn-link:hover {
+            color: #0056b3; /* Darker blue on hover */
+            text-decoration: underline;
+        }
+
+    .btn-light {
+        background-color: #e7f3ff; /* Light blue background for buttons */
+        border: 1px solid #007bff; /* Border color */
+    }
+
+        .btn-light:hover {
+            background-color: #d0e7ff;
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="text-primary">User Paramedic Details</h2>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light text-primary">
+                    <h5 class="mb-0">Paramedic Information</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="View">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Nom" class="control-label"></label>
+                            <input asp-for="Nom" class="form-control" />
+                            <span asp-validation-for="Nom" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Prenom" class="control-label"></label>
+                            <input asp-for="Prenom" class="form-control" />
+                            <span asp-validation-for="Prenom" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Ville" class="control-label"></label>
+                            <input asp-for="Ville" class="form-control" />
+                            <span asp-validation-for="Ville" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Telephone" class="control-label"></label>
+                            <input asp-for="Telephone" class="form-control" />
+                            <span asp-validation-for="Telephone" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Matricule" class="control-label"></label>
+                            <input asp-for="Matricule" class="form-control" />
+                            <span asp-validation-for="Matricule" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FkCompany" class="control-label"></label>
+                            <select asp-for="FkCompany" class="form-control" asp-items="ViewBag.FkCompany"></select>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="FkIdentityUser" class="control-label"></label>
+                            <select asp-for="FkIdentityUser" class="form-control" asp-items="ViewBag.FkIdentityUser"></select>
+                        </div>
+
+                        <div class="text-center">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <a asp-action="Admin" class="btn btn-light text-primary ms-2">Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* <h4>UserParamedic</h4>
+<hr />
+
+
 
 <div class="row">
     <!-- Add New Paramedic Card -->
@@ -84,8 +189,15 @@
     </div>
 </div>
 
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div> *@
+
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+

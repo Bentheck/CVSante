@@ -1,6 +1,127 @@
-﻿@model IEnumerable<CVSante.Models.HistoriqueParam>
+﻿@using CVSante.Tools
+@model PaginatedList<CVSante.Models.HistoriqueParam>
 
-<div>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="search-container mb-4">
+    <form method="get" asp-action="Index">
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Plage de dates :</label>
+            <div class="col-md-3">
+                <input type="date" class="form-control" name="dateFrom" />
+            </div>
+            <label class="col-md-1 col-form-label text-center">À</label>
+            <div class="col-md-3">
+                <input type="date" class="form-control" name="dateTo" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">ID param :</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control" name="idParam" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Nom param :</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control" name="nomParam" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Type d'action :</label>
+            <div class="col-md-3">
+                <select class="form-control" name="actionType">
+                    <option value="">Options</option>
+                    <option value="connexion">Connexion</option>
+                    <option value="deconnexion">Déconnexion</option>
+                    <option value="profile_visit">Visite de Profil</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Recherche</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<h3>Historique des Actions:</h3>
+
+<table class="table table-striped">
+    <thead class="thead-light">
+        <tr>
+            <th>Date</th>
+            <th>Action</th>
+            <th>Matricule</th>
+            <th>Nom de l'utilisateur</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Date.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                <td>@item.Action</td>
+                <td>@item.FkParam.Matricule</td>
+                <td>@item.FkUser.UserInfo.Nom</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pagination-container mt-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @* Première page *@
+            <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="1" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                    <span class="sr-only">First</span>
+                </a>
+            </li>
+
+            @* Page précédente *@
+            <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+
+            @* Pages intermédiaires *@
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
+                </li>
+            }
+
+            @* Page suivante *@
+            <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+
+            @* Dernière page *@
+            <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@Model.TotalPages" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                    <span class="sr-only">Last</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Admin" class="btn btn-light text-primary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>
+@* <div>
     <h4>HistoriqueParam</h4>
     <hr />
 <div>
@@ -33,3 +154,4 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+ *@
