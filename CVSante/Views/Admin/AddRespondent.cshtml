@@ -90,7 +90,7 @@
                             <span asp-validation-for="UserParamedic.ParamIsActive" class="text-danger"></span>
                         </div>
                         <input type="hidden" asp-for="CompanyId" />
-
+                        <button type="submit" class="btn btn-primary">Add New Paramedic</button>
                      @*    <div class="form-group mb-3">
                             <label asp-for="UserParamedic.FkCompany" class="control-label"></label>
                             <select asp-for="UserParamedic.FkCompany" class="form-control" asp-items="ViewBag.FkCompany"></select>
@@ -101,14 +101,42 @@
                             <select asp-for="UserParamedic.FkIdentityUser" class="form-control" asp-items="ViewBag.FkIdentityUser"></select>
                         </div>
  *@
-                        <div class="text-center">
+                       @*  <div class="text-center">
                             <input type="submit" value="Create" class="btn btn-primary" />
                             <a asp-action="Admin" class="btn btn-light text-primary ms-2">Back to List</a>
-                        </div>
+                        </div> *@
                     </form>
                 </div>
             </div>
         </div>
+        <!-- Add Existing Paramedic by Matricule Card -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Ajouté employé existant</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddByMatricule" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            <label asp-for="UserParamedic.Matricule">Numéro de matricule</label>
+                            <input asp-for="UserParamedic.Matricule" class="form-control" />
+                            <span asp-validation-for="UserParamedic.Matricule" class="text-danger"></span>
+                        </div>
+                        <input type="hidden" asp-for="CompanyId" />
+
+                        <button type="submit" class="btn btn-primary">Add by Matricule</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div> 
     </div>
 </div>
 @* <h4>UserParamedic</h4>
