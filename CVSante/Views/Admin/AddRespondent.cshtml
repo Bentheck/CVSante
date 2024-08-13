@@ -84,8 +84,14 @@
                             <input asp-for="UserParamedic.Matricule" class="form-control" />
                             <span asp-validation-for="UserParamedic.Matricule" class="text-danger"></span>
                         </div>
-
                         <div class="form-group mb-3">
+                            <label asp-for="UserParamedic.ParamIsActive">Employé Actif</label>
+                            <input asp-for="UserParamedic.ParamIsActive" type="checkbox" />
+                            <span asp-validation-for="UserParamedic.ParamIsActive" class="text-danger"></span>
+                        </div>
+                        <input type="hidden" asp-for="CompanyId" />
+
+                     @*    <div class="form-group mb-3">
                             <label asp-for="UserParamedic.FkCompany" class="control-label"></label>
                             <select asp-for="UserParamedic.FkCompany" class="form-control" asp-items="ViewBag.FkCompany"></select>
                         </div>
@@ -94,7 +100,7 @@
                             <label asp-for="UserParamedic.FkIdentityUser" class="control-label"></label>
                             <select asp-for="UserParamedic.FkIdentityUser" class="form-control" asp-items="ViewBag.FkIdentityUser"></select>
                         </div>
-
+ *@
                         <div class="text-center">
                             <input type="submit" value="Create" class="btn btn-primary" />
                             <a asp-action="Admin" class="btn btn-light text-primary ms-2">Back to List</a>
