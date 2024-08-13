@@ -496,6 +496,8 @@ namespace CVSante.Controllers
             return View(paramedic);
         }
 
+
+
         [Authorize(Roles = "SuperAdmin,Paramedic")]
         // POST: Admin/ManageCompany/EditRespondent
         [HttpPost]
@@ -561,6 +563,94 @@ namespace CVSante.Controllers
         }
 
 
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
+        public async Task<IActionResult> SearchCitoyen(string searchString)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _context.UserParamedics
+                .Include(u => u.FkRoleNavigation)
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            if (!currentUser.FkRoleNavigation.GetCitoyen)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
+            IQueryable<UserInfo> citoyensQuery = _context.UserInfos;
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                searchString = searchString.Trim(); // Remove leading/trailing whitespace
+
+                int parsedUserId;
+                bool isNumeric = int.TryParse(searchString, out parsedUserId);
+
+                citoyensQuery = citoyensQuery.Where(c =>
+                    c.Nom.Contains(searchString) ||
+                    c.Prenom.Contains(searchString) ||
+                    (isNumeric && c.FkUserId == parsedUserId)
+                );
+            }
+
+            var citoyenList = await citoyensQuery.ToListAsync();
+
+            // Pass searchString to the view using ViewBag
+            ViewBag.SearchString = searchString;
+
+            if (!string.IsNullOrWhiteSpace(searchString) && !citoyenList.Any())
+            {
+                ViewBag.Message = "No citizens found matching your search criteria.";
+            }
+
+            return View(citoyenList);
+        }
+
+
+
+
+
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
+        // GET: Admin/ManageCompany/ViewCitoyen
+        public async Task<IActionResult> ViewCitoyen(int? id)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _context.UserParamedics
+                .Include(u => u.FkRoleNavigation)
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            if (!currentUser.FkRoleNavigation.GetCitoyen)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
+            var citoyen = new User
+            {
+                UserInfo = await _context.UserInfos.FirstAsync(u => u.FkUserId == id),
+                Addresses = await _context.UserAdresses.Where(a => a.FkUserId == id).ToListAsync(),
+                Allergies = await _context.UserAllergies.Where(a => a.FkUserId == id).ToListAsync(),
+                Antecedent = await _context.UserAntecedents.FirstAsync(a => a.FkUserId == id),
+                Medications = await _context.UserMedications.Where(m => m.FkUserId == id).ToListAsync(),
+                Handicaps = await _context.UserHandicaps.Where(h => h.FkUserId == id).ToListAsync()
+            };
+
+
+            if (citoyen == null)
+            {
+                return NotFound();
+            }
+
+            return View(citoyen);
+        }
 
     }
 }

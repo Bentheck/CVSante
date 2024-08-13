@@ -1,0 +1,203 @@
+﻿@model CVSante.ViewModels.User
+
+@{
+    ViewData["Title"] = "Citizen Details";
+    // Sort addresses with the primary address first
+    var sortedAddresses = Model.Addresses
+        .OrderByDescending(a => a.AdressePrimaire) // Primary addresses first
+        .ToList();
+}
+
+<h2 class="text-center mb-4">Citizen Details</h2>
+
+<div class="container">
+    <!-- User Info -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">User Information</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">User ID:</dt>
+                <dd class="col-sm-9">@Model.UserInfo.FkUserId</dd>
+
+                <dt class="col-sm-3">First Name:</dt>
+                <dd class="col-sm-9">@Model.UserInfo.Prenom</dd>
+
+                <dt class="col-sm-3">Last Name:</dt>
+                <dd class="col-sm-9">@Model.UserInfo.Nom</dd>
+
+                <dt class="col-sm-3">Gender:</dt>
+                <dd class="col-sm-9">@Model.UserInfo.Sexe</dd>
+
+                <dt class="col-sm-3">Date of Birth:</dt>
+                <dd class="col-sm-9">@Model.UserInfo.DateNaissance</dd>
+
+                <dt class="col-sm-3">Telephone:</dt>
+                <dd class="col-sm-9">@Model.UserInfo.TelephoneCell</dd>
+
+                <dt class="col-sm-3">Blood Type:</dt>
+                <dd class="col-sm-9">@Model.UserInfo.TypeSanguin</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Addresses -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">Addresses</h4>
+        </div>
+        <div class="card-body">
+            @if (sortedAddresses.Any())
+            {
+                <ul class="list-group">
+                    @for (int i = 0; i < sortedAddresses.Count; i++)
+                    {
+                        var address = sortedAddresses[i];
+                        <li class="list-group-item">
+                            <strong>Address @(i+1):</strong><br />
+                            <strong>Street:</strong> @address.Rue @address.Appartement<br />
+                            <strong>City:</strong> @address.Ville<br />
+                            <strong>Postal Code:</strong> @address.CodePostal<br />
+                            <strong>Primary Address:</strong> @(address.AdressePrimaire ? "Yes" : "No")<br />
+                            <strong>Telephone:</strong> @address.TelphoneAdresse
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No addresses found.</p>
+            }
+        </div>
+    </div>
+
+    <!-- Antecedents -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">Antecedents</h4>
+        </div>
+        <div class="card-body">
+            @if (Model.Antecedent != null)
+            {
+                <p>@Model.Antecedent.Antecedent</p>
+            }
+            else
+            {
+                <p class="text-muted">No antecedents found.</p>
+            }
+        </div>
+    </div>
+
+    <!-- Buttons for Modals -->
+    <div class="mb-4 text-center">
+        <h4 class="mb-3">Details</h4>
+        <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#allergiesModal" @(Model.Allergies.Any() ? "" : "disabled")>Show Allergies</button>
+        <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#medicationsModal" @(Model.Medications.Any() ? "" : "disabled")>Show Medications</button>
+        <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#handicapsModal" @(Model.Handicaps.Any() ? "" : "disabled")>Show Handicaps</button>
+    </div>
+
+    <!-- Modal for Allergies -->
+    <div class="modal fade" id="allergiesModal" tabindex="-1" aria-labelledby="allergiesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="allergiesModalLabel">Allergies</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (Model.Allergies.Any())
+                    {
+                        <ul class="list-group">
+                            @for (int i = 0; i < Model.Allergies.Count; i++)
+                            {
+                                var allergy = Model.Allergies[i];
+                                <li class="list-group-item">
+                                    <strong>Allergy @(i + 1):</strong><br />
+                                    <strong>Allergy:</strong> @allergy.AllergieIntolerance<br />
+                                    <strong>Severity:</strong> @allergy.Gravite<br />
+                                    <strong>Product:</strong> @allergy.Produit
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No allergies found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Medications -->
+    <div class="modal fade" id="medicationsModal" tabindex="-1" aria-labelledby="medicationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="medicationsModalLabel">Medications</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (Model.Medications.Any())
+                    {
+                        <ul class="list-group">
+                            @for (int i = 0; i < Model.Medications.Count; i++)
+                            {
+                                var medication = Model.Medications[i];
+                                <li class="list-group-item">
+                                    <strong>Medication @(i + 1):</strong><br />
+                                    <strong>Product:</strong> @medication.MedicamentProduitNat<br />
+                                    <strong>Name:</strong> @medication.Nom<br />
+                                    <strong>Dosage:</strong> @medication.Posologie<br />
+                                    <strong>Reason:</strong> @medication.Raison
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No medications found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Handicaps -->
+    <div class="modal fade" id="handicapsModal" tabindex="-1" aria-labelledby="handicapsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="handicapsModalLabel">Handicaps</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (Model.Handicaps.Any())
+                    {
+                        <ul class="list-group">
+                            @for (int i = 0; i < Model.Handicaps.Count; i++)
+                            {
+                                var handicap = Model.Handicaps[i];
+                                <li class="list-group-item">
+                                    <strong>Handicap @(i + 1):</strong><br />
+                                    <strong>Definition:</strong> @handicap.Definition<br />
+                                    <strong>Type:</strong> @handicap.Type
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No handicaps found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+        <a class="btn btn-secondary" asp-action="SearchCitoyen">Back to Search</a>
+    </div>
+</div>
