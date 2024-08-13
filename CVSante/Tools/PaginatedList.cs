@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CVSante.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CVSante.Tools
 {
@@ -18,7 +19,7 @@ namespace CVSante.Tools
         public bool HasPreviousPage => PageIndex > 1;
 
         public bool HasNextPage => PageIndex < TotalPages;
-
+     
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {
             var count = await source.CountAsync();
@@ -26,7 +27,6 @@ namespace CVSante.Tools
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
 
-
-
+      
     }
 }
