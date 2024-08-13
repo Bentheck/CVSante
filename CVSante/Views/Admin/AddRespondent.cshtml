@@ -1,5 +1,4 @@
-
-﻿@model CVSante.ViewModels.AddRespondent
+@model CVSante.ViewModels.AddRespondent
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
@@ -57,43 +56,43 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Nom" class="control-label"></label>
-                            <input asp-for="Nom" class="form-control" />
-                            <span asp-validation-for="Nom" class="text-danger"></span>
+                            <label asp-for="UserParamedic.Nom" class="control-label"></label>
+                            <input asp-for="UserParamedic.Nom" class="form-control" />
+                            <span asp-validation-for="UserParamedic.Nom" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Prenom" class="control-label"></label>
-                            <input asp-for="Prenom" class="form-control" />
-                            <span asp-validation-for="Prenom" class="text-danger"></span>
+                            <label asp-for="UserParamedic.Prenom" class="control-label"></label>
+                            <input asp-for="UserParamedic.Prenom" class="form-control" />
+                            <span asp-validation-for="UserParamedic.Prenom" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Ville" class="control-label"></label>
-                            <input asp-for="Ville" class="form-control" />
-                            <span asp-validation-for="Ville" class="text-danger"></span>
+                            <label asp-for="UserParamedic.Ville" class="control-label"></label>
+                            <input asp-for="UserParamedic.Ville" class="form-control" />
+                            <span asp-validation-for="UserParamedic.Ville" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Telephone" class="control-label"></label>
-                            <input asp-for="Telephone" class="form-control" />
-                            <span asp-validation-for="Telephone" class="text-danger"></span>
+                            <label asp-for="UserParamedic.Telephone" class="control-label"></label>
+                            <input asp-for="UserParamedic.Telephone" class="form-control" />
+                            <span asp-validation-for="UserParamedic.Telephone" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Matricule" class="control-label"></label>
-                            <input asp-for="Matricule" class="form-control" />
-                            <span asp-validation-for="Matricule" class="text-danger"></span>
+                            <label asp-for="UserParamedic.Matricule" class="control-label"></label>
+                            <input asp-for="UserParamedic.Matricule" class="form-control" />
+                            <span asp-validation-for="UserParamedic.Matricule" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="FkCompany" class="control-label"></label>
-                            <select asp-for="FkCompany" class="form-control" asp-items="ViewBag.FkCompany"></select>
+                            <label asp-for="UserParamedic.FkCompany" class="control-label"></label>
+                            <select asp-for="UserParamedic.FkCompany" class="form-control" asp-items="ViewBag.FkCompany"></select>
                         </div>
 
                         <div class="form-group mb-4">
-                            <label asp-for="FkIdentityUser" class="control-label"></label>
-                            <select asp-for="FkIdentityUser" class="form-control" asp-items="ViewBag.FkIdentityUser"></select>
+                            <label asp-for="UserParamedic.FkIdentityUser" class="control-label"></label>
+                            <select asp-for="UserParamedic.FkIdentityUser" class="form-control" asp-items="ViewBag.FkIdentityUser"></select>
                         </div>
 
                         <div class="text-center">
