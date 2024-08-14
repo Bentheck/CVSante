@@ -163,13 +163,14 @@
         function confirmSave() {
             // Affiche la modal
             $('#confirmModal').modal('show');
+            $('.modal-backdrop').remove();
         }
 
         function submitForm() {
             // Soumet le formulaire
             $('#roleForm').submit();
         }
-
+      
         // Ferme la modal lorsque le bouton "Cancel" est cliqué
         $('#confirmModal').on('hidden.bs.modal', function (e) {
             $('#confirmModal').modal('hide');
