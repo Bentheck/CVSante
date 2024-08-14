@@ -181,56 +181,56 @@ function addDynamicField(type) {
             containerId = 'address-fields';
             index = document.querySelectorAll(`#${containerId} .card`).length;
             fieldHtml = `
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Ville</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Addresses[${index}].Ville" class="form-control" />
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Adresse Primaire</label>
+                                <div class="col-md-10">
+                                    <input asp-for="Addresses[${index}].AdressePrimaire" type="checkbox" name="Addresses[${index}].AdressePrimaire" class="address-primary" value="true" />
+                                    <span style="display: none; color: red;">Adresse primaire déja sélectionnée</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Num Civic</label>
+                                <div class="col-md-10">
+                                    <input asp-for="Addresses[${index}].NumCivic" type="text" name="Addresses[${index}].NumCivic" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Rue</label>
+                                <div class="col-md-10">
+                                    <input asp-for="Addresses[${index}].Rue" type="text" name="Addresses[${index}].Rue" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Appartement</label>
+                                <div class="col-md-10">
+                                    <input asp-for="Addresses[${index}].Appartement" type="text" name="Addresses[${index}].Appartement" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Code Postal</label>
+                                <div class="col-md-10">
+                                    <input asp-for="Addresses[${index}].CodePostal" type="text" name="Addresses[${index}].CodePostal" class="form-control CP-mask" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Ville</label>
+                                <div class="col-md-10">
+                                    <input asp-for="Addresses[${index}].Ville" type="text" name="Addresses[${index}].Ville" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Téléphone filaire</label>
+                                <div class="col-md-10">
+                                    <input asp-for="Addresses[${index}].TelphoneAdresse" type="text" name="Addresses[${index}].TelphoneAdresse" class="form-control phone-mask" id="telephoneCell" />
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Adresse Primaire</label>
-                            <div class="col-md-10">
-                                <input type="checkbox" name="Addresses[${index}].AdressePrimaire" class="address-primary" value="true" />
-                                <span style="display: none; color: red;">Adresse primaire déjà sélectionnée</span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Num Civic</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Addresses[${index}].NumCivic" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Rue</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Addresses[${index}].Rue" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Appartement</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Addresses[${index}].Appartement" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Code Postal</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Addresses[${index}].CodePostal" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Téléphone filaire</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Addresses[${index}].TelphoneAdresse" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="card-footer d-flex justify-content-between align-items-center">
-                            <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
-                        </div>
-                    </div>
-                </div>`;
+                    </div>`;
             break;
         case 'allergy':
             containerId = 'allergy-fields';
@@ -243,11 +243,11 @@ function addDynamicField(type) {
                                 <div class="col-md-10">
                                     <div class="d-flex flex-column flex-md-row align-items-start">
                                         <div class="me-3">
-                                            <input type="radio" name="Allergies[${index}].AllergieIntolerance" value="Allergie" class="form-check-input allergy-intolerance-radio" id="allergie-${index}" />
+                                            <input asp-for="Allergies[${index}].AllergieIntolerance" type="radio" name="Allergies[${index}].AllergieIntolerance" value="Allergie" class="form-check-input allergy-intolerance-radio" id="allergie-${index}" />
                                             <label class="form-check-label" for="allergie-${index}">Allergie</label>
                                         </div>
                                         <div>
-                                            <input type="radio" name="Allergies[${index}].AllergieIntolerance" value="Intolerance" class="form-check-input allergy-intolerance-radio" id="intolerance-${index}" />
+                                            <input asp-for="Allergies[${index}].AllergieIntolerance" type="radio" name="Allergies[${index}].AllergieIntolerance" value="Intolerance" class="form-check-input allergy-intolerance-radio" id="intolerance-${index}" />
                                             <label class="form-check-label" for="intolerance-${index}">Intolérance</label>
                                         </div>
                                     </div>
@@ -258,11 +258,11 @@ function addDynamicField(type) {
                                     <div class="col-md-10">
                                         <div class="d-flex flex-column flex-md-row align-items-start">
                                             <div class="me-3">
-                                                <input type="radio" name="Allergies[${index}].Gravite" value="Bénigne" class="form-check-input" id="benigne-${index}" />
+                                                <input asp-for="Allergies[${index}].Gravite" type="radio" name="Allergies[${index}].Gravite" value="Bénigne" class="form-check-input" id="benigne-${index}" />
                                                 <label class="form-check-label" for="benigne-${index}">Bénigne</label>
                                             </div>
                                             <div>
-                                                <input type="radio" name="Allergies[${index}].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-${index}" />
+                                                <input asp-for="Allergies[${index}].Gravite" type="radio" name="Allergies[${index}].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-${index}" />
                                                 <label class="form-check-label" for="grave-${index}">Grave/Mortelle</label>
                                             </div>
                                         </div>
@@ -271,7 +271,7 @@ function addDynamicField(type) {
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Produit</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="Allergies[${index}].Produit" class="form-control" />
+                                    <input asp-for="Allergies[${index}].Produit" type="text" name="Allergies[${index}].Produit" class="form-control" />
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
@@ -284,88 +284,93 @@ function addDynamicField(type) {
             containerId = 'handicap-fields';
             index = document.querySelectorAll(`#${containerId} .card`).length;
             fieldHtml = `
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Type</label>
-                            <div class="col-md-10 d-flex flex-wrap">
-                                <!-- Flex container for horizontal alignment -->
-                                <div class="radio-container">
-                                    <input type="radio" id="autisme${index}" name="Handicaps[${index}].Type" value="Autisme" class="form-check-input" />
-                                    <label for="autisme${index}" class="form-check-label">Autisme</label>
-                                </div>
-                                <div class="radio-container">
-                                    <input type="radio" id="mobilite-reduite${index}" name="Handicaps[${index}].Type" value="Mobilité réduite" class="form-check-input" />
-                                    <label for="mobilite-reduite${index}" class="form-check-label">Mobilité réduite</label>
-                                </div>
-                                <div class="radio-container">
-                                    <input type="radio" id="deficience-auditive${index}" name="Handicaps[${index}].Type" value="Déficience auditive" class="form-check-input" />
-                                    <label for="deficience-auditive${index}" class="form-check-label">Déficience auditive</label>
-                                </div>
-                                <div class="radio-container">
-                                    <input type="radio" id="deficience-visuelle${index}" name="Handicaps[${index}].Type" value="Déficience visuelle" class="form-check-input" />
-                                    <label for="deficience-visuelle${index}" class="form-check-label">Déficience visuelle</label>
-                                </div>
-                                <div class="radio-container">
-                                    <input type="radio" id="autre${index}" name="Handicaps[${index}].Type" value="Autre" class="form-check-input" />
-                                    <label for="autre${index}" class="form-check-label">Autre</label>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Type</label>
+                                <div class="col-md-10 d-flex flex-wrap">
+                                    <!-- Flex container for horizontal alignment -->
+                                    <div class="radio-container">
+                                        <input asp-for="Handicaps[${index}].Type" type="radio" id="autisme${index}" name="Handicaps[${index}].Type" value="Autisme" class="form-check-input" />
+                                        <label for="autisme${index}" class="form-check-label">Autisme</label>
+                                    </div>
+                                    <div class="radio-container">
+                                        <input asp-for="Handicaps[${index}].Type" type="radio" id="mobilite-reduite${index}" name="Handicaps[${index}].Type" value="Mobilité réduite" class="form-check-input" />
+                                        <label for="mobilite-reduite${index}" class="form-check-label">Mobilité réduite</label>
+                                    </div>
+                                    <div class="radio-container">
+                                        <input asp-for="Handicaps[${index}].Type" type="radio" id="deficience-auditive${index}" name="Handicaps[${index}].Type" value="Déficience auditive" class="form-check-input" />
+                                        <label for="deficience-auditive${index}" class="form-check-label">Déficience auditive</label>
+                                    </div>
+                                    <div class="radio-container">
+                                        <input asp-for="Handicaps[${index}].Type" type="radio" id="deficience-visuelle${index}" name="Handicaps[${index}].Type" value="Déficience visuelle" class="form-check-input" />
+                                        <label for="deficience-visuelle${index}" class="form-check-label">Déficience visuelle</label>
+                                    </div>
+                                    <div class="radio-container">
+                                        <input asp-for="Handicaps[${index}].Type" type="radio" id="autre${index}" name="Handicaps[${index}].Type" value="Autre" class="form-check-input" />
+                                        <label for="autre${index}" class="form-check-label">Autre</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Définition</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Handicaps[${index}].Definition" class="form-control" />
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Définition</label>
+                                <div class="col-md-10">
+                                    <input asp-for="Handicaps[${index}].Definition" type="text" name="Handicaps[${index}].Definition" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between align-items-center">
-                            <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
-                        </div>
-                    </div>
-                </div>`;
+                    </div>`;
             break;
         case 'medication':
             containerId = 'medication-fields';
             index = document.querySelectorAll(`#${containerId} .card`).length;
             fieldHtml = `
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Produit</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Medications[${index}].Produit" class="form-control" />
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Type</label>
+                        <div class="col-md-10">
+                            <div class="form-check form-check-inline">
+                                <input asp-for="Medications[${index}].MedicamentProduitNat" class="form-check-input" type="radio" id="medicament${index}" name="Medications[${index}].MedicamentProduitNat" value="Medicament" />
+                                <label class="form-check-label" for="medicament${index}">Médicament</label>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Type</label>
-                            <div class="col-md-10">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Medications[${index}].Type" value="Medicament" />
-                                    <label class="form-check-label">Médicament</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Medications[${index}].Type" value="Produit Naturel" />
-                                    <label class="form-check-label">Produit Naturel</label>
-                                </div>
+                            <div class="form-check form-check-inline">
+                                <input asp-for="Medications[${index}].MedicamentProduitNat" class="form-check-input" type="radio" id="produitNaturel${index}" name="Medications[${index}].MedicamentProduitNat" value="Produit Naturel" />
+                                <label class="form-check-label" for="produitNaturel${index}">Produit Naturel</label>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label" id="posologieLabel_${index}">Posologie</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Medications[${index}].Posologie" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group row" id="raisonGroup_${index}">
-                            <label class="col-md-2 col-form-label">Raison</label>
-                            <div class="col-md-10">
-                                <input type="text" name="Medications[${index}].Raison" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="card-footer d-flex justify-content-between align-items-center">
-                            <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
                         </div>
                     </div>
-                </div>`;
+
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Nom</label>
+                        <div class="col-md-10">
+                            <input asp-for="Medications[${index}].Nom" type="text" name="Medications[${index}].Nom" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label" id="posologieLabel${index}">Posologie</label>
+                        <div class="col-md-10">
+                            <input asp-for="Medications[${index}].Posologie" type="text" name="Medications[${index}].Posologie" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="raisonGroup${index}" style="display: none;">
+                        <label class="col-md-2 col-form-label">Raison</label>
+                        <div class="col-md-10">
+                            <input asp-for="Medications[${index}].Raison" type="text" name="Medications[${index}].Raison" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- Remove Button -->
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                    </div>
+                </div>
+            </div>`;
             break;
         default:
             return;

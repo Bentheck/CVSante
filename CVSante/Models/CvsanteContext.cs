@@ -246,25 +246,28 @@ public partial class CvsanteContext : DbContext
 
         modelBuilder.Entity<HistoriqueParam>(entity =>
         {
-            entity.HasKey(e => new { e.FkUserId, e.FkParamId });
+            // Define a single primary key, or use composite keys with non-nullable parts
+            entity.HasKey(e => e.HistId); // Assuming you have an Id property or use another key strategy
 
             entity.ToTable("HistoriqueParam");
 
-            entity.HasIndex(e => e.FkParamId, "IX_HistoriqueParam_FK_PARAM_ID");
-
+            // Configure properties
             entity.Property(e => e.FkUserId).HasColumnName("FK_USER_ID");
             entity.Property(e => e.FkParamId).HasColumnName("FK_PARAM_ID");
             entity.Property(e => e.Action).HasMaxLength(450);
             entity.Property(e => e.Date).HasColumnType("datetime");
 
-            entity.HasOne(d => d.FkParam).WithMany(p => p.HistoriqueParams)
+            // Configure relationships
+            entity.HasOne(d => d.FkParam)
+                .WithMany(p => p.HistoriqueParams)
                 .HasForeignKey(d => d.FkParamId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_HistoriqueParam_UserParamedic");
 
-            entity.HasOne(d => d.FkUser).WithMany(p => p.HistoriqueParams)
+            entity.HasOne(d => d.FkUser)
+                .WithMany(p => p.HistoriqueParams)
                 .HasForeignKey(d => d.FkUserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull) // Handle null values properly
                 .HasConstraintName("FK_HistoriqueParam_UserCitoyen");
         });
 
