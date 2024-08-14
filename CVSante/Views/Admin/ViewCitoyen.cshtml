@@ -267,62 +267,69 @@
             </div>
         </div>
     </div>
-    <!-- Modal for Comments -->
-    <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="commentsModalLabel">Commentaires</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Display Comments -->
+<!-- Modal for Comments -->
+<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentsModalLabel">Commentaires</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Display Comments -->
+                <ul class="list-group mb-3" id="commentsList">
                     @if (Model.Commentaires.Any())
                     {
-                        <ul class="list-group mb-3">
-                            @foreach (var commentaire in Model.Commentaires.OrderByDescending(c => c.Date))
-                            {
-                                <li class="list-group-item">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="d-flex justify-content-between">
-                                                <div><strong>Paramedic:</strong> @commentaire.FkUserparamedicNavigation.Matricule</div>
-                                                <div><strong>Créer le :</strong> @commentaire.Date.ToString("dd/MM/yyyy - HH:mm")</div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <strong>Commentaire :</strong> @commentaire.Comment
-                                            @if (Model.CurrentUserParamId == commentaire.FkUserparamedicNavigation.ParamId)
-                                            {
-                                                <div class="card-footer d-flex justify-content-end">
-                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCommentModal" data-comment-id="@commentaire.Id" data-comment-text="@commentaire.Comment">Modifier</button>
-                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-comment-id="@commentaire.Id">Supprimer</button>
-                                                </div>
-                                            }
+                        @foreach (var commentaire in Model.Commentaires)
+                        {
+                            <li class="list-group-item comment-item">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between">
+                                            <div><strong>Paramedic:</strong> @commentaire.FkUserparamedicNavigation.Matricule</div>
+                                            <div><strong>Créer le :</strong> @commentaire.Date.ToString("dd/MM/yyyy - HH:mm")</div>
                                         </div>
                                     </div>
-                                </li>
-                            }
-                        </ul>
+                                    <div class="card-body">
+                                        <strong>Commentaire :</strong> @commentaire.Comment
+                                        @if (Model.CurrentUserParamId == commentaire.FkUserparamedicNavigation.ParamId)
+                                        {
+                                            <div class="card-footer d-flex justify-content-end">
+                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCommentModal" data-comment-id="@commentaire.Id" data-comment-text="@commentaire.Comment">Modifier</button>
+                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-comment-id="@commentaire.Id">Supprimer</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        }
                     }
                     else
                     {
                         <p class="text-muted">Aucun commentaire trouvé.</p>
                     }
+                </ul>
 
-                    <!-- Form to Add Comment -->
-                    <form asp-action="AddComment" method="post">
-                        <input type="hidden" name="userId" value="@Model.UserInfo.FkUserId" />
-                        <div class="mb-3">
-                            <label for="commentText" class="form-label">Ajouter un Commentaire</label>
-                            <textarea id="commentText" name="commentText" class="form-control" rows="3" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Ajouter</button>
-                    </form>
-                </div>
+                <!-- Pagination Controls -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination" id="paginationControls">
+                        <!-- Pagination links will be generated by JavaScript -->
+                    </ul>
+                </nav>
+
+                <!-- Form to Add Comment -->
+                <form asp-action="AddComment" method="post">
+                    <input type="hidden" name="userId" value="@Model.UserInfo.FkUserId" />
+                    <div class="mb-3">
+                        <label for="commentText" class="form-label">Ajouter un Commentaire</label>
+                        <textarea id="commentText" name="commentText" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Modal for Editing a Comment -->
     <div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel" aria-hidden="true">
@@ -376,6 +383,46 @@
 
     @section Scripts {
         <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const commentsPerPage = 5; // Number of comments to show per page
+            const commentsList = document.getElementById('commentsList');
+            const paginationControls = document.getElementById('paginationControls');
+
+            // Get all comments
+            const comments = Array.from(document.querySelectorAll('.comment-item'));
+
+            // Calculate total pages
+            const totalPages = Math.ceil(comments.length / commentsPerPage);
+
+            // Function to render comments for a specific page
+            function renderPage(page) {
+                // Hide all comments
+                comments.forEach(comment => comment.style.display = 'none');
+
+                // Show comments for the current page
+                const start = (page - 1) * commentsPerPage;
+                const end = start + commentsPerPage;
+                comments.slice(start, end).forEach(comment => comment.style.display = 'block');
+
+                // Update pagination controls
+                paginationControls.innerHTML = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageItem = document.createElement('li');
+                    pageItem.className = 'page-item ' + (i === page ? 'active' : '');
+                    pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                    pageItem.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        renderPage(i);
+                    });
+                    paginationControls.appendChild(pageItem);
+                }
+            }
+
+            // Initial render
+            renderPage(1);
+        });
+
+
             document.addEventListener('DOMContentLoaded', function () {
                 // Retrieve URL parameters
                 var urlParams = new URLSearchParams(window.location.search);
