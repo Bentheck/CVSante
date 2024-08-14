@@ -2,9 +2,9 @@
 
 @{
     ViewData["Title"] = "Détails du Citoyen";
-    // Trier les adresses avec l'adresse principale en premier
+    // Sort addresses by primary address first
     var sortedAddresses = Model.Addresses
-        .OrderByDescending(a => a.AdressePrimaire) // Adresses principales d'abord
+        .OrderByDescending(a => a.AdressePrimaire) // Sort primary address first
         .ToList();
 
     DateTime dateOfBirth;
