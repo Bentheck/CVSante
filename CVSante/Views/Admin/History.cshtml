@@ -1,157 +1,263 @@
-﻿@using CVSante.Tools
-@model PaginatedList<CVSante.Models.HistoriqueParam>
+﻿@model PaginatedList<CVSante.Models.HistoriqueParam>
+@using CVSante.Tools
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "History";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+
+
 <div class="search-container mb-4">
-    <form method="get" asp-action="Index">
+    <form method="get" asp-action="History">
         <div class="form-group row">
             <label class="col-md-2 col-form-label">Plage de dates :</label>
             <div class="col-md-3">
-                <input type="date" class="form-control" name="dateFrom" />
+                <input type="date" class="form-control" name="dateFrom" value="@ViewData["CurrentFilterDateFrom"]" />
             </div>
             <label class="col-md-1 col-form-label text-center">À</label>
             <div class="col-md-3">
-                <input type="date" class="form-control" name="dateTo" />
+                <input type="date" class="form-control" name="dateTo" value="@ViewData["CurrentFilterDateTo"]" />
             </div>
         </div>
         <div class="form-group row">
             <label class="col-md-2 col-form-label">ID param :</label>
             <div class="col-md-3">
-                <input type="text" class="form-control" name="idParam" />
+                <input type="text" class="form-control" name="idParam" value="@ViewData["CurrentFilterIdParam"]" />
             </div>
         </div>
         <div class="form-group row">
             <label class="col-md-2 col-form-label">Nom param :</label>
             <div class="col-md-3">
-                <input type="text" class="form-control" name="nomParam" />
+                <input type="text" class="form-control" name="nomParam" value="@ViewData["CurrentFilterNomParam"]" />
             </div>
         </div>
         <div class="form-group row">
             <label class="col-md-2 col-form-label">Type d'action :</label>
             <div class="col-md-3">
-                <select class="form-control" name="actionType">
-                    <option value="">Options</option>
-                    <option value="connexion">Connexion</option>
-                    <option value="deconnexion">Déconnexion</option>
-                    <option value="profile_visit">Visite de Profil</option>
-                </select>
+                <input type="text" class="form-control" name="actionType" value="@ViewData["CurrentFilterActionType"]" placeholder="Type d'action" />
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Recherche</button>
+            <div class="col-md-2 d-inline-flex">
+                <div>
+                    <button type="submit" class="btn btn-primary">Recherche</button>
+                </div>
+                <div>
+                    <a asp-action="Index" asp-controller="Admin" class="btn btn-light text-primary ms-3">
+                        <i class="fas fa-arrow-left"></i> Retour à l'acceuil
+                    </a>
+                </div>
             </div>
         </div>
     </form>
 </div>
 
-<h3>Historique des Actions:</h3>
+@if (Model != null && Model.Any())
+{
+    <h3>Historique des Actions:</h3>
 
-<table class="table table-striped">
-    <thead class="thead-light">
-        <tr>
-            <th>Date</th>
-            <th>Action</th>
-            <th>Matricule</th>
-            <th>Nom de l'utilisateur</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Date.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                <td>@item.Action</td>
-                <td>@item.FkParam.Matricule</td>
-                <td>@item.FkUser.UserInfo.Nom</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<div class="pagination-container mt-4">
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            @* Première page *@
-            <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-pageNumber="1" aria-label="First">
-                    <span aria-hidden="true">&laquo;&laquo;</span>
-                    <span class="sr-only">First</span>
-                </a>
-            </li>
-
-            @* Page précédente *@
-            <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-
-            @* Pages intermédiaires *@
-            @for (var i = 1; i <= Model.TotalPages; i++)
-            {
-                <li class="page-item @(Model.PageIndex == i ? "active" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
-                </li>
-            }
-
-            @* Page suivante *@
-            <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>
-
-            @* Dernière page *@
-            <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-pageNumber="@Model.TotalPages" aria-label="Last">
-                    <span aria-hidden="true">&raquo;&raquo;</span>
-                    <span class="sr-only">Last</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
-
-<div class="mt-4">
-    <a asp-action="Admin" class="btn btn-light text-primary">
-        <i class="fas fa-arrow-left"></i> Back to List
-    </a>
-</div>
-@* <div>
-    <h4>HistoriqueParam</h4>
-    <hr />
-<div>
-    <h4>Historique</h4>
-    <hr />
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Action</th>
-                <th>Matricule</th>
-                <th>Nom de l'utilisateur</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead class="thead-light">
                 <tr>
-                    <td>@item.Date</td>
-                    <td>@item.Action</td>
-                    <td>@item.FkParam.Matricule</td>
-                    <td>@item.FkUser.UserInfo.Nom</td>
+                    <th class="col-md-1">
+                        @* Generate URL for sorting by Id *@
+                        @{
+                            string idSortOrder;
+                            if ((string)ViewData["CurrentSortOrder"] == "id_desc")
+                            {
+                                idSortOrder = "id_asc";
+                            }
+                            else
+                            {
+                                idSortOrder = "id_desc";
+                            }
+                        }
+                        <a href="@Url.Action("History", new { sortOrder = idSortOrder })" class="text-primary">
+                            Id
+                            @if ((string)ViewData["CurrentSortOrder"] == "id_desc")
+                            {
+                                <i class="fas fa-arrow-down"></i>
+                            }
+                            else if ((string)ViewData["CurrentSortOrder"] == "id_asc")
+                            {
+                                <i class="fas fa-arrow-up"></i>
+                            }
+                        </a>
+                    </th>
+                    <th class="col-md-1">
+                        @* Generate URL for sorting by Matricule *@
+                        @{
+                            string nameSortOrder;
+                            if ((string)ViewData["CurrentSortOrder"] == "name_desc")
+                            {
+                                nameSortOrder = "name_asc";
+                            }
+                            else
+                            {
+                                nameSortOrder = "name_desc";
+                            }
+                        }
+                        <a href="@Url.Action("History", new { sortOrder = nameSortOrder })" class="text-primary">
+                            Matricule
+                            @if ((string)ViewData["CurrentSortOrder"] == "name_desc")
+                            {
+                                <i class="fas fa-arrow-down"></i>
+                            }
+                            else if ((string)ViewData["CurrentSortOrder"] == "name_asc")
+                            {
+                                <i class="fas fa-arrow-up"></i>
+                            }
+                        </a>
+                    </th>
+                    <th class="col-md-2">
+                        @* Generate URL for sorting by Date *@
+                        @{
+                            string dateSortOrder;
+                            if ((string)ViewData["CurrentSortOrder"] == "date_desc")
+                            {
+                                dateSortOrder = "date_asc";
+                            }
+                            else
+                            {
+                                dateSortOrder = "date_desc";
+                            }
+                        }
+                        <a href="@Url.Action("History", new { sortOrder = dateSortOrder })" class="text-primary">
+                            Date
+                            @if ((string)ViewData["CurrentSortOrder"] == "date_desc")
+                            {
+                                <i class="fas fa-arrow-down"></i>
+                            }
+                            else if ((string)ViewData["CurrentSortOrder"] == "date_asc")
+                            {
+                                <i class="fas fa-arrow-up"></i>
+                            }
+                        </a>
+                    </th>
+                    <th class="col-md-12">
+                        @* Generate URL for sorting by Action *@
+                        @{
+                            string actionSortOrder;
+                            if ((string)ViewData["CurrentSortOrder"] == "action_desc")
+                            {
+                                actionSortOrder = "action_asc";
+                            }
+                            else
+                            {
+                                actionSortOrder = "action_desc";
+                            }
+                        }
+                        <a href="@Url.Action("History", new { sortOrder = actionSortOrder })" class="text-primary">
+                            Action
+                            @if ((string)ViewData["CurrentSortOrder"] == "action_desc")
+                            {
+                                <i class="fas fa-arrow-down"></i>
+                            }
+                            else if ((string)ViewData["CurrentSortOrder"] == "action_asc")
+                            {
+                                <i class="fas fa-arrow-up"></i>
+                            }
+                        </a>
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
 
-</div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
- *@
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.HistId</td>
+                        <td>@item.FkParam.Matricule</td>
+                        <td>@item.Date.AddHours(-4).ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        <td>@item.Action</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination-container mt-4">
+        <nav aria-label="Page navigation">
+            <div class="d-flex justify-content-between align-items-center">
+                <ul class="pagination mb-0">
+                    @{
+                        // Number of pages to display between ellipses
+                        int pageRange = 5;
+
+                        // Calculate the start and end pages for the range
+                        int startPage = Math.Max(1, Model.PageIndex - (pageRange / 2));
+                        int endPage = Math.Min(Model.TotalPages, startPage + pageRange - 1);
+
+                        // Adjust startPage if endPage is near the end
+                        if (endPage - startPage + 1 < pageRange)
+                        {
+                            startPage = Math.Max(1, endPage - pageRange + 1);
+                        }
+                    }
+
+                    @* First page link *@
+                    <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="History" asp-route-pageNumber="1" aria-label="First">
+                            &laquo;&laquo; Première
+                        </a>
+                    </li>
+
+                    @* Previous page link *@
+                    <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="History" asp-route-pageNumber="@(Model.PageIndex - 1)" aria-label="Previous">
+                            &laquo; Précédente
+                        </a>
+                    </li>
+
+                    @* Ellipsis before pages, if not showing the first page *@
+                    @if (startPage > 1)
+                    {
+                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                    }
+
+                    @* Page numbers *@
+                    @for (var i = startPage; i <= endPage; i++)
+                    {
+                        <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                            <a class="page-link" asp-action="History" asp-route-pageNumber="@i">@i</a>
+                        </li>
+                    }
+
+                    @* Ellipsis after pages, if not showing the last page *@
+                    @if (endPage < Model.TotalPages)
+                    {
+                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                    }
+
+                    @* Next page link *@
+                    <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="History" asp-route-pageNumber="@(Model.PageIndex + 1)" aria-label="Next">
+                            Suivante &raquo;
+                        </a>
+                    </li>
+
+                    @* Last page link *@
+                    <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="History" asp-route-pageNumber="@Model.TotalPages" aria-label="Last">
+                            Dernière &raquo;&raquo;
+                        </a>
+                    </li>
+
+                    @* Jump to Page input *@
+                    <li class="page-item">
+                        <form method="get" asp-action="History" class="d-inline-flex align-items-center">
+                            <label for="pageNumber" class="ms-3 me-2 mb-0">Aller à la page:</label>
+                            <input type="number" class="form-control form-control-sm me-2" id="pageNumber" name="pageNumber" min="1" max="@Model.TotalPages" value="@Model.PageIndex" style="width: 60px;" />
+                            <button type="submit" class="btn btn-primary btn-sm">Go</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+}
+else
+{
+    <div class="flex-row justify-content-center">
+        <h1>Aucun résultat</h1>
+    </div>
+}
