@@ -92,13 +92,14 @@ namespace CVSante.Controllers
         [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin/History
         public async Task<IActionResult> History(
-           int? pageNumber,
-           int? pageSize,
-           string dateFrom,
-           string dateTo,
-           string idParam,
-           string nomParam,
-           string actionType)
+            int? pageNumber,
+            int? pageSize,
+            string dateFrom,
+            string dateTo,
+            string idParam,
+            string nomParam,
+            string actionType,
+            string sortOrder)
         {
             var currentUserId = _userManager.GetUserId(User);
             var userParam = await _context.UserParamedics
@@ -120,11 +121,11 @@ namespace CVSante.Controllers
                 .Include(h => h.FkUser)
                 .Where(h => h.FkParamId == userParam.ParamId);
 
+            // Apply filters
             if (!string.IsNullOrEmpty(dateFrom))
             {
                 if (DateTime.TryParseExact(dateFrom, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fromDate))
                 {
-                    // Use the start of the day for dateFrom
                     historique = historique.Where(h => h.Date >= fromDate.Date);
                 }
             }
@@ -133,7 +134,6 @@ namespace CVSante.Controllers
             {
                 if (DateTime.TryParseExact(dateTo, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime toDate))
                 {
-                    // Use the end of the day for dateTo
                     historique = historique.Where(h => h.Date <= toDate.Date.AddDays(1).AddTicks(-1));
                 }
             }
@@ -153,6 +153,38 @@ namespace CVSante.Controllers
                 historique = historique.Where(h => h.Action.Contains(actionType));
             }
 
+            // Apply sorting
+            switch (sortOrder)
+            {
+                case "id_desc":
+                    historique = historique.OrderByDescending(h => h.HistId);
+                    break;
+                case "id_asc":
+                    historique = historique.OrderBy(h => h.HistId);
+                    break;
+                case "date_desc":
+                    historique = historique.OrderByDescending(h => h.Date);
+                    break;
+                case "date_asc":
+                    historique = historique.OrderBy(h => h.Date);
+                    break;
+                case "name_desc":
+                    historique = historique.OrderByDescending(h => h.FkParam.Nom);
+                    break;
+                case "name_asc":
+                    historique = historique.OrderBy(h => h.FkParam.Nom);
+                    break;
+                case "action_desc":
+                    historique = historique.OrderByDescending(h => h.Action);
+                    break;
+                case "action_asc":
+                    historique = historique.OrderBy(h => h.Action);
+                    break;
+                default:
+                    historique = historique.OrderByDescending(h => h.Date);
+                    break;
+            }
+
             int pageSizeValue = pageSize ?? 10;
             var paginatedList = await PaginatedList<HistoriqueParam>.CreateAsync(historique.AsNoTracking(), pageNumber ?? 1, pageSizeValue);
 
@@ -161,9 +193,11 @@ namespace CVSante.Controllers
             ViewData["CurrentFilterIdParam"] = idParam;
             ViewData["CurrentFilterNomParam"] = nomParam;
             ViewData["CurrentFilterActionType"] = actionType;
+            ViewData["CurrentSortOrder"] = sortOrder ?? "date_desc"; // Ensure a default value
 
             return View(paginatedList);
         }
+
 
 
 
