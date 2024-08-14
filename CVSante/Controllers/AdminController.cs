@@ -614,10 +614,15 @@ namespace CVSante.Controllers
 
 
 
-        [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin/ManageCompany/ViewCitoyen
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
         public async Task<IActionResult> ViewCitoyen(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentUser = await _context.UserParamedics
                 .Include(u => u.FkRoleNavigation)
@@ -633,23 +638,118 @@ namespace CVSante.Controllers
                 return RedirectToAction("Index", "Admin");
             }
 
-            var citoyen = new User
-            {
-                UserInfo = await _context.UserInfos.FirstAsync(u => u.FkUserId == id),
-                Addresses = await _context.UserAdresses.Where(a => a.FkUserId == id).ToListAsync(),
-                Allergies = await _context.UserAllergies.Where(a => a.FkUserId == id).ToListAsync(),
-                Antecedent = await _context.UserAntecedents.FirstAsync(a => a.FkUserId == id),
-                Medications = await _context.UserMedications.Where(m => m.FkUserId == id).ToListAsync(),
-                Handicaps = await _context.UserHandicaps.Where(h => h.FkUserId == id).ToListAsync()
-            };
-
-
-            if (citoyen == null)
+            var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == id);
+            if (userInfo == null)
             {
                 return NotFound();
             }
 
+            var citoyen = new ParamedicUserView
+            {
+                UserInfo = userInfo,
+                Addresses = await _context.UserAdresses.Where(a => a.FkUserId == id).OrderByDescending(a => a.AdressePrimaire).ToListAsync(),
+                Allergies = await _context.UserAllergies.Where(a => a.FkUserId == id).ToListAsync(),
+                Antecedent = await _context.UserAntecedents.FirstOrDefaultAsync(a => a.FkUserId == id),
+                Medications = await _context.UserMedications.Where(m => m.FkUserId == id).ToListAsync(),
+                Handicaps = await _context.UserHandicaps.Where(h => h.FkUserId == id).ToListAsync(),
+                Commentaires = await _context.Commentaires.Where(c => c.FkUserId == id).OrderByDescending(c => c.Date).ToListAsync(),
+                CurrentUserParamId = currentUser.ParamId
+            };
+
             return View(citoyen);
+        }
+
+        // POST: Admin/ManageCompany/AddComment
+        [HttpPost]
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
+        public async Task<IActionResult> AddComment(int userId, string commentText)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _context.UserParamedics
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            if (string.IsNullOrWhiteSpace(commentText))
+            {
+                ModelState.AddModelError("", "Comment text cannot be empty.");
+                return RedirectToAction("ViewCitoyen", new { id = userId, showModal = true });
+            }
+
+            var commentaire = new Commentaire
+            {
+                Date = DateTime.Now,
+                Comment = commentText,
+                FkUserId = userId,
+                FkUserparamedic = currentUser.ParamId
+            };
+
+            _context.Commentaires.Add(commentaire);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ViewCitoyen", new { id = userId, showModal = true });
+        }
+
+        // POST: Admin/ManageCompany/EditComment
+        [HttpPost]
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
+        public async Task<IActionResult> EditComment(int commentId, string commentText)
+        {
+            if (string.IsNullOrWhiteSpace(commentText))
+            {
+                ModelState.AddModelError("", "Comment text cannot be empty.");
+                return RedirectToAction("ViewCitoyen", new { id = commentId, showModal = true });
+            }
+
+            var comment = await _context.Commentaires.FindAsync(commentId);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _context.UserParamedics
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            if (currentUser == null || comment.FkUserparamedic != currentUser.ParamId)
+            {
+                return Unauthorized();
+            }
+
+            comment.Comment = commentText;
+            _context.Commentaires.Update(comment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ViewCitoyen", new { id = comment.FkUserId, showModal = true });
+        }
+
+        // POST: Admin/ManageCompany/DeleteComment
+        [HttpPost]
+        [Authorize(Roles = "SuperAdmin,Paramedic")]
+        public async Task<IActionResult> DeleteComment(int commentId, int userId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _context.UserParamedics
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var comment = await _context.Commentaires.FindAsync(commentId);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            _context.Commentaires.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ViewCitoyen", new { id = userId, showModal = true });
         }
 
     }

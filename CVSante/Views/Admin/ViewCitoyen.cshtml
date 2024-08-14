@@ -1,51 +1,68 @@
-﻿@model CVSante.ViewModels.User
+﻿@model CVSante.ViewModels.ParamedicUserView
 
 @{
-    ViewData["Title"] = "Citizen Details";
-    // Sort addresses with the primary address first
+    ViewData["Title"] = "Détails du Citoyen";
+    // Trier les adresses avec l'adresse principale en premier
     var sortedAddresses = Model.Addresses
-        .OrderByDescending(a => a.AdressePrimaire) // Primary addresses first
+        .OrderByDescending(a => a.AdressePrimaire) // Adresses principales d'abord
         .ToList();
+
+    DateTime dateOfBirth;
+    DateTime.TryParse(Model.UserInfo.DateNaissance, out dateOfBirth);
+
+    // Helper method to calculate age from date of birth
+    int CalculateAge(DateTime dob)
+    {
+        var today = DateTime.Today;
+        int age = today.Year - dob.Year;
+        if (dob.Date > today.AddYears(-age)) age--;
+        return age;
+    }
+
+    // Calculate age, default to 0 if parsing fails
+    int age = dateOfBirth != DateTime.MinValue ? CalculateAge(dateOfBirth) : 0;
 }
 
-<h2 class="text-center mb-4">Citizen Details</h2>
+
+<h2 class="text-center mb-4">Détails du Citoyen</h2>
 
 <div class="container">
-    <!-- User Info -->
+    <!-- Informations sur l'utilisateur -->
     <div class="card mb-4">
         <div class="card-header">
-            <h4 class="mb-0">User Information</h4>
+            <h4 class="mb-0">Informations sur l'Utilisateur</h4>
         </div>
         <div class="card-body">
             <dl class="row">
-                <dt class="col-sm-3">User ID:</dt>
-                <dd class="col-sm-9">@Model.UserInfo.FkUserId</dd>
+                <dt class="col-sm-2">ID Utilisateur :</dt>
+                <dd class="col-sm-10">@Model.UserInfo.FkUserId</dd>
 
-                <dt class="col-sm-3">First Name:</dt>
-                <dd class="col-sm-9">@Model.UserInfo.Prenom</dd>
+                <dt class="col-sm-2">Prénom :</dt>
+                <dd class="col-sm-10">@Model.UserInfo.Prenom</dd>
 
-                <dt class="col-sm-3">Last Name:</dt>
-                <dd class="col-sm-9">@Model.UserInfo.Nom</dd>
+                <dt class="col-sm-2">Nom :</dt>
+                <dd class="col-sm-10">@Model.UserInfo.Nom</dd>
 
-                <dt class="col-sm-3">Gender:</dt>
-                <dd class="col-sm-9">@Model.UserInfo.Sexe</dd>
+                <dt class="col-sm-2">Sexe :</dt>
+                <dd class="col-sm-10">@Model.UserInfo.Sexe</dd>
 
-                <dt class="col-sm-3">Date of Birth:</dt>
-                <dd class="col-sm-9">@Model.UserInfo.DateNaissance</dd>
+                <dt class="col-sm-2">Date de Naissance :</dt>
+                <dd class="col-sm-10">@Model.UserInfo.DateNaissance (Âge: @age ans)</dd>
 
-                <dt class="col-sm-3">Telephone:</dt>
-                <dd class="col-sm-9">@Model.UserInfo.TelephoneCell</dd>
+                <dt class="col-sm-2">Téléphone :</dt>
+                <dd class="col-sm-10">@Model.UserInfo.TelephoneCell</dd>
 
-                <dt class="col-sm-3">Blood Type:</dt>
-                <dd class="col-sm-9">@Model.UserInfo.TypeSanguin</dd>
+                <dt class="col-sm-2">Groupe Sanguin :</dt>
+                <dd class="col-sm-10">@Model.UserInfo.TypeSanguin</dd>
             </dl>
         </div>
     </div>
 
-    <!-- Addresses -->
+
+    <!-- Adresses -->
     <div class="card mb-4">
         <div class="card-header">
-            <h4 class="mb-0">Addresses</h4>
+            <h4 class="mb-0">Adresses</h4>
         </div>
         <div class="card-body">
             @if (sortedAddresses.Any())
@@ -55,49 +72,76 @@
                     {
                         var address = sortedAddresses[i];
                         <li class="list-group-item">
-                            <strong>Address @(i+1):</strong><br />
-                            <strong>Street:</strong> @address.Rue @address.Appartement<br />
-                            <strong>City:</strong> @address.Ville<br />
-                            <strong>Postal Code:</strong> @address.CodePostal<br />
-                            <strong>Primary Address:</strong> @(address.AdressePrimaire ? "Yes" : "No")<br />
-                            <strong>Telephone:</strong> @address.TelphoneAdresse
+                            <h5 class="mb-2">
+                                Adresse @(i + 1) @(address.AdressePrimaire ? "(Adresse Principale)" : "")
+                            </h5>
+                            <div class="row mb-2">
+                                <div class="col-sm-1"><strong>Adresse :</strong></div>
+                                <div class="col-sm-11">
+                                    @if (!string.IsNullOrEmpty(address.Appartement))
+                                    {
+                                        @($"{address.Appartement}-{address.NumCivic} {address.Rue}")
+                                    }
+                                    else
+                                    {
+                                        @($"{address.NumCivic} {address.Rue}")
+                                    }
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-1"><strong>Ville :</strong></div>
+                                <div class="col-sm-11">@address.Ville</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-1"><strong>CP :</strong></div>
+                                <div class="col-sm-11">@address.CodePostal</div>
+                            </div>
+                            <div class="row">
+                                @if (!string.IsNullOrEmpty(address.TelphoneAdresse))
+                                {
+                                    <div class="col-sm-1"><strong>Téléphone :</strong></div>
+                                    <div class="col-sm-11">@address.TelphoneAdresse</div>
+                                }
+                            </div>
                         </li>
                     }
                 </ul>
             }
             else
             {
-                <p class="text-muted">No addresses found.</p>
+                <p class="text-muted">Aucune adresse trouvée.</p>
             }
         </div>
     </div>
 
-    <!-- Antecedents -->
+    <!-- Antécédents -->
     <div class="card mb-4">
         <div class="card-header">
-            <h4 class="mb-0">Antecedents</h4>
+            <h4 class="mb-0">Antécédents</h4>
         </div>
         <div class="card-body">
-            @if (Model.Antecedent != null)
+            @if (Model.Antecedent != null && Model.Antecedent.Antecedent != "Aucun")
             {
                 <p>@Model.Antecedent.Antecedent</p>
             }
             else
             {
-                <p class="text-muted">No antecedents found.</p>
+                <p class="text-muted">Aucun antécédent trouvé.</p>
             }
         </div>
     </div>
+</div>
 
-    <!-- Buttons for Modals -->
+    <!-- Boutons pour les Modaux -->
     <div class="mb-4 text-center">
-        <h4 class="mb-3">Details</h4>
-        <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#allergiesModal" @(Model.Allergies.Any() ? "" : "disabled")>Show Allergies</button>
-        <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#medicationsModal" @(Model.Medications.Any() ? "" : "disabled")>Show Medications</button>
-        <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#handicapsModal" @(Model.Handicaps.Any() ? "" : "disabled")>Show Handicaps</button>
+        <h4 class="mb-3">Détails</h4>
+        <button class="btn btn-primary mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#allergiesModal" @(Model.Allergies.Any() ? "" : "disabled")>Allergies</button>
+        <button class="btn btn-primary mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#medicationsModal" @(Model.Medications.Any() ? "" : "disabled")>Médicaments</button>
+        <button class="btn btn-primary mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#handicapsModal" @(Model.Handicaps.Any() ? "" : "disabled")>Handicaps</button>
+        <button class="btn btn-primary mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#commentsModal">Commentaires</button>
     </div>
 
-    <!-- Modal for Allergies -->
+    <!-- Modal pour les Allergies -->
     <div class="modal fade" id="allergiesModal" tabindex="-1" aria-labelledby="allergiesModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -113,29 +157,44 @@
                             {
                                 var allergy = Model.Allergies[i];
                                 <li class="list-group-item">
-                                    <strong>Allergy @(i + 1):</strong><br />
-                                    <strong>Allergy:</strong> @allergy.AllergieIntolerance<br />
-                                    <strong>Severity:</strong> @allergy.Gravite<br />
-                                    <strong>Product:</strong> @allergy.Produit
+                                    @if (allergy.AllergieIntolerance == "Allergie")
+                                    {
+                                        <div>
+                                            <h6>Allergie</h6>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            <h6>Intolérance</h6>
+                                        </div>
+                                    }
+                                    <div class="card">
+                                        @if (allergy.Gravite != null)
+                                        {
+                                            <div><strong>Gravité :</strong> @allergy.Gravite</div>
+                                        }
+                                        <div><strong>Produit :</strong> @allergy.Produit</div>
+                                    </div>
                                 </li>
                             }
                         </ul>
                     }
                     else
                     {
-                        <p class="text-muted">No allergies found.</p>
+                        <p class="text-muted">Aucune allergie trouvée.</p>
                     }
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Medications -->
+    <!-- Modal pour les Médicaments -->
     <div class="modal fade" id="medicationsModal" tabindex="-1" aria-labelledby="medicationsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="medicationsModalLabel">Medications</h5>
+                    <h5 class="modal-title" id="medicationsModalLabel">Médicaments</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -146,25 +205,36 @@
                             {
                                 var medication = Model.Medications[i];
                                 <li class="list-group-item">
-                                    <strong>Medication @(i + 1):</strong><br />
-                                    <strong>Product:</strong> @medication.MedicamentProduitNat<br />
-                                    <strong>Name:</strong> @medication.Nom<br />
-                                    <strong>Dosage:</strong> @medication.Posologie<br />
-                                    <strong>Reason:</strong> @medication.Raison
+                                    <div><h6>@medication.MedicamentProduitNat</h6></div>
+                                    <div class="card">
+                                        <div><strong>Nom :</strong> @medication.Nom</div>
+                                        @if (medication.MedicamentProduitNat == "Medicament")
+                                        {
+                                            <div><strong>Posologie :</strong> @medication.Posologie</div>
+                                        }
+                                        else
+                                        {
+                                            <div><strong>Quantité :</strong> @medication.Posologie</div>
+                                        }
+                                        @if (medication.MedicamentProduitNat == "Medicament")
+                                        {
+                                            <div><strong>Raison :</strong> @medication.Raison</div>
+                                        }
+                                    </div>
                                 </li>
                             }
                         </ul>
                     }
                     else
                     {
-                        <p class="text-muted">No medications found.</p>
+                        <p class="text-muted">Aucun médicament trouvé.</p>
                     }
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Handicaps -->
+    <!-- Modal pour les Handicaps -->
     <div class="modal fade" id="handicapsModal" tabindex="-1" aria-labelledby="handicapsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -180,17 +250,120 @@
                             {
                                 var handicap = Model.Handicaps[i];
                                 <li class="list-group-item">
-                                    <strong>Handicap @(i + 1):</strong><br />
-                                    <strong>Definition:</strong> @handicap.Definition<br />
-                                    <strong>Type:</strong> @handicap.Type
+                                    <h6 class="mb-2">Handicap @(i + 1)</h6>
+                                    <div class="card">
+                                        <div><strong>Type :</strong> @handicap.Type</div>
+                                        <div><strong>Définition :</strong> @handicap.Definition</div>
+                                    </div>
                                 </li>
                             }
                         </ul>
                     }
                     else
                     {
-                        <p class="text-muted">No handicaps found.</p>
+                        <p class="text-muted">Aucun handicap trouvé.</p>
                     }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal for Comments -->
+    <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentsModalLabel">Commentaires</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Display Comments -->
+                    @if (Model.Commentaires.Any())
+                    {
+                        <ul class="list-group mb-3">
+                            @foreach (var commentaire in Model.Commentaires.OrderByDescending(c => c.Date))
+                            {
+                                <li class="list-group-item">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="d-flex justify-content-between">
+                                                <div><strong>Paramedic:</strong> @commentaire.FkUserparamedicNavigation.Matricule</div>
+                                                <div><strong>Créer le :</strong> @commentaire.Date.ToString("dd/MM/yyyy - HH:mm")</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <strong>Commentaire :</strong> @commentaire.Comment
+                                            @if (Model.CurrentUserParamId == commentaire.FkUserparamedicNavigation.ParamId)
+                                            {
+                                                <div class="card-footer d-flex justify-content-end">
+                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCommentModal" data-comment-id="@commentaire.Id" data-comment-text="@commentaire.Comment">Modifier</button>
+                                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-comment-id="@commentaire.Id">Supprimer</button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Aucun commentaire trouvé.</p>
+                    }
+
+                    <!-- Form to Add Comment -->
+                    <form asp-action="AddComment" method="post">
+                        <input type="hidden" name="userId" value="@Model.UserInfo.FkUserId" />
+                        <div class="mb-3">
+                            <label for="commentText" class="form-label">Ajouter un Commentaire</label>
+                            <textarea id="commentText" name="commentText" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Editing a Comment -->
+    <div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCommentModalLabel">Éditer Commentaire</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCommentForm" asp-action="EditComment" method="post">
+                        <input type="hidden" name="commentId" id="editCommentId" />
+                        <div class="mb-3">
+                            <label for="editCommentText" class="form-label">Commentaire</label>
+                            <textarea id="editCommentText" name="commentText" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Deleting a Comment -->
+    <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteCommentModalLabel">Confirmer la Suppression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer ce commentaire ?
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteCommentForm" asp-action="DeleteComment" method="post">
+                        <input type="hidden" name="commentId" id="deleteCommentId" />
+                        <input type="hidden" name="userId" id="deleteUserId" value="@Model.UserInfo.FkUserId" />
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -198,6 +371,60 @@
 
     <!-- Back Button -->
     <div class="text-center mt-4">
-        <a class="btn btn-secondary" asp-action="SearchCitoyen">Back to Search</a>
+        <a class="btn btn-secondary" asp-action="SearchCitoyen">Retour à la Recherche</a>
+        <button id="testShowModal" class="btn btn-primary">Test Show Modal</button>
     </div>
-</div>
+
+    @section Scripts {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Retrieve URL parameters
+                var urlParams = new URLSearchParams(window.location.search);
+                var showModal = urlParams.get('showModal');
+
+                // Show the comments modal if the showModal parameter is 'true'
+                if (showModal && showModal.toLowerCase() === 'true') {
+                    setTimeout(function () { // Use setTimeout to ensure all modals are closed
+                        var commentsModalElement = document.getElementById('commentsModal');
+                        if (commentsModalElement) {
+                            var commentsModal = new bootstrap.Modal(commentsModalElement);
+                            commentsModal.show();
+                        } else {
+                            console.error('Comments Modal element not found');
+                        }
+                    }, 500); // Adjust timeout as needed
+                }
+
+                // Initialize Edit Comment Modal
+                var editCommentModal = document.getElementById('editCommentModal');
+                if (editCommentModal) {
+                    editCommentModal.addEventListener('show.bs.modal', function (event) {
+                        var button = event.relatedTarget;
+                        var commentId = button.getAttribute('data-comment-id');
+                        var commentText = button.getAttribute('data-comment-text');
+
+                        var form = document.getElementById('editCommentForm');
+                        var commentIdInput = document.getElementById('editCommentId');
+                        var commentTextArea = document.getElementById('editCommentText');
+
+                        commentIdInput.value = commentId;
+                        commentTextArea.value = commentText;
+                    });
+                }
+
+                // Initialize Delete Comment Modal
+                var deleteCommentModal = document.getElementById('deleteCommentModal');
+                if (deleteCommentModal) {
+                    deleteCommentModal.addEventListener('show.bs.modal', function (event) {
+                        var button = event.relatedTarget;
+                        var commentId = button.getAttribute('data-comment-id');
+
+                        var form = document.getElementById('deleteCommentForm');
+                        var commentIdInput = document.getElementById('deleteCommentId');
+                        commentIdInput.value = commentId;
+                    });
+                }
+            });
+        </script>
+    }
+
