@@ -72,11 +72,15 @@ namespace CVSante.Controllers
         public async Task<IActionResult> Index()
         {
             GetCurrentUser();
-            if (_currentUser != null)
+            if (_currentUser == null)
             {
-                await _historyService.LogActionAsync(null, _currentUser, "Accessed Admin Index page");
+                return NotFound();
             }
-            return View();
+
+            await _historyService.LogActionAsync(null, _currentUser, "Accessed Admin Index page");
+                return View();
+
+            
         }
 
 
@@ -84,6 +88,14 @@ namespace CVSante.Controllers
         public async Task<IActionResult> RedirectToHistory(int? id)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
+            if (id == null)
+            {
+                return NotFound();
+            }
             await _historyService.LogActionAsync(null, _currentUser, "Accessed History page");
             return RedirectToAction("History", new { id = id });
         }
@@ -206,6 +218,10 @@ namespace CVSante.Controllers
         public async Task<IActionResult> ManageRoles(int? paramedicId)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
             // Get the current user's ID (assuming this is how you identify the current user)
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -263,6 +279,11 @@ namespace CVSante.Controllers
         public async Task<IActionResult> EditRole(CompanyRole selectedRole, int selectedParamedicId)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
+
             if (!ModelState.IsValid)
             {
                 // Log model state errors
@@ -327,6 +348,11 @@ namespace CVSante.Controllers
         public async Task<IActionResult> ManageCompany()
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
+
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // currentUserId is already a string
             var currentUser = await _context.UserParamedics
                 .Include(u => u.FkRoleNavigation)
@@ -371,6 +397,11 @@ namespace CVSante.Controllers
         public async Task<IActionResult> ManageCompany(ManageCompany viewModel, int? removeParamedicId)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
+
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentUser = await _context.UserParamedics
                 .Include(u => u.FkRoleNavigation)
@@ -456,6 +487,11 @@ namespace CVSante.Controllers
         public async Task<IActionResult> AddRespondent()
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
+
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentUser = await _context.UserParamedics
                 .Include(u => u.FkRoleNavigation)
@@ -496,6 +532,11 @@ namespace CVSante.Controllers
         public async Task<IActionResult> AddRespondent(AddRespondent viewModel)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
+
             ModelState.Remove("UserParamedic.FkRoleNavigation");
             ModelState.Remove("UserParamedic.FkIdentityUser");
             ModelState.Remove("UserParamedic.FkIdentityUserNavigation");
@@ -577,6 +618,11 @@ namespace CVSante.Controllers
         public async Task<IActionResult> AddByMatricule(AddRespondent viewModel)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
+
             var existingParamedic = await _context.UserParamedics
                 .Include(p => p.FkIdentityUserNavigation)
                 .FirstOrDefaultAsync(p => p.Matricule == viewModel.UserParamedic.Matricule);
@@ -622,6 +668,10 @@ namespace CVSante.Controllers
         public async Task<IActionResult> EditRespondent(int? paramedicId)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
             // Get the current user's ID
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -691,6 +741,10 @@ namespace CVSante.Controllers
         public async Task<IActionResult> EditRespondent(UserParamedic paramedic)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
             // Remove validation for fields that are not part of the form
             ModelState.Remove("FkRoleNavigation");
             ModelState.Remove("FkIdentityUserNavigation");
@@ -758,6 +812,10 @@ namespace CVSante.Controllers
         public async Task<IActionResult> SearchCitoyen(string searchString)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var paramId = _context.UserParamedics.Where(u => u.FkIdentityUser == currentUserId)
@@ -824,6 +882,10 @@ namespace CVSante.Controllers
         public async Task<IActionResult> ViewCitoyen(int? id)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
             // Log the attempt to access ViewCitoyen
             await _historyService.LogActionAsync(id, _currentUser, $"Attempting to view citizen details. ID: {id}");
 
@@ -886,6 +948,10 @@ namespace CVSante.Controllers
         public async Task<IActionResult> AddComment(int userId, string commentText)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
             // Log the attempt to add a comment
             await _historyService.LogActionAsync(null, _currentUser, $"Attempting to add a comment. Comment Text: {commentText}");
 
@@ -932,6 +998,10 @@ namespace CVSante.Controllers
         public async Task<IActionResult> EditComment(int commentId, string commentText)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
             // Log the attempt to edit a comment
             await _historyService.LogActionAsync(null, _currentUser, $"Attempting to edit comment {commentId}. New Comment Text: {commentText}");
 
@@ -978,6 +1048,10 @@ namespace CVSante.Controllers
         public async Task<IActionResult> DeleteComment(int commentId, int userId)
         {
             GetCurrentUser();
+            if (_currentUser == null)
+            {
+                return NotFound();
+            }
             // Log the attempt to delete a comment
             await _historyService.LogActionAsync(null, _currentUser, $"Attempting to delete comment with ID: {commentId}");
 
