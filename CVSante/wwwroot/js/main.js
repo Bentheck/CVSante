@@ -25,7 +25,7 @@
         mobileNavToggleBtn.classList.toggle('bi-x');
     }
 
-   
+
     /**
      * Toggle mobile nav dropdowns
      */
@@ -103,7 +103,7 @@
             });
         }
     });
-    
+
     /**
      * Frequently Asked Questions Toggle
      */
