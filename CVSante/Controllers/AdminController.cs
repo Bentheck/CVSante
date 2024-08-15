@@ -548,7 +548,7 @@ namespace CVSante.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError("Email", "Aucun utilisateur n'a été trouvé avec cet email.");
-                    await _historyService.LogActionAsync(0, 0, $"Failed to add respondent: User not found with email {viewModel.Email}");
+                    await _historyService.LogActionAsync(null, _currentUser, $"Failed to add respondent: User not found with email {viewModel.Email}");
                     return View(viewModel);
                 }
 
@@ -653,7 +653,7 @@ namespace CVSante.Controllers
             await _context.SaveChangesAsync();
 
             // Log successful addition of the paramedic
-            await _historyService.LogActionAsync(existingParamedic.ParamId, viewModel.CompanyId,
+            await _historyService.LogActionAsync(null, _currentUser,
                 $"Successfully added paramedic with matricule {viewModel.UserParamedic.Matricule} to company ID {viewModel.CompanyId}.");
 
             return RedirectToAction("ManageCompany");
@@ -692,7 +692,7 @@ namespace CVSante.Controllers
             if (!currentUser.FkRoleNavigation.EditParamedic)
             {
                 // Log when the user does not have the necessary permissions
-                await _historyService.LogActionAsync(currentUser.ParamId, 0,
+                await _historyService.LogActionAsync(null, _currentUser,
                     $"User ID {currentUserId} attempted to access EditRespondent without the necessary permissions.");
 
                 return RedirectToAction("ManageCompany", "Admin");
@@ -718,14 +718,14 @@ namespace CVSante.Controllers
                 if (paramedic == null)
                 {
                     // Log when the paramedic to be edited cannot be found
-                    await _historyService.LogActionAsync(currentUser.ParamId, paramedicId.Value,
+                    await _historyService.LogActionAsync(null, _currentUser,
                         $"Failed to retrieve paramedic with ID {paramedicId.Value} for editing. The paramedic was not found.");
 
                     return NotFound();
                 }
 
                 // Optionally log successful retrieval of the paramedic
-                await _historyService.LogActionAsync(currentUser.ParamId, paramedic.ParamId,
+                await _historyService.LogActionAsync(null, _currentUser,
                     $"Successfully retrieved paramedic with ID {paramedic.ParamId} for editing.");
             }
 
