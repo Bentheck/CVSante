@@ -56,6 +56,12 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <div class="form-group mb-3">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
                             <label asp-for="UserParamedic.Nom" class="control-label"></label>
                             <input asp-for="UserParamedic.Nom" class="form-control" />
                             <span asp-validation-for="UserParamedic.Nom" class="text-danger"></span>
@@ -91,7 +97,7 @@
                             <span asp-validation-for="UserParamedic.ParamIsActive" class="text-danger"></span>
                         </div>
                         <input type="hidden" asp-for="CompanyId" />
-                        <button type="submit" class="btn btn-primary">Add New Paramedic</button>
+                        <button type="submit" asp-route="AddRespondent" class="btn btn-primary">Add New Paramedic</button>
                      @*    <div class="form-group mb-3">
 
                             <label asp-for="UserParamedic.FkCompany" class="control-label"></label>
@@ -128,7 +134,7 @@
                         </div>
                         <input type="hidden" asp-for="CompanyId" />
 
-                        <button type="submit" class="btn btn-primary">Add by Matricule</button>
+                        <button type="submit" asp-route="AddByMatricule" class="btn btn-primary">Add by Matricule</button>
                     </form>
                 </div>
             </div>
