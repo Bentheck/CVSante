@@ -6,8 +6,18 @@
 }
 <script src="~/js/ProfilCitoyenCreate.js" asp-append-version="true" defer></script>
 
-<h2>Create</h2>
+<h2 class="text-center" style="margin-top: 55px;">Create</h2>
+<style>
+    .form-check-label {
+        display: inline-block;
+        min-width: 70px; /* Ajustez selon vos besoins */
+        white-space: nowrap;
+        text-align: left;
+    }
 
+    
+  
+</style>
 <form asp-action="Create" asp-controller="ProfilCitoyen" method="post" class="form-horizontal">
     <div class="container">
         <div class="row">
@@ -62,18 +72,18 @@
                             <!--- Sexe Naissance --->
                             <div class="form-group row align-items-center">
                                 <label class="col-md-2 col-form-label">Sexe à la naissance</label>
-                                <div class="col-md-10 d-flex align-items-center">
+                                <div class="col-md-9 d-flex align-items-center">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" id="sexeHomme" name="UserInfo.Sexe" value="Homme" @(Model.UserInfo.Sexe == "Homme" ? "checked" : "") />
                                         <label class="form-check-label" for="sexeHomme">Homme</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" id="sexeFemme" name="UserInfo.Sexe" value="Femme" @(Model.UserInfo.Sexe == "Femme" ? "checked" : "") />
-                                        <label class="form-check-label" for="sexeFemme">Femme</label>
+                                        <label class="form-check-label" for="sexeFemme" >Femme</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" id="sexeAutre" name="UserInfo.Sexe" value="Autre" @(Model.UserInfo.Sexe == "Autre" ? "checked" : "") />
-                                        <label class="form-check-label" for="sexeAutre">Autre</label>
+                                        <label class="form-check-label" for="sexeAutre" >Autre</label>
                                     </div>
                                     <div class="form-group mb-0 ms-3" id="autrePrecisionGroup" @(Model.UserInfo.Sexe == "Autre" ? "style=display:block;" : "style=display:none;")>
                                         <input type="text" class="form-control" id="autrePrecision" name="UserInfo.AutrePrecision" placeholder="Précisez" value="@Model.UserInfo.AutrePrecision" />
@@ -282,21 +292,21 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row severity-field" style="display: @(allergy.AllergieIntolerance == "Allergie" ? "block" : "none");">
+                                                <div class="form-group row severity-field" style="display: @(allergy.AllergieIntolerance == "Allergie" ? "flex" : "none");">
                                                     <label class="col-md-2 col-form-label">Sévérité</label>
-                                                    <div class="col-md-10">
-                                                        <div class="d-flex flex-column flex-md-row align-items-start">
-                                                            <div class="me-3">
+                                                    <div class="col-md-10 d-flex align-items-center">
+                                                        <div class="form-check form-check-inline ">
+                                                         
                                                                 <input type="radio" name="Allergies[@i].Gravite" value="Bénigne" class="form-check-input" id="benigne-@i" @(allergy.Gravite == "Bénigne" ? "checked" : "") />
                                                                 <label class="form-check-label" for="benigne-@i">Bénigne</label>
                                                             </div>
-                                                            <div>
+                                                            <div class="form-check form-check-inline">
                                                                 <input type="radio" name="Allergies[@i].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-@i" @(allergy.Gravite == "Grave/Mortelle" ? "checked" : "") />
                                                                 <label class="form-check-label" for="grave-@i">Grave/Mortelle</label>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                              
                                                 <div class="form-group row">
                                                     <label class="col-md-2 col-form-label">Produit</label>
                                                     <div class="col-md-10">
@@ -456,7 +466,7 @@
             </div>
 
             <!-- Navigation List Box and Buttons -->
-            <div class="col-md-3">
+            <div class="col-md-3" style="margin-top: 60px;">
                 <div class="card mb-3">
                     <div class="card-header">
                         <h4>Navigation</h4>
@@ -492,11 +502,15 @@
                         <button id="next-btn" type="button" class="btn btn-primary" onclick="nextSection()">Next</button>
                         <div class="mt-3">
                             <button type="submit" class="btn btn-primary" id="save-btn">Save</button>
+                           
+                            
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-footer">
+                <div class=" mt-3">
                     <div asp-validation-summary="ModelOnly" class="card-header text-danger"></div>
+                </div>
                 </div>
             </div>
         </div>

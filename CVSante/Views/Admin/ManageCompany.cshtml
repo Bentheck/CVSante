@@ -1,10 +1,178 @@
 ﻿@model CVSante.ViewModels.ManageCompany
 
 @{
-    ViewData["Title"] = "Manage Company";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 <style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h4 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            color: #495057;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+    .btn-link {
+        color: #dc3545;
+        background: none;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+        .btn-link:hover {
+            color: #a71d2a;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+    }
+</style>
+
+<div class="container">
+    <h4>Manage Company: @Model.Company.CompName</h4>
+
+    <form asp-action="ManageCompany" method="post">
+        <input type="hidden" asp-for="Company.IdComp" />
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Employé</th>
+                    <th>Matricule</th>
+                    <th>Actif</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.Paramedics.Count; i++)
+                {
+                    <tr>
+                        <td>@Model.Paramedics[i].Nom</td>
+                        <td>@Model.Paramedics[i].Matricule</td>
+                        <td>
+                            <input asp-for="Paramedics[i].ParamId" type="hidden" />
+                            <input asp-for="Paramedics[i].ParamIsActive" type="checkbox" />
+                        </td>
+                        <td>
+                            <button type="submit" name="removeParamedicId" value="@Model.Paramedics[i].ParamId" class="btn-link" onclick="return confirm('Voulez-vous vraiment retirer cet employé de la compagnie ?');">Retirer</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="button-group">
+            <div>
+                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+            </div>
+            <a asp-action="ManageRoles" class="btn btn-secondary">Gestion des rôles</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('form').on('submit', function (event) {
+                var isValid = true;
+
+                $('input.form-control').each(function () {
+                    if ($(this).val().trim() === '') {
+                        $(this).addClass('is-invalid');
+                        isValid = false;
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    event.preventDefault();
+                    alert('Veuillez remplir tous les champs requis.');
+                }
+            });
+
+            $('input.form-control').on('input', function () {
+                if ($(this).val().trim() !== '') {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
+}
+@* <style>
     form {
         margin-top: 20px;
     }
@@ -66,8 +234,8 @@
         a:hover {
             text-decoration: underline;
         }
-</style>
-<h4>Company</h4>
+</style> *@
+@* <h4>Company</h4>
 
 <h4>@Model.Company.CompName</h4>
 
@@ -148,3 +316,4 @@
     </div>
 </form>
 
+ *@
