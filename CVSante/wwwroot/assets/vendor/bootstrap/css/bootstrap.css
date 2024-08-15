@@ -4174,6 +4174,13 @@ textarea.form-control-lg {
     overflow-y: visible;
   }
 }
+.navbar {
+    z-index: 1000; /* S'assurer que cela est inférieur au z-index du modal */
+}
+.modal.show {
+    z-index: 1055;
+    background-color: rgba(0, 0, 0, 0.5); /* Ajoute un arrière-plan semi-transparent pour améliorer la visibilité */
+}
 @media (min-width: 992px) {
   .navbar-expand-lg {
     flex-wrap: nowrap;
@@ -5543,30 +5550,41 @@ textarea.form-control-lg {
 }
 
 .modal-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  color: var(--bs-modal-color);
-  pointer-events: auto;
-  background-color: var(--bs-modal-bg);
-  background-clip: padding-box;
-  border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
-  border-radius: var(--bs-modal-border-radius);
-  outline: 0;
-}
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: var(--bs-modal-color);
+    pointer-events: auto;
+    background-color: var(--bs-modal-bg);
+    background-clip: padding-box;
+    border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
+    border-radius: var(--bs-modal-border-radius);
+    outline: 0;
 
+}
+.modal {
+    display: block; /* Force l'affichage du modal */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+}
+.navbar {
+    z-index: 1000; /* S'assure que la navbar est en dessous du modal */
+}
 .modal-backdrop {
-  --bs-backdrop-zindex: 1050;
-  --bs-backdrop-bg: #000;
-  --bs-backdrop-opacity: 0.5;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: var(--bs-backdrop-zindex);
-  width: 100vw;
-  height: 100vh;
-  background-color: var(--bs-backdrop-bg);
+    --bs-backdrop-zindex: auto;
+    --bs-backdrop-bg: #000;
+    --bs-backdrop-opacity: 0.5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--bs-backdrop-zindex);
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bs-backdrop-bg);
 }
 .modal-backdrop.fade {
   opacity: 0;
@@ -5576,6 +5594,7 @@ textarea.form-control-lg {
 }
 
 .modal-header {
+  
   display: flex;
   flex-shrink: 0;
   align-items: center;

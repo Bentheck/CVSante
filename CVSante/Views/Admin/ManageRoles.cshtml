@@ -34,12 +34,14 @@
 
     .btn-light {
         background-color: #e7f3ff; /* Light blue background for buttons */
-        border: 1px solid #007bff; /* Border color */
+        border: 1px solid #007bff; 
     }
 
         .btn-light:hover {
             background-color: #d0e7ff; 
         }
+
+    
 </style>
 <div class="container mt-5">
     <div class="text-center mb-4">
@@ -138,47 +140,52 @@
 </div>
 
 <!-- Modal for confirmation -->
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmModalLabel">Confirm Changes</h5>
+<div class="modal fade" id="confirmModal" aria-labelledby="confirmModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" >
+        <div class="modal-content" role="document">
+            <div class="modal-header " >
+                <h5 class="modal-title" id="confirmModalLabel">Confirmer les modifications</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to save these changes?
+                Êtes-vous sûr de vouloir enregistrer ces modifications ?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="submitForm()">Confirm</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" onclick="submitForm()">Confirmer</button>
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    
     <script>
         function confirmSave() {
             // Affiche la modal
             $('#confirmModal').modal('show');
+            $('.modal-backdrop').remove();
         }
 
         function submitForm() {
             // Soumet le formulaire
             $('#roleForm').submit();
         }
-
+      
         // Ferme la modal lorsque le bouton "Cancel" est cliqué
         $('#confirmModal').on('hidden.bs.modal', function (e) {
             $('#confirmModal').modal('hide');
+            location.reload(); // Recharge la page pour annuler les modifications
         });
 
-        
+
         $('.close, .btn-secondary').click(function () {
             $('#confirmModal').modal('hide');
         });
+        
+      
     </script>
 }
 
