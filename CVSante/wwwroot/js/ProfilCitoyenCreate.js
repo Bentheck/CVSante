@@ -67,46 +67,103 @@ function updateNavigationButtons() {
 
 
 //Fonctions gérant "autre" dans les antécédents//
-function toggleManualEntry() {
-    const otherCheckbox = document.querySelector('input[name="antecedents"][value="Autre"]');
-    const manualEntry = document.getElementById('manual-entry');
+//function toggleManualEntry() {
+//    const otherCheckbox = document.querySelector('input[name="antecedents"][value="Autre"]');
+//    const manualEntry = document.getElementById('manual-entry');
 
-    if (otherCheckbox.checked) {
+//    if (otherCheckbox.checked) {
+//        manualEntry.style.display = 'block';
+//    } else {
+//        manualEntry.style.display = 'none';
+//    }
+//    updateAntecedentsString();
+//}
+
+//function updateAntecedentsString() {
+//    const checkedCheckboxes = document.querySelectorAll('input[name="antecedents"]:checked');
+//    const manualEntryField = document.getElementById('autre-details');
+
+//    let antecedentsText = Array.from(checkedCheckboxes)
+//        .map(checkbox => checkbox.value)
+
+//    if (document.querySelector('input[name="antecedents"][value="Autre"]').checked) {
+//        const manualEntryText = manualEntryField.value.trim();
+//        if (manualEntryText) {
+//            antecedentsText.push(manualEntryText);
+//        }
+//    }
+
+//    document.getElementById('antecedent-aggregate').value = antecedentsText.join('/');
+//}
+
+//showSection(sections[0]);
+
+//document.querySelectorAll('input[name="antecedents"]').forEach(checkbox => {
+//    checkbox.addEventListener('change', () => {
+//        toggleManualEntry();
+//        updateAntecedentsString();
+//    });
+//});
+
+//document.getElementById('autre-details').addEventListener('input', updateAntecedentsString);
+function updateAntecedentsString() {
+    var checkboxes = document.querySelectorAll('#antecedent-checkboxes input[type="checkbox"]');
+    var selectedAntecedents = [];
+    var aucunCheckbox = document.getElementById('Aucun');
+    var otherCheckboxes = Array.from(checkboxes).filter(cb => cb.id !== 'Aucun');
+
+    // Si "Aucun" est coché, décocher toutes les autres options
+    if (aucunCheckbox.checked) {
+        otherCheckboxes.forEach(cb => {
+            cb.checked = false;
+            cb.disabled = true;
+        });
+        selectedAntecedents.push('Aucun');
+    } else {
+        otherCheckboxes.forEach(cb => {
+            cb.disabled = false;
+            if (cb.checked) {
+                selectedAntecedents.push(cb.value);
+            }
+        });
+    }
+
+    // Si une autre option est cochée, décocher "Aucun"
+    if (selectedAntecedents.length > 0 && selectedAntecedents[0] !== 'Aucun') {
+        aucunCheckbox.checked = false;
+    }
+
+    // Gérer l'option "Autre"
+    var autreCheckbox = document.getElementById('Autre');
+    var manualEntry = document.getElementById('manual-entry');
+    var autreDetails = document.getElementById('autre-details');
+
+    if (autreCheckbox.checked) {
         manualEntry.style.display = 'block';
+        if (autreDetails.value.trim() !== '') {
+            selectedAntecedents.push('Autre: ' + autreDetails.value.trim());
+        }
     } else {
         manualEntry.style.display = 'none';
-    }
-    updateAntecedentsString();
-}
-
-function updateAntecedentsString() {
-    const checkedCheckboxes = document.querySelectorAll('input[name="antecedents"]:checked');
-    const manualEntryField = document.getElementById('autre-details');
-
-    let antecedentsText = Array.from(checkedCheckboxes)
-        .map(checkbox => checkbox.value)
-
-    if (document.querySelector('input[name="antecedents"][value="Autre"]').checked) {
-        const manualEntryText = manualEntryField.value.trim();
-        if (manualEntryText) {
-            antecedentsText.push(manualEntryText);
-        }
+        autreDetails.value = '';
     }
 
-    document.getElementById('antecedent-aggregate').value = antecedentsText.join('/');
+    // Mettre à jour la valeur cachée
+    document.getElementById('antecedent-aggregate').value = selectedAntecedents.join('/');
 }
 
-showSection(sections[0]);
-
-document.querySelectorAll('input[name="antecedents"]').forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-        toggleManualEntry();
-        updateAntecedentsString();
-    });
+// Ajouter des écouteurs d'événements pour tous les checkboxes
+document.querySelectorAll('.antecedent-checkbox').forEach(function (checkbox) {
+    checkbox.addEventListener('change', updateAntecedentsString);
 });
 
+// Ajouter un écouteur d'événements pour le champ de texte "Autre"
 document.getElementById('autre-details').addEventListener('input', updateAntecedentsString);
 
+// Appeler la fonction une fois au chargement de la page pour initialiser l'état
+document.addEventListener('DOMContentLoaded', function () {
+    updateAntecedentsString();
+});
 
 //Fonctions assurant qu'une seule adresse primaire est cochée//
 function handlePrimaryAddressCheckbox() {
@@ -141,17 +198,24 @@ function attachAllergyEventListeners() {
     });
 }
 
-function handleAllergyChange() {
-    setTimeout(() => {
-        const severityField = this.closest('.card-body').querySelector('.severity-field');
-        if (this.value === 'Allergie') {
-            severityField.style.display = 'block';
-        } else {
-            severityField.style.display = 'none';
-        }
-    }, 0); // Ensure this runs after DOM updates
-}
-
+//function handleAllergyChange() {
+//    setTimeout(() => {
+//        const severityField = this.closest('.card-body').querySelector('.severity-field');
+//        if (this.value === 'Allergie') {
+//            severityField.style.display = 'block';
+//        } else {
+//            severityField.style.display = 'none';
+//        }
+//    }, 0); // Ensure this runs after DOM updates
+//}
+$(document).on('change', '.allergy-intolerance-radio', function () {
+    var severityField = $(this).closest('.card-body').find('.severity-field');
+    if ($(this).val() === 'Allergie') {
+        severityField.css('display', 'flex');
+    } else {
+        severityField.css('display', 'none');
+    }
+});
 //Fonction permettant de retirer un dynamic field//
 document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('click', function (event) {
