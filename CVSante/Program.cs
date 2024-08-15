@@ -1,7 +1,10 @@
 using CVSante.Data;
 using CVSante.Models;
 using CVSante.Services;
+using CVSante.Tools;
+using Google.Api;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +29,18 @@ builder.Services.AddScoped<IHistoryService, HistoryService>();
 builder.Services.AddTransient<UserValidation>();
 
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddTransient<IEmailSender, MailKitEmailSender>();
+builder.Services.Configure<MailKitEmailSenderOptions>(options =>
+{
+    options.Host_Address = builder.Configuration["ExternalProviders:MailKit:SMTP:Address"];
+    options.Host_Port = Convert.ToInt32(builder.Configuration["ExternalProviders:MailKit:SMTP:Port"]);
+    options.Host_Username = builder.Configuration["ExternalProviders:MailKit:SMTP:Account"];
+    options.Host_Password = builder.Configuration["ExternalProviders:MailKit:SMTP:Password"];
+    options.Sender_EMail = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderEmail"];
+    options.Sender_Name = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderName"];
+});
 
 var app = builder.Build();
 
