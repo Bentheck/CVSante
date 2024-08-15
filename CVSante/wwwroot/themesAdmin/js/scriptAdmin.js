@@ -1,27 +1,48 @@
 
 // Scripts
 // 
-//document.getElementById('sidebarToggle').addEventListener('click', function () {
-//    document.getElementById('layoutSidenav_nav').classList.toggle('sb-sidenav-toggled');
-//    document.body.classList.toggle('sb-sidenav-toggled');
-//});
-window.addEventListener('DOMContentLoaded', event => {
+document.getElementById('sidebarToggle').addEventListener('click', function () {
+    document.getElementById('layoutSidenav_nav').classList.toggle('sb-sidenav-toggled');
+    document.body.classList.toggle('sb-sidenav-toggled');
+});
+function toggleSidebar() {
+    document.body.classList.toggle('sb-sidenav-toggled');
+    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+}
 
-    // Toggle the side navigation
+document.getElementById('sidebarToggle').addEventListener('click', function (event) {
+    event.preventDefault();
+    toggleSidebar();
+});
+
+window.addEventListener('DOMContentLoaded', event => {
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
+
     if (sidebarToggle) {
-        // Uncomment Below to persist sidebar toggle between refreshes
-        // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-        //     document.body.classList.toggle('sb-sidenav-toggled');
-        // }
+        if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+            document.body.classList.add('sb-sidenav-toggled');
+        }
         sidebarToggle.addEventListener('click', event => {
             event.preventDefault();
-            document.body.classList.toggle('sb-sidenav-toggled');
-            localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+            toggleSidebar();
         });
     }
 
+    // Ensure the sidebar is closed on resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth < 992) {
+            document.body.classList.remove('sb-sidenav-toggled');
+            localStorage.setItem('sb|sidebar-toggle', 'false');
+        }
+        if (window.innerWidth > 992) {
+            document.body.classList.add('sb-sidenav-toggled');
+            localStorage.setItem('sb|sidebar-toggle', 'true');
+        }
+    });
 });
+
+
+
 document.querySelectorAll('.nav-link.collapsed').forEach(function (element) {
     element.addEventListener('click', function () {
         const targetId = this.getAttribute('data-bs-target');
@@ -48,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
             viewCitizenFile.checked = false;
 
             // Set checkboxes based on role
-            if (role === 'Admin') {
+            if (role === 'SuperAdmin') {
                 createResponder.checked = true;
                 viewHistory.checked = true;
                 viewCitizenFile.checked = true;
