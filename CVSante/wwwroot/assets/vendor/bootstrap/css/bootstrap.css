@@ -5575,7 +5575,7 @@ textarea.form-control-lg {
     z-index: 1000; /* S'assure que la navbar est en dessous du modal */
 }
 .modal-backdrop {
-    --bs-backdrop-zindex: 1000;
+    --bs-backdrop-zindex: auto;
     --bs-backdrop-bg: #000;
     --bs-backdrop-opacity: 0.5;
     position: fixed;
@@ -5594,6 +5594,7 @@ textarea.form-control-lg {
 }
 
 .modal-header {
+  
   display: flex;
   flex-shrink: 0;
   align-items: center;
