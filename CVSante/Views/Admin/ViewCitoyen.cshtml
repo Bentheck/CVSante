@@ -139,9 +139,9 @@
     <div class="mb-4 text-center">
         <h4 class="mb-3">Détails</h4>
         <button class="btn btn-primary mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#allergiesModal" @(Model.Allergies.Any() ? "" : "disabled")>Allergies</button>
-        <button class="btn btn-primary mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#medicationsModal" @(Model.Medications.Any() ? "" : "disabled")>Médicaments</button>
-        <button class="btn btn-primary mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#handicapsModal" @(Model.Handicaps.Any() ? "" : "disabled")>Handicaps</button>
-        <button class="btn btn-primary mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#commentsModal">Commentaires</button>
+        <button class="btn btn-info mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#medicationsModal" @(Model.Medications.Any() ? "" : "disabled")>Médicaments</button>
+        <button class="btn btn-warning mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#handicapsModal" @(Model.Handicaps.Any() ? "" : "disabled")>Handicaps</button>
+        <button class="btn btn-success mx-2 mt-2" data-bs-toggle="modal" data-bs-target="#commentsModal">Commentaires</button>
     </div>
 
     <!-- Modal pour les Allergies -->

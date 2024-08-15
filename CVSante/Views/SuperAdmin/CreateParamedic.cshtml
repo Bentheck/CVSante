@@ -51,7 +51,7 @@
 
                         <div class="mb-3">
                             <label asp-for="FkCompany" class="form-label"></label>
-                            <select asp-for="FkCompany" class="form-select"></select>
+                            <select asp-for="FkCompany" class="form-select" asp-items="ViewBag.FkCompany"></select>
                             <span asp-validation-for="FkCompany" class="text-danger"></span>
                         </div>
 
