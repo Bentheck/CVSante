@@ -54,7 +54,11 @@
                 <div class="card-body">
                     <form asp-action="View">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+                        <div class="form-group mb-3">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
                         <div class="form-group mb-3">
                             <label asp-for="Email" class="control-label"></label>
                             <input asp-for="Email" class="form-control" />
@@ -97,7 +101,10 @@
                             <span asp-validation-for="UserParamedic.ParamIsActive" class="text-danger"></span>
                         </div>
                         <input type="hidden" asp-for="CompanyId" />
-                        <button type="submit" asp-route="AddRespondent" class="btn btn-primary">Add New Paramedic</button>
+
+                        <button type="submit" asp-route="AddRespondent" class="btn btn-primary">
+                            Add New Paramedic</button>
+
                      @*    <div class="form-group mb-3">
 
                             <label asp-for="UserParamedic.FkCompany" class="control-label"></label>

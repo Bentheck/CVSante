@@ -53,39 +53,39 @@ document.querySelectorAll('.nav-link.collapsed').forEach(function (element) {
         }
     });
 });
-document.addEventListener('DOMContentLoaded', function () {
-    const rolesList = document.getElementById('rolesList');
-    const createResponder = document.getElementById('createResponder');
-    const viewHistory = document.getElementById('viewHistory');
-    const viewCitizenFile = document.getElementById('viewCitizenFile');
+//document.addEventListener('DOMContentLoaded', function () {
+//    const rolesList = document.getElementById('rolesList');
+//    const createResponder = document.getElementById('createResponder');
+//    const viewHistory = document.getElementById('viewHistory');
+//    const viewCitizenFile = document.getElementById('viewCitizenFile');
 
-    rolesList.addEventListener('click', function (event) {
-        if (event.target.classList.contains('role-item')) {
-            const role = event.target.getAttribute('data-role');
+////    rolesList.addEventListener('click', function (event) {
+////        if (event.target.classList.contains('role-item')) {
+////            const role = event.target.getAttribute('data-role');
 
-            // Clear all checkboxes
-            createResponder.checked = false;
-            viewHistory.checked = false;
-            viewCitizenFile.checked = false;
+////            // Clear all checkboxes
+////            createResponder.checked = false;
+////            viewHistory.checked = false;
+////            viewCitizenFile.checked = false;
 
-            // Set checkboxes based on role
-            if (role === 'SuperAdmin') {
-                createResponder.checked = true;
-                viewHistory.checked = true;
-                viewCitizenFile.checked = true;
-            } else if (role === 'Paramedic') {
-                viewHistory.checked = true;
-            } else if (role === 'Hybride') {
-                createResponder.checked = true;
-                viewCitizenFile.checked = true;
-            }
-        }
-    });
+////            // Set checkboxes based on role
+////            if (role === 'SuperAdmin') {
+////                createResponder.checked = true;
+////                viewHistory.checked = true;
+////                viewCitizenFile.checked = true;
+////            } else if (role === 'Paramedic') {
+////                viewHistory.checked = true;
+////            } else if (role === 'Hybride') {
+////                createResponder.checked = true;
+////                viewCitizenFile.checked = true;
+////            }
+////        }
+////    });
 
-    document.getElementById('returnBtn').addEventListener('click', function () {
-        window.history.back();
-    });
-});
+//    document.getElementById('returnBtn').addEventListener('click', function () {
+//        window.history.back();
+//    });
+//});
 //document.getElementById('themeToggle').addEventListener('click', function () {
 //    const body = document.body;
 //    const sunIcon = document.getElementById('sunIcon');
