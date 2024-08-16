@@ -17,7 +17,7 @@ using System.Globalization;
 
 namespace CVSante.Controllers
 {
-    public class AdminController : Controller
+    public class ParamedicController : Controller
     {
         private readonly CvsanteContext _context;
         private readonly UserManager<IdentityUser> _userManager;
@@ -25,7 +25,7 @@ namespace CVSante.Controllers
         private readonly IHistoryService _historyService;
         private int _currentUser;
 
-        public AdminController(CvsanteContext context, UserManager<IdentityUser> userManager, UserValidation userValidation, IHistoryService historyService)
+        public ParamedicController(CvsanteContext context, UserManager<IdentityUser> userManager, UserValidation userValidation, IHistoryService historyService)
         {
             _context = context;
             _userManager = userManager;
