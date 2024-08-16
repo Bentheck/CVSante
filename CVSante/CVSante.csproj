@@ -8,10 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\mask.js" />
     <Content Remove="wwwroot\js\ProfilCitoyenCreate.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\mask.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\mask.js" />
     <None Include="wwwroot\themesAdmin\demo\chart-area-demo.js" />
     <None Include="wwwroot\themesAdmin\demo\chart-bar-demo.js" />
     <None Include="wwwroot\themesAdmin\demo\chart-pie-demo.js" />

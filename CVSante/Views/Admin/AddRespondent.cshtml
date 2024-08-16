@@ -3,6 +3,7 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+
 <style>
     .card {
         border-radius: 10px;
@@ -54,11 +55,7 @@
                 <div class="card-body">
                     <form asp-action="AddRespondent" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Email"></label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
+
                         <div class="form-group mb-3">
                             <label asp-for="Email" class="control-label"></label>
                             <input asp-for="Email" class="form-control" />
@@ -85,7 +82,7 @@
 
                         <div class="form-group mb-3">
                             <label asp-for="UserParamedic.Telephone" class="control-label"></label>
-                            <input asp-for="UserParamedic.Telephone" class="form-control" />
+                            <input asp-for="UserParamedic.Telephone" class="form-control phone-mask" />
                             <span asp-validation-for="UserParamedic.Telephone" class="text-danger"></span>
                         </div>
 
@@ -130,15 +127,18 @@
                 </div>
             </div>
         </div>
-          <div>
-        <a asp-action="Index">Back to List</a>
-    </div> 
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
     </div>
 </div>
+
+<script src="~/js/mask.js" asp-append-version="true"></script>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
     }
 }
 
