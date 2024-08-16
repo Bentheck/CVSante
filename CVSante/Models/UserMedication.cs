@@ -5,6 +5,8 @@ namespace CVSante.Models;
 
 public partial class UserMedication
 {
+    public int MedId { get; set; }
+
     public int FkUserId { get; set; }
 
     public string MedicamentProduitNat { get; set; } = null!;

@@ -7,9 +7,21 @@ public partial class CompanyRole
 {
     public int IdRole { get; set; }
 
-    public string RoleName { get; set; } = null!;
+    public bool CreateParamedic { get; set; }
 
-    public string RoleDroits { get; set; } = null!;
+    public bool EditParamedic { get; set; }
 
-    public virtual ICollection<UserParamedic> FkParams { get; set; } = new List<UserParamedic>();
+    public bool GetHistorique { get; set; }
+
+    public bool GetCitoyen { get; set; }
+
+    public bool EditRole { get; set; }
+
+    public int? FkCompany { get; set; }
+
+    public bool EditCompany { get; set; }
+
+    public virtual Company? FkCompanyNavigation { get; set; }
+
+    public virtual ICollection<UserParamedic> UserParamedics { get; set; } = new List<UserParamedic>();
 }

@@ -1,39 +1,116 @@
 ﻿<!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CVSante</title>
-    <link href="css/styles.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AdminApplication</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" /> 
+   
+
+    <link href="~/themesadmin/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+   
+    <link href="~/themesadmin/css/stylesadmin.css" rel="stylesheet" />
+   
+    
 </head>
-<body>
-    <header>
-        <div class="header-container">
-            <nav>
-                <ul class="nav-list">
-                    <li><NavLink href="/" Match="NavLinkMatch.All">Accueil</NavLink></li>
-                    <li><NavLink href="/presentation-projet">Présentation du projet</NavLink></li>
-                    <li><NavLink href="/membre-equipe">Membre de l'équipe</NavLink></li>
-                    <li><NavLink href="/faq">FAQ</NavLink></li>
-                    <li class="nav-right"><NavLink href="/inscription">Inscription</NavLink></li>
-                    <li><NavLink href="/connexion">Connexion</NavLink></li>
+<body class="d-flex flex-column min-vh-100 sb-nav-fixed sb-sidenav-toggled">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark navbar-dark-blue">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" asp-area="" asp-controller="Home" asp-action="Index">AdminApplication</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <!-- Theme Toggle Button-->
+        <button class="btn btn-light ms-auto" id="themeToggle">
+            <i class="fas fa-sun" id="sunIcon"></i>
+            <i class="fas fa-moon d-none" id="moonIcon"></i>
+        </button>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <partial name="_LoginPartial" />
+
                 </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav" class="d-flex flex-grow-1">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark-blue" id="sidenavAccordion">
+                <div class="sb-sidenav-menu" class="sb-sidenav-toggled">
+                    <div class="nav">
+
+                        <div class="sb-sidenav-menu-heading">Interface</div>
+                        <a class="nav-link collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Layouts
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AddRespondant">AddRespondant</a>
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EditRespondent">Edit Respondent</a>
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="History">History</a>
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ManageCompany">ManageCompany</a>
+                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ManageRoles">ManageRoles</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                            Pages
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                    Authentication
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <!-- Envelopper le partial avec un lien généré par Razor -->
+                                        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="text-white d-block">
+                                            Manage Account
+                                        </a>
+                                        <a asp-area="Identity" asp-page="/Account/Login" class="text-white d-block sidebar-partial">
+                                            <partial name="_LoginPartial" />
+                                        </a>
+                                
+                                    </nav>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
-    </header>
-
-    <div class="page">
-        <main>
-            <article>
-                @RenderBody()
-            </article>
-        </main>
+        
     </div>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2024, cvsante.qc.ca</p>
-        </div>
-    </footer>
+    <div id="layoutSidenav_content" class="d-flex flex-column flex-grow-1">
+        <main class="flex-grow-1">
+            <div class="container-fluid px-4">
+                @RenderBody()
+            </div>
+        </main>
+        <footer class="py-4 navbar-dark-blue mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-center small">
+                    <p class="text-center">&copy; 2024, cvsante.qc.ca</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script> 
+    <script src="~/themesadmin/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/themesadmin/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/themesadmin/js/scriptAdmin.js" asp-append-version="true"></script>
+ @*    <script src="~/themesadmin/demo/chart-area-demo.js"></script> 
+     <script src="~/themesadmin/demo/chart-bar-demo.js"></script>  *@
+ @*  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="~/themesadmin/js/datatables-simple-demo.js"></script>  *@
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

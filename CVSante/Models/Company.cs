@@ -13,5 +13,7 @@ public partial class Company
 
     public string? AdId { get; set; }
 
+    public virtual ICollection<CompanyRole> CompanyRoles { get; set; } = new List<CompanyRole>();
+
     public virtual ICollection<UserParamedic> UserParamedics { get; set; } = new List<UserParamedic>();
 }

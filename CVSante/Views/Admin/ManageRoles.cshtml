@@ -1,0 +1,276 @@
+﻿@model CVSante.ViewModels.ManageCompanyRoles
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+ <style>
+    .card {
+        border-radius: 10px;
+        transition: transform 0.2s;
+    }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+    .card-header {
+        font-weight: bold;
+    }
+
+    .list-group-item.active {
+        background-color: #b3d7ff; /* Light blue for active item */
+        color: #003366; /* Darker text for contrast */
+    }
+
+    .btn-link {
+        color: #007bff; /* Light blue link color */
+    }
+
+        .btn-link:hover {
+            color: #0056b3; /* Darker blue on hover */
+            text-decoration: underline;
+        }
+
+    .btn-light {
+        background-color: #e7f3ff; /* Light blue background for buttons */
+        border: 1px solid #007bff; 
+    }
+
+        .btn-light:hover {
+            background-color: #d0e7ff; 
+        }
+
+    
+</style>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="text-primary">Manage Paramedic Roles for Company</h2>
+    </div>
+
+    <div class="row">
+        <!-- Left Side: List of Paramedics -->
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light text-primary">
+                    <h5 class="mb-0">Paramedics</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var paramedic in Model.Paramedics)
+                    {
+                        <li class="list-group-item @(paramedic.ParamId == Model.SelectedParamedic?.ParamId ? "active" : "")">
+                            <a asp-action="ManageRoles"
+                               asp-route-paramedicId="@paramedic.ParamId"
+                               class="btn btn-link text-primary text-decoration-none">
+                                <i class="fas fa-user-md"></i> @paramedic.Nom, @paramedic.Prenom
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Side: Edit Selected Paramedic's Roles -->
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light text-primary">
+                    <h5 class="mb-0">Edit Roles</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.SelectedParamedic != null && Model.SelectedRole != null)
+                    {
+                        <h6 class="card-title mb-3">Editing roles for @Model.SelectedParamedic.Nom, @Model.SelectedParamedic.Prenom</h6>
+                        <form asp-action="EditRole" method="post" id="roleForm">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <!-- Hidden inputs -->
+                            <input type="hidden" asp-for="SelectedRole.IdRole" />
+                            <input type="hidden" name="SelectedParamedicId" value="@Model.SelectedParamedic.ParamId" />
+
+                            <!-- Role Checkboxes -->
+                            <div class="form-group form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="SelectedRole.CreateParamedic" id="createParamedic" />
+                                <label class="form-check-label" asp-for="SelectedRole.CreateParamedic">Create Paramedic</label>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="SelectedRole.EditParamedic" id="editParamedic" />
+                                <label class="form-check-label" asp-for="SelectedRole.EditParamedic">Edit Paramedic</label>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="SelectedRole.GetHistorique" id="getHistorique" />
+                                <label class="form-check-label" asp-for="SelectedRole.GetHistorique">Get Historique</label>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="SelectedRole.GetCitoyen" id="getCitoyen" />
+                                <label class="form-check-label" asp-for="SelectedRole.GetCitoyen">Get Citoyen</label>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="SelectedRole.EditRole" id="editRole" />
+                                <label class="form-check-label" asp-for="SelectedRole.EditRole">Edit Role</label>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="SelectedRole.EditCompany" />
+                                <label class="form-check-label" asp-for="SelectedRole.EditCompany"></label>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-light text-primary" onclick="confirmSave()">Save</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Select a paramedic to edit roles.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a asp-action="Index" class="btn btn-light text-primary">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<!-- Modal for confirmation -->
+<div class="modal fade" id="confirmModal" aria-labelledby="confirmModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" >
+        <div class="modal-content" role="document">
+            <div class="modal-header " >
+                <h5 class="modal-title" id="confirmModalLabel">Confirmer les modifications</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir enregistrer ces modifications ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" onclick="submitForm()">Confirmer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    
+    <script>
+        function confirmSave() {
+            // Affiche la modal
+            $('#confirmModal').modal('show');
+            $('.modal-backdrop').remove();
+        }
+
+        function submitForm() {
+            // Soumet le formulaire
+            $('#roleForm').submit();
+        }
+      
+        // Ferme la modal lorsque le bouton "Cancel" est cliqué
+        $('#confirmModal').on('hidden.bs.modal', function (e) {
+            $('#confirmModal').modal('hide');
+            location.reload(); // Recharge la page pour annuler les modifications
+        });
+
+
+        $('.close, .btn-secondary').click(function () {
+            $('#confirmModal').modal('hide');
+        });
+        
+      
+    </script>
+}
+
+@* <h4>Manage Paramedic Roles for Company</h4>
+<hr />
+ *@
+@* <div class="row">
+    <!-- Left Side: List of Paramedics -->
+    <div class="col-md-4">
+        <h5>Paramedics</h5>
+        <ul class="list-group">
+            @foreach (var paramedic in Model.Paramedics)
+            {
+                <li class="list-group-item @(paramedic.ParamId == Model.SelectedParamedic?.ParamId ? "active" : "")">
+                    <a asp-action="ManageRoles"
+                       asp-route-paramedicId="@paramedic.ParamId"
+                       class="btn btn-link">
+                        @paramedic.Nom, @paramedic.Prenom
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <!-- Right Side: Edit Selected Paramedic's Roles -->
+    <div class="col-md-8">
+        @if (Model.SelectedParamedic != null && Model.SelectedRole != null)
+        {
+            <h5>Edit Roles for @Model.SelectedParamedic.Nom, @Model.SelectedParamedic.Prenom</h5>
+            <form asp-action="EditRole" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <!-- Hidden input to carry IdRole and ParamId -->
+                <input type="hidden" asp-for="SelectedRole.IdRole" />
+                <input type="hidden" name="SelectedParamedicId" value="@Model.SelectedParamedic.ParamId" />
+
+                <!-- Checkbox for CreateParamedic -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.CreateParamedic" />
+                    <label class="form-check-label" asp-for="SelectedRole.CreateParamedic"></label>
+                </div>
+
+                <!-- Checkbox for EditParamedic -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.EditParamedic" />
+                    <label class="form-check-label" asp-for="SelectedRole.EditParamedic"></label>
+                </div>
+
+                <!-- Checkbox for GetHistorique -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.GetHistorique" />
+                    <label class="form-check-label" asp-for="SelectedRole.GetHistorique"></label>
+                </div>
+
+                <!-- Checkbox for GetCitoyen -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.GetCitoyen" />
+                    <label class="form-check-label" asp-for="SelectedRole.GetCitoyen"></label>
+                </div>
+
+                <!-- Checkbox for EditRole -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.EditRole" />
+                    <label class="form-check-label" asp-for="SelectedRole.EditRole"></label>
+                </div>
+
+                <!-- Checkbox for EditCompany -->
+                <div class="form-group form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="SelectedRole.EditCompany" />
+                    <label class="form-check-label" asp-for="SelectedRole.EditCompany"></label>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        }
+        else
+        {
+            <p>Select a paramedic to edit roles.</p>
+        }
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+ *@

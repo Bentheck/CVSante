@@ -5,6 +5,8 @@ namespace CVSante.Models;
 
 public partial class UserAllergy
 {
+    public int AlId { get; set; }
+
     public int FkUserId { get; set; }
 
     public string AllergieIntolerance { get; set; } = null!;

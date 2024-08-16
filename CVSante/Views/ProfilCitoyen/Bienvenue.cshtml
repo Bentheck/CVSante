@@ -1,0 +1,19 @@
+﻿@model IEnumerable<CVSante.ViewModels.User>
+
+@{
+    ViewData["Title"] = "Bienvenue";
+}
+
+<div class="container d-flex flex-column align-items-center justify-content-center text-center" style="height: 80vh";>
+    <div class="card p-5">
+    <h2>Bienvenue, <a href="#">Nom de l'utilisateur</a></h2>
+    <p>Nous sommes ravis de vous accueillir sur notre plateforme</p>
+    <div class="profile-picture">
+        <img src="~/images/profile-placeholder.png" alt="Photo de profil">
+        <p>Photo de profil</p>
+    </div>
+    <div class="buttons-container">
+        <button type="button" onclick="location.href='@Url.Action("CreateId", "ProfilCitoyen")'">Ajouter / modifier profil</button>
+    </div>
+    </div>
+</div>

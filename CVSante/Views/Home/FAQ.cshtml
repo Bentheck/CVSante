@@ -2,4 +2,71 @@
     ViewData["Title"] = "Home Page";
 }
 
+@{
+    ViewData["Title"] = "FAQ";
 
+    var faqList = new List<FaqItem>
+    {
+        new FaqItem { Question = "Qu'est-ce que le système de communication d'urgence pour les premiers répondants et les citoyens ?", Answer = "Il s'agit d'une plateforme centralisée permettant de transmettre rapidement et en toute sécurité des informations médicales et des urgences entre les citoyens et les premiers répondants." },
+        new FaqItem { Question = "Quelles informations dois-je fournir lors de la création de mon compte ?", Answer = "Vous devez fournir des informations de base comme votre nom, adresse, numéro de téléphone, ainsi que des informations médicales essentielles telles que les allergies et les traitements en cours." },
+        new FaqItem { Question = "Comment puis-je accéder aux informations d'urgence d'un citoyen ?", Answer = "Une fois que vous recevez une alerte d'urgence, vous pouvez accéder aux informations en vous identifiant sur l'application. En mode hors-ligne, vous pouvez scanner le code QR du citoyen pour obtenir les informations nécessaires." },
+        new FaqItem { Question = "Que faire si je rencontre un problème avec l'application ?", Answer = "Vous pouvez contacter notre support technique via le formulaire de contact disponible sur notre site web. Notre équipe est disponible 24/7 pour vous assister." },
+        new FaqItem { Question = "Où puis-je trouver des guides et des tutoriels pour utiliser l'application ?", Answer = "Des guides et des tutoriels détaillés sont disponibles dans la section 'Accueil' de l'application ainsi que sur notre site web." }
+    };
+}
+
+
+
+<header class="logo-container header-background-logo">
+    <div class="header-content">
+        <h1 class="project-title">Foire Aux Questions (FAQ)</h1>
+    </div>
+</header>
+
+<div class="faq-container">
+    <div class="contact-form">
+        <h2>Nous contacter</h2>
+        <form>
+            <div class="form-group">
+                <label for="prenom">Prénom</label>
+                <input type="text" id="prenom" name="prenom" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="nom">Nom</label>
+                <input type="text" id="nom" name="nom" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="ville">Ville</label>
+                <input type="text" id="ville" name="ville" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="courriel">Courriel</label>
+                <input type="email" id="courriel" name="courriel" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="question">Question</label>
+                <textarea id="question" name="question" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Soumettre</button>
+        </form>
+    </div>
+
+    <div class="faq">
+        <h2>Foire Aux Questions (FAQ)</h2>
+        @foreach (var faq in faqList)
+        {
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">@faq.Question</div>
+                <div class="answer" style="display: none;">@faq.Answer</div>
+            </div>
+        }
+    </div>
+</div>
+
+@functions {
+    public class FaqItem
+    {
+        public string Question { get; set; }
+        public string Answer { get; set; }
+    }
+}

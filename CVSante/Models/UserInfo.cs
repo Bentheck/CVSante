@@ -21,9 +21,11 @@ public partial class UserInfo
 
     public string Prenom { get; set; } = null!;
 
-    public string TelephoneCell { get; set; } = null!;
+    public string? TelephoneCell { get; set; }
 
     public string? Pronoms { get; set; }
+
+    public string? AutrePrecision { get; set; }
 
     public virtual UserCitoyen FkUser { get; set; } = null!;
 }

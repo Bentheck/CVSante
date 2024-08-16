@@ -5,6 +5,8 @@ namespace CVSante.Models;
 
 public partial class UserAdresse
 {
+    public int AdId { get; set; }
+
     public int FkUserId { get; set; }
 
     public string Ville { get; set; } = null!;
