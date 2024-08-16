@@ -5,10 +5,20 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fa; /* Couleur de fond douce */
+        color: #333; /* Couleur de texte standard */
+    }
+
     .container {
         max-width: 1200px;
         margin: 0 auto;
         padding: 20px;
+        margin-top: 40px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     h4 {
@@ -98,10 +108,21 @@
         align-items: center;
         margin-top: 30px;
     }
+
+        .button-group > div {
+            display: flex;
+            gap: 10px;
+        }
+
+    .icon {
+        font-size: 1.2rem;
+        margin-right: 5px;
+        color: #007bff;
+    }
 </style>
 
 <div class="container">
-    <h4>Manage Company: @Model.Company.CompName</h4>
+    <h4><i class="icon fas fa-building"></i> Gérer la Compagnie: @Model.Company.CompName</h4>
 
     <form asp-action="ManageCompany" method="post">
         <input type="hidden" asp-for="Company.IdComp" />
@@ -135,10 +156,10 @@
 
         <div class="button-group">
             <div>
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Sauvegarder</button>
+                <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-times"></i> Annuler</a>
             </div>
-            <a asp-action="ManageRoles" class="btn btn-secondary">Gestion des rôles</a>
+            <a asp-action="ManageRoles" class="btn btn-secondary"><i class="fas fa-user-cog"></i> Gestion des rôles</a>
         </div>
     </form>
 </div>
@@ -171,149 +192,5 @@
             });
         });
     </script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 }
-@* <style>
-    form {
-        margin-top: 20px;
-    }
-
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        display: block;
-    }
-
-    input.form-control {
-        width: 100%;
-        padding: 10px;
-        font-size: 1rem;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-        transition: border-color 0.3s ease;
-    }
-
-        input.form-control:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-
-    .text-danger {
-        color: #dc3545;
-        font-size: 0.875rem;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-        padding: 10px 20px;
-        font-size: 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-    /* Style pour le lien retour */
-    a {
-        margin-top: 20px;
-        display: inline-block;
-        color: #007bff;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-        a:hover {
-            text-decoration: underline;
-        }
-</style> *@
-@* <h4>Company</h4>
-
-<h4>@Model.Company.CompName</h4>
-
-<hr />
-<form asp-action="ManageCompany" method="post">
-    <input type="hidden" asp-for="Company.IdComp" />
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Employé</th>
-                <th>Matricule</th>
-                <th>Actif</th>
-                <th>Retirer de la compagnie</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (var i = 0; i < Model.Paramedics.Count; i++)
-            {
-                <tr>
-                    <td>@Model.Paramedics[i].Nom</td>
-                    <td>@Model.Paramedics[i].Matricule</td>
-                    <td>
-                        <input asp-for="Paramedics[i].ParamId" type="hidden" />
-                        <input asp-for="Paramedics[i].ParamIsActive" type="checkbox" />
-                    </td>
-                    <td>
-                        <button type="submit" name="removeParamedicId" value="@Model.Paramedics[i].ParamId" class="btn btn-link" onclick="return confirm('Voulez-vous vraiment retirer cet employé de la compagnie ?');">Retirer</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-@section Scripts {
-<script>
-    $(document).ready(function() {
-    $('form').on('submit', function(event) {
-    var isValid = true;
-
-    // Vérifier si tous les champs requis sont remplis
-    $('input.form-control').each(function() {
-    if ($(this).val().trim() === '') {
-    $(this).addClass('is-invalid');
-    isValid = false;
-    } else {
-    $(this).removeClass('is-invalid');
-    }
-    });
-
-    if (!isValid) {
-    event.preventDefault();
-    alert('Please fill in all required fields.');
-    }
-    });
-
-    // Supprimer l'état d'erreur lors de la saisie
-    $('input.form-control').on('input', function() {
-    if ($(this).val().trim() !== '') {
-    $(this).removeClass('is-invalid');
-    }
-    });
-    });
-</script>
-}
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Sauvegarder</button>
-        <a asp-action="Index" class="btn btn-secondary">Annuler</a>
-    </div>
-
-    <div class="form-group">
-        <a asp-action="ManageRoles" class="btn btn-secondary">Gestion des rôles</a>
-    </div>
-</form>
-
- *@

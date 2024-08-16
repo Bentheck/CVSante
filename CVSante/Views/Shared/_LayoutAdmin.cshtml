@@ -58,11 +58,13 @@
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AddRespondant">AddRespondant</a>
-                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EditRespondent">Edit Respondent</a>
-                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="History">History</a>
-                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ManageCompany">ManageCompany</a>
-                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ManageRoles">ManageRoles</a>
+                              
+                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="AddRespondant">Ajouter le 1er Répondant</a>
+                            
+                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="EditRespondent">Modifier le 1er Respondent</a>
+                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="History">Historique</a>
+                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="ManageCompany">Gérer la Compagnie</a>
+                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="ManageRoles">Gérer les Rôles</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -105,7 +107,7 @@
         <footer class="py-4 navbar-dark-blue mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-center small">
-                    <p class="text-center">&copy; 2024, cvsante.qc.ca</p>
+                    <p class="text-center text-white">&copy; 2024, cvsante.qc.ca</p>
                 </div>
             </div>
         </footer>
@@ -118,7 +120,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script> 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

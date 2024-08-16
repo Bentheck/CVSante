@@ -2,9 +2,87 @@
 
 @{
     ViewData["Title"] = "Index";
+
 }
+<style>
+    .container-fluid {
+        padding: 20px;
+       
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        text-align: center; /* Centrer le titre principal */
+    }
+
+    h2 {
+        color: #333;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        text-align: left; /* Garder le sous-titre à gauche */
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Couleur bleue */
+        border: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Couleur bleue plus foncée */
+            transform: translateY(-2px);
+        }
+
+    .row {
+        margin-bottom: 20px; /* Espacement entre les lignes */
+    }
+</style>
 
 <div class="container-fluid">
+    <h1 class="text-primary">Super Administrateur</h1>
+
+    <div class="row justify-content-center">
+        <!-- Centrer les éléments dans la ligne -->
+        <div class="col-auto">
+            <h2 class="mt-4">Administration des Paramédics</h2>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Centrer les boutons -->
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="CreateCompany" class="btn btn-primary">Créer une Compagnie</a>
+        </div>
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="CreateRole" class="btn btn-primary">Créer un Rôle</a>
+        </div>
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="CreateParamedic" class="btn btn-primary">Créer un Paramédic</a>
+        </div>
+    </div>
+
+    <div class="row mt-4 justify-content-center">
+        <!-- Centrer les éléments dans la ligne -->
+        <div class="col-auto">
+            <h2>Rôles ASP.NET</h2>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Centrer les boutons -->
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="ListRoles" class="btn btn-primary">Rôles d'Identité</a>
+        </div>
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="ASPUserRolesAndEdit" class="btn btn-primary">Modifier les Rôles d'Identité des Utilisateurs</a>
+        </div>
+    </div>
+</div>
+
+@* <div class="container-fluid">
     <h1>SuperAdmin</h1>
     <div class="row justify-content-start">
         <h2>Paramedic admin</h2>
@@ -28,3 +106,4 @@
         </div>
     </div>
 </div>
+ *@
