@@ -55,7 +55,7 @@
     </form>
 </div>
 
-<div class="result-container">
+
 @if (Model != null && Model.Any())
 {
     <h3>Historique des Actions:</h3>
@@ -148,125 +148,123 @@
             </tbody>
         </table>
     </div>
+        <div class="pagination-container mt-4">
+            <nav aria-label="Page navigation">
+                <div class="d-flex justify-content-between align-items-center">
+                    <ul class="pagination mb-0">
+                        @{
+                            // Number of pages to display between ellipses
+                            int pageRange = 5;
 
-    <div class="pagination-container mt-4">
-        <nav aria-label="Page navigation">
-            <div class="d-flex justify-content-between align-items-center">
-                <ul class="pagination mb-0">
-                    @{
-                        // Number of pages to display between ellipses
-                        int pageRange = 5;
+                            // Calculate the start and end pages for the range
+                            int startPage = Math.Max(1, Model.PageIndex - (pageRange / 2));
+                            int endPage = Math.Min(Model.TotalPages, startPage + pageRange - 1);
 
-                        // Calculate the start and end pages for the range
-                        int startPage = Math.Max(1, Model.PageIndex - (pageRange / 2));
-                        int endPage = Math.Min(Model.TotalPages, startPage + pageRange - 1);
-
-                        // Adjust startPage if endPage is near the end
-                        if (endPage - startPage + 1 < pageRange)
-                        {
-                            startPage = Math.Max(1, endPage - pageRange + 1);
+                            // Adjust startPage if endPage is near the end
+                            if (endPage - startPage + 1 < pageRange)
+                            {
+                                startPage = Math.Max(1, endPage - pageRange + 1);
+                            }
                         }
-                    }
 
-                    @* First page link *@
-                    <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
-                        <a class="page-link"
-                           asp-action="History"
-                           asp-route-pageNumber="1"
-                           asp-route-pageSize="@Model.PageSize"
-                           asp-route-sortOrder="@ViewData["CurrentSortOrder"]"
-                           asp-route-dateFrom="@ViewData["CurrentFilterDateFrom"]"
-                           asp-route-dateTo="@ViewData["CurrentFilterDateTo"]"
-                           asp-route-idParam="@ViewData["CurrentFilterIdParam"]"
-                           asp-route-nomParam="@ViewData["CurrentFilterNomParam"]"
-                           asp-route-actionType="@ViewData["CurrentFilterActionType"]"
-                           aria-label="First">
-                            &laquo;&laquo; Première
-                        </a>
-                    </li>
-
-                    @* Previous page link *@
-                    <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
-                        <a class="page-link"
-                           asp-action="History"
-                           asp-route-pageNumber="@(Model.PageIndex - 1)"
-                           asp-route-pageSize="@Model.PageSize"
-                           asp-route-sortOrder="@ViewData["CurrentSortOrder"]"
-                           asp-route-dateFrom="@ViewData["CurrentFilterDateFrom"]"
-                           asp-route-dateTo="@ViewData["CurrentFilterDateTo"]"
-                           asp-route-idParam="@ViewData["CurrentFilterIdParam"]"
-                           asp-route-nomParam="@ViewData["CurrentFilterNomParam"]"
-                           asp-route-actionType="@ViewData["CurrentFilterActionType"]"
-                           aria-label="Previous">
-                            &laquo; Précédente
-                        </a>
-                    </li>
-
-                    @* Page numbers links *@
-                    @for (int i = startPage; i <= endPage; i++)
-                    {
-                        <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                        @* First page link *@
+                        <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
                             <a class="page-link"
                                asp-action="History"
-                               asp-route-pageNumber="@i"
+                               asp-route-pageNumber="1"
                                asp-route-pageSize="@Model.PageSize"
                                asp-route-sortOrder="@ViewData["CurrentSortOrder"]"
                                asp-route-dateFrom="@ViewData["CurrentFilterDateFrom"]"
                                asp-route-dateTo="@ViewData["CurrentFilterDateTo"]"
                                asp-route-idParam="@ViewData["CurrentFilterIdParam"]"
                                asp-route-nomParam="@ViewData["CurrentFilterNomParam"]"
-                               asp-route-actionType="@ViewData["CurrentFilterActionType"]">
-                                @i
+                               asp-route-actionType="@ViewData["CurrentFilterActionType"]"
+                               aria-label="First">
+                                &laquo;&laquo; Première
                             </a>
                         </li>
-                    }
 
-                    @* Next page link *@
-                    <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
-                        <a class="page-link"
-                           asp-action="History"
-                           asp-route-pageNumber="@(Model.PageIndex + 1)"
-                           asp-route-pageSize="@Model.PageSize"
-                           asp-route-sortOrder="@ViewData["CurrentSortOrder"]"
-                           asp-route-dateFrom="@ViewData["CurrentFilterDateFrom"]"
-                           asp-route-dateTo="@ViewData["CurrentFilterDateTo"]"
-                           asp-route-idParam="@ViewData["CurrentFilterIdParam"]"
-                           asp-route-nomParam="@ViewData["CurrentFilterNomParam"]"
-                           asp-route-actionType="@ViewData["CurrentFilterActionType"]"
-                           aria-label="Next">
-                            Suivante &raquo;
-                        </a>
-                    </li>
+                        @* Previous page link *@
+                        <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
+                            <a class="page-link"
+                               asp-action="History"
+                               asp-route-pageNumber="@(Model.PageIndex - 1)"
+                               asp-route-pageSize="@Model.PageSize"
+                               asp-route-sortOrder="@ViewData["CurrentSortOrder"]"
+                               asp-route-dateFrom="@ViewData["CurrentFilterDateFrom"]"
+                               asp-route-dateTo="@ViewData["CurrentFilterDateTo"]"
+                               asp-route-idParam="@ViewData["CurrentFilterIdParam"]"
+                               asp-route-nomParam="@ViewData["CurrentFilterNomParam"]"
+                               asp-route-actionType="@ViewData["CurrentFilterActionType"]"
+                               aria-label="Previous">
+                                &laquo; Précédente
+                            </a>
+                        </li>
 
-                    @* Last page link *@
-                    <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
-                        <a class="page-link"
-                           asp-action="History"
-                           asp-route-pageNumber="@Model.TotalPages"
-                           asp-route-pageSize="@Model.PageSize"
-                           asp-route-sortOrder="@ViewData["CurrentSortOrder"]"
-                           asp-route-dateFrom="@ViewData["CurrentFilterDateFrom"]"
-                           asp-route-dateTo="@ViewData["CurrentFilterDateTo"]"
-                           asp-route-idParam="@ViewData["CurrentFilterIdParam"]"
-                           asp-route-nomParam="@ViewData["CurrentFilterNomParam"]"
-                           asp-route-actionType="@ViewData["CurrentFilterActionType"]"
-                           aria-label="Last">
-                            Dernière &raquo;&raquo;
-                        </a>
-                    </li>
-                </ul>
+                        @* Page numbers links *@
+                        @for (int i = startPage; i <= endPage; i++)
+                        {
+                            <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                                <a class="page-link"
+                                   asp-action="History"
+                                   asp-route-pageNumber="@i"
+                                   asp-route-pageSize="@Model.PageSize"
+                                   asp-route-sortOrder="@ViewData["CurrentSortOrder"]"
+                                   asp-route-dateFrom="@ViewData["CurrentFilterDateFrom"]"
+                                   asp-route-dateTo="@ViewData["CurrentFilterDateTo"]"
+                                   asp-route-idParam="@ViewData["CurrentFilterIdParam"]"
+                                   asp-route-nomParam="@ViewData["CurrentFilterNomParam"]"
+                                   asp-route-actionType="@ViewData["CurrentFilterActionType"]">
+                                    @i
+                                </a>
+                            </li>
+                        }
 
-                <div class="ml-4">
-                    <p>
-                        Page @(Model.PageIndex) sur @Model.TotalPages
-                    </p>
+                        @* Next page link *@
+                        <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link"
+                               asp-action="History"
+                               asp-route-pageNumber="@(Model.PageIndex + 1)"
+                               asp-route-pageSize="@Model.PageSize"
+                               asp-route-sortOrder="@ViewData["CurrentSortOrder"]"
+                               asp-route-dateFrom="@ViewData["CurrentFilterDateFrom"]"
+                               asp-route-dateTo="@ViewData["CurrentFilterDateTo"]"
+                               asp-route-idParam="@ViewData["CurrentFilterIdParam"]"
+                               asp-route-nomParam="@ViewData["CurrentFilterNomParam"]"
+                               asp-route-actionType="@ViewData["CurrentFilterActionType"]"
+                               aria-label="Next">
+                                Suivante &raquo;
+                            </a>
+                        </li>
+
+                        @* Last page link *@
+                        <li class="page-item @(Model.PageIndex == Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link"
+                               asp-action="History"
+                               asp-route-pageNumber="@Model.TotalPages"
+                               asp-route-pageSize="@Model.PageSize"
+                               asp-route-sortOrder="@ViewData["CurrentSortOrder"]"
+                               asp-route-dateFrom="@ViewData["CurrentFilterDateFrom"]"
+                               asp-route-dateTo="@ViewData["CurrentFilterDateTo"]"
+                               asp-route-idParam="@ViewData["CurrentFilterIdParam"]"
+                               asp-route-nomParam="@ViewData["CurrentFilterNomParam"]"
+                               asp-route-actionType="@ViewData["CurrentFilterActionType"]"
+                               aria-label="Last">
+                                Dernière &raquo;&raquo;
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="ml-4">
+                        <p>
+                            Page @(Model.PageIndex) sur @Model.TotalPages
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </div>
+            </nav>
+        </div>
 }
 else
 {
     <h4>Aucun enregistrement trouvé.</h4>
 }
-</div>
