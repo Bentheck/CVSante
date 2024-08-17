@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\mask.js" />
     <Content Remove="wwwroot\js\ProfilCitoyenCreate.js" />
     <Content Remove="wwwroot\themesAdmin\js\datatables-simple-demo.js" />
   </ItemGroup>
