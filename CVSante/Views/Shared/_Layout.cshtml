@@ -54,11 +54,11 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="FAQ">FAQ</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="ProfilCitoyen" asp-action="Bienvenue">Profil</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
                             if (User.IsInRole("Paramedic") || User.IsInRole("SuperAdmin"))
                             {
                                 <li class="nav-item">
