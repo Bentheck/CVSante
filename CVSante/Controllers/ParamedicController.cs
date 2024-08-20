@@ -14,6 +14,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using CVSante.Tools;
 using System.Globalization;
+using static Google.Cloud.RecaptchaEnterprise.V1.TransactionData.Types;
 
 namespace CVSante.Controllers
 {
@@ -74,6 +75,13 @@ namespace CVSante.Controllers
             GetCurrentUser();
             if (_currentUser == null)
             {
+                return NotFound();
+            }
+
+            var currentUser = _context.UserParamedics
+                    .FirstOrDefaultAsync(up => up.FkIdentityUser == _currentUser.ToString()).Result;
+            if (currentUser == null)
+                {
                 return NotFound();
             }
 
