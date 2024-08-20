@@ -350,5 +350,16 @@ namespace CVSante.Controllers
 
             return RedirectToAction(nameof(ASPUserRolesAndEdit)); // Redirect to refresh the view
         }
+
+
+        [Authorize(Roles = "SuperAdmin")]
+        // GET: SuperAdmin/FAQContact
+        public async Task<IActionResult> FAQContact()
+        {
+            var faqContact = await _context.FAQ.ToListAsync();
+            return View(faqContact);
+        }
+
+
     }
 }

@@ -25,7 +25,7 @@
 <body class="d-flex flex-column min-vh-100 sb-nav-fixed sb-sidenav-toggled">
     <nav class="sb-topnav navbar navbar-expand navbar-dark navbar-dark-blue">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" asp-area="" asp-controller="Home" asp-action="Index">AdminApplication</a>
+        <a class="navbar-brand ps-3" asp-area="" asp-controller="Paramedic" asp-action="Index">Application Paramédic</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
         <!-- Theme Toggle Button-->
@@ -50,48 +50,16 @@
                 <div class="sb-sidenav-menu" class="sb-sidenav-toggled">
                     <div class="nav">
 
-                        <div class="sb-sidenav-menu-heading">Interface</div>
-                        <a class="nav-link collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Layouts
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                              
-                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="AddRespondant">Ajouter le 1er Répondant</a>
-                            
-                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="EditRespondent">Modifier le 1er Respondent</a>
-                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="History">Historique</a>
-                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="ManageCompany">Gérer la Compagnie</a>
-                                <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="ManageRoles">Gérer les Rôles</a>
-                            </nav>
-                        </div>
-                        <a class="nav-link collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                            Pages
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                    Authentication
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <!-- Envelopper le partial avec un lien généré par Razor -->
-                                        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="text-white d-block">
-                                            Manage Account
-                                        </a>
-                                        <a asp-area="Identity" asp-page="/Account/Login" class="text-white d-block sidebar-partial">
-                                            <partial name="_LoginPartial" />
-                                        </a>
-                                
-                                    </nav>
-                                </div>
-                            </nav>
-                        </div>
+
+                        <nav class="sb-sidenav-menu-nested nav">
+
+                            <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="AddRespondent">Ajouter le 1er Répondant</a>
+
+                            <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="EditRespondent">Modifier le 1er Respondent</a>
+                            <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="History">Historique</a>
+                            <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="ManageCompany">Gérer la Compagnie</a>
+                            <a class="nav-link" asp-area="" asp-controller="Paramedic" asp-action="ManageRoles">Gérer les Rôles</a>
+                        </nav>
                     </div>
                 </div>
             </nav>
