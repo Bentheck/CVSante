@@ -515,6 +515,7 @@ public partial class CvsanteContext : DbContext
             entity.Property(e => e.ville).HasColumnName("ville").HasMaxLength(150);
             entity.Property(e => e.Courriel).HasColumnName("Courriel");
             entity.Property(e => e.Question).HasColumnName("Question");
+            entity.Property(e => e.IsNew).HasColumnName("Is_new");
         });
 
         OnModelCreatingPartial(modelBuilder);

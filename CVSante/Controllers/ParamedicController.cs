@@ -123,7 +123,7 @@ namespace CVSante.Controllers
 
             if (!userParam.FkRoleNavigation.GetHistorique)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Index", "Paramedic");
             }
 
             var historique = _context.HistoriqueParams
@@ -235,7 +235,7 @@ namespace CVSante.Controllers
             // Vérifier si l'utilisateur actuel a la permission EditRole
             if (!currentUser.FkRoleNavigation.EditRole)
             {
-                return RedirectToAction("ManageCompany", "Admin");
+                return RedirectToAction("ManageCompany", "Paramedic");
             }
 
             // Récupérer tous les paramédicaux associés à l'entreprise
@@ -360,7 +360,7 @@ namespace CVSante.Controllers
 
             if (!currentUser.FkRoleNavigation.EditCompany)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Index", "Paramedic");
             }
 
             var company = await _context.Companies
@@ -499,7 +499,7 @@ namespace CVSante.Controllers
 
             if (!currentUser.FkRoleNavigation.CreateParamedic)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Index", "Paramedic");
             }
 
             var company = await _context.Companies
@@ -690,7 +690,7 @@ namespace CVSante.Controllers
                 await _historyService.LogActionAsync(null, _currentUser,
                     $"L'utilisateur avec l'ID {currentUserId} a tenté d'accéder à EditRespondent sans les autorisations nécessaires.");
 
-                return RedirectToAction("ManageCompany", "Admin");
+                return RedirectToAction("ManageCompany", "Paramedic");
             }
 
             var currentCompanyId = currentUser.FkCompany;
@@ -831,7 +831,7 @@ namespace CVSante.Controllers
 
             if (!currentUser.FkRoleNavigation.GetCitoyen)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Index", "Paramedic");
             }
 
             IQueryable<UserInfo> citoyensQuery = _context.UserInfos;
@@ -907,7 +907,7 @@ namespace CVSante.Controllers
             {
                 // Enregistrer si l'utilisateur actuel n'a pas les autorisations suffisantes
                 await _historyService.LogActionAsync(id, _currentUser, "Tentative d'afficher les détails du citoyen sans les autorisations suffisantes.");
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Index", "Paramedic");
             }
 
             var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == id);

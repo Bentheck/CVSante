@@ -14,8 +14,9 @@
         document.getElementById('memberModal').style.display = 'flex';
     }
 
+
     function closeModal() {
-        document.getElementById('memberModal').style.display = 'none';
+        document.getElementById('memberModal').style.display = 'none'; 
     }
 
     document.querySelectorAll('.team-member').forEach(function (element) {

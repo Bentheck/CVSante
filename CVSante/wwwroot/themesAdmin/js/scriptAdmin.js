@@ -17,16 +17,19 @@ document.getElementById('sidebarToggle').addEventListener('click', function (eve
 
 window.addEventListener('DOMContentLoaded', event => {
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
-
-    if (sidebarToggle) {
-        if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-            document.body.classList.add('sb-sidenav-toggled');
+        if (sidebarToggle) {
+            if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+                document.body.classList.add('sb-sidenav-toggled');
+            }
+            sidebarToggle.addEventListener('click', event => {
+                event.preventDefault();
+                toggleSidebar();
+            });
+            }
+        if (window.innerWidth < 992) {
+            document.body.classList.remove('sb-sidenav-toggled');
+            localStorage.setItem('sb|sidebar-toggle', 'false');
         }
-        sidebarToggle.addEventListener('click', event => {
-            event.preventDefault();
-            toggleSidebar();
-        });
-    }
 
     // Ensure the sidebar is closed on resize
     window.addEventListener('resize', () => {
