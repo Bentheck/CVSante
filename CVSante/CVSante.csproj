@@ -8,8 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\mask.js" />
+    <Compile Remove="wwwroot\themesAdmin\demo\**" />
+    <Content Remove="wwwroot\themesAdmin\demo\**" />
+    <EmbeddedResource Remove="wwwroot\themesAdmin\demo\**" />
+    <None Remove="wwwroot\themesAdmin\demo\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\js\ProfilCitoyenCreate.js" />
+    <Content Remove="wwwroot\themesAdmin\js\datatables-simple-demo.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,10 +25,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\js\mask.js" />
-    <None Include="wwwroot\themesAdmin\demo\chart-area-demo.js" />
-    <None Include="wwwroot\themesAdmin\demo\chart-bar-demo.js" />
-    <None Include="wwwroot\themesAdmin\demo\chart-pie-demo.js" />
-    <None Include="wwwroot\themesAdmin\demo\datatables-demo.js" />
     <None Include="wwwroot\js\ProfilCitoyenCreate.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />

@@ -5,9 +5,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="~/js/ProfilCitoyenEdit.js" asp-append-version="true" defer></script>
+<style>
+    .form-check-label {
+        display: inline-block;
+        min-width: 70px; /* Ajustez selon vos besoins */
+        white-space: nowrap;
+        text-align: left;
+    }
+</style>
 
-
-<h2 class ="text-center">Edit</h2>
+<h2 class="text-center" style="margin-top: 55px;">Edit</h2>
 
 <form asp-action="Edit" asp-controller="ProfilCitoyen" method="post" class="form-horizontal">
     <div class="container">

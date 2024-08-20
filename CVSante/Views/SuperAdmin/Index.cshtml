@@ -2,29 +2,53 @@
 
 @{
     ViewData["Title"] = "Index";
+
 }
 
-<div class="container-fluid">
-    <h1>SuperAdmin</h1>
-    <div class="row justify-content-start">
-        <h2>Paramedic admin</h2>
+
+
+<div class ="container-fluid">
+    <div class="card shadow-sm rounded my-5">
+        <div class="card-body">
+
+    <h1 class="text-primary text-center">Super Administrateur</h1>
+
+    <div class="row justify-content-center">
+        <!-- Centrer les éléments dans la ligne -->
         <div class="col-auto">
-            <a asp-controller="SuperAdmin" asp-action="CreateCompany" class="btn btn-primary">Create Company</a>
-        </div>
-        <div class="col-auto">
-            <a asp-controller="SuperAdmin" asp-action="CreateRole" class="btn btn-primary">Create Role</a>
-        </div>
-        <div class="col-auto">
-            <a asp-controller="SuperAdmin" asp-action="CreateParamedic" class="btn btn-primary">Create Paramedic</a>
-        </div>
-    </div>
-    <div class="row mt-4 justify-content-start">
-        <h2>ASP.NET Roles</h2>
-        <div class="col-auto">
-            <a asp-controller="SuperAdmin" asp-action="ListRoles" class="btn btn-primary">Identity Roles</a>
-        </div>
-        <div class="col-auto">
-            <a asp-controller="SuperAdmin" asp-action="ASPUserRolesAndEdit" class="btn btn-primary">Edit Users Identity Roles</a>
+            <h2 class="mt-4">Administration des Paramédics</h2>
         </div>
     </div>
+
+    <div class="row justify-content-center">
+        <!-- Centrer les boutons -->
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="CreateCompany" class="btn btn-primary">Créer une Compagnie</a>
+        </div>
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="CreateRole" class="btn btn-primary">Créer un Rôle</a>
+        </div>
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="CreateParamedic" class="btn btn-primary">Créer un Paramédic</a>
+        </div>
+    </div>
+
+    <div class="row mt-4 justify-content-center">
+        <!-- Centrer les éléments dans la ligne -->
+        <div class="col-auto">
+            <h2>Rôles ASP.NET</h2>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Centrer les boutons -->
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="ListRoles" class="btn btn-primary">Rôles d'Identité</a>
+        </div>
+        <div class="col-auto">
+            <a asp-controller="SuperAdmin" asp-action="ASPUserRolesAndEdit" class="btn btn-primary">Modifier les Rôles d'Identité des Utilisateurs</a>
+        </div>
+    </div>
+</div>
+</div>
 </div>
