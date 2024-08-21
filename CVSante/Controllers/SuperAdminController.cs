@@ -8,16 +8,19 @@ using CVSante.Models;
 using Microsoft.AspNetCore.Identity;
 using CVSante.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using CVSante.Data;
 
 namespace CVSante.Controllers
 {
     public class SuperAdminController : Controller
     {
         private readonly CvsanteContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public SuperAdminController(CvsanteContext context)
+        public SuperAdminController(CvsanteContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
 
@@ -29,6 +32,12 @@ namespace CVSante.Controllers
                 .Include(u => u.FkCompanyNavigation)
                 .Include(u => u.FkIdentityUserNavigation)
                 .Include(u => u.FkRoleNavigation);
+
+            var newFAQCount = await _context.FAQ.CountAsync(f => f.IsNew);
+
+            // Pass the new FAQ count to the view
+            ViewBag.NewFAQCount = newFAQCount;
+
             return View(await cvsanteContext.ToListAsync());
         }
 
@@ -352,14 +361,112 @@ namespace CVSante.Controllers
         }
 
 
-        [Authorize(Roles = "SuperAdmin")]
         // GET: SuperAdmin/FAQContact
         public async Task<IActionResult> FAQContact()
         {
-            var faqContact = await _context.FAQ.ToListAsync();
-            return View(faqContact);
+            // Fetch all tickets with their associated comments
+            var allTickets = await _context.FAQ
+                .Include(f => f.FaqCommentaires)
+                .OrderByDescending(f => f.IsNew) // New tickets first
+                .ThenBy(f => f.Id) // Then by Id
+                .ToListAsync();
+
+            return View(allTickets);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetDetails(int id)
+        {
+            var faq = await _context.FAQ
+                .Include(f => f.FaqCommentaires)
+                .FirstOrDefaultAsync(f => f.Id == id);
 
+            if (faq == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new EmailGroup
+            {
+                Email = faq.Courriel, // Assuming you want to keep the email in the view model
+                Tickets = new List<FAQ> { faq },
+                Comments = faq.FaqCommentaires.ToList()
+            };
+
+            return PartialView("_FAQDetails", viewModel);
+        }
+
+        // POST: SuperAdmin/MarkAsRead/5
+        [HttpPost]
+        public async Task<IActionResult> MarkAsRead(int id)
+        {
+            var faq = await _context.FAQ.FindAsync(id);
+
+            if (faq == null)
+            {
+                return NotFound();
+            }
+
+            faq.IsNew = false;
+            _context.Update(faq);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        // POST: SuperAdmin/AddComment
+        [HttpPost]
+        public async Task<IActionResult> AddComment(FaqCommentaires comment)
+        {
+
+            comment.FK_ASP_ID = _userManager.GetUserAsync(User).Result.Id;
+            ModelState.Remove("FK_ASP_ID");
+
+            if (ModelState.IsValid)
+            {
+                _context.FaqCommentaires.Add(comment);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        // POST: SuperAdmin/EditComment
+        [HttpPost]
+        public async Task<IActionResult> EditComment(FaqCommentaires comment)
+        {
+            var existingComment = await _context.FaqCommentaires.FindAsync(comment.Id);
+
+            ModelState.Remove("FK_ASP_ID");
+
+            if (ModelState.IsValid)
+            {
+
+                if (existingComment != null)
+                {
+                    existingComment.Comentaire = comment.Comentaire;
+                    _context.Update(existingComment);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+            }
+            return BadRequest();
+        }
+
+        // POST: SuperAdmin/DeleteComment
+        [HttpPost]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var comment = await _context.FaqCommentaires.FindAsync(id);
+
+            if (comment != null)
+            {
+                _context.FaqCommentaires.Remove(comment);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return NotFound();
+        }
     }
 }

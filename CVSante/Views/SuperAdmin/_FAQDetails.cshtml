@@ -1,0 +1,90 @@
+﻿@model CVSante.ViewModels.EmailGroup
+
+<div class="container mt-4">
+    @if (Model.Tickets.Any())
+    {
+        var ticket = Model.Tickets.First(); // Supposant qu'un seul ticket est affiché dans les détails
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">@ticket.Sujet</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Question :</dt>
+                    <dd class="col-sm-9">@ticket.Question</dd>
+
+                    <dt class="col-sm-3">Prénom :</dt>
+                    <dd class="col-sm-9">@ticket.Prenom</dd>
+
+                    <dt class="col-sm-3">Nom :</dt>
+                    <dd class="col-sm-9">@ticket.Nom</dd>
+
+                    <dt class="col-sm-3">Ville :</dt>
+                    <dd class="col-sm-9">@ticket.ville</dd>
+
+                    <dt class="col-sm-3">Email :</dt>
+                    <dd class="col-sm-9">@ticket.Courriel</dd>
+                </dl>
+
+                @if (ticket.IsNew)
+                {
+                    <button id="markAsRead" data-id="@ticket.Id" class="btn btn-success">Marquer comme lu</button>
+                }
+            </div>
+        </div>
+
+        <!-- Section des commentaires -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Commentaires :</h4>
+            </div>
+            <div class="card-body">
+                @foreach (var comment in ticket.FaqCommentaires)
+                {
+                    <div class="comment mb-3 p-3 border rounded">
+                        <p>@comment.Comentaire</p>
+
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <div class="d-flex">
+                                <form class="editCommentForm me-2" action="@Url.Action("EditComment", "SuperAdmin")" method="post">
+                                    <input type="hidden" name="Id" value="@comment.Id" />
+                                    <input type="hidden" name="FK_FAQ_ID" value="@ticket.Id" />
+                                    <input type="text" name="Comentaire" value="@comment.Comentaire" class="form-control form-control-sm" />
+                                    <button type="submit" class="btn btn-warning btn-sm mt-2">Modifier</button>
+                                </form>
+
+                                <form class="deleteCommentForm" action="@Url.Action("DeleteComment", "SuperAdmin")" method="post">
+                                    <input type="hidden" name="Id" value="@comment.Id" />
+                                    <input type="hidden" name="FK_FAQ_ID" value="@ticket.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm mt-2">Supprimer</button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    <div class="mt-4">
+                        <form id="addCommentForm" action="@Url.Action("AddComment", "SuperAdmin")" method="post">
+                            <input type="hidden" name="FK_FAQ_ID" value="@ticket.Id" />
+                            <div class="form-group">
+                                <label for="commentText">Nouveau Commentaire :</label>
+                                <textarea id="commentText" name="Comentaire" class="form-control" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">Ajouter Commentaire</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mt-4" role="alert">
+            Aucun détail de ticket disponible.
+        </div>
+    }
+</div>

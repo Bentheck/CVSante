@@ -43,6 +43,8 @@ public partial class CvsanteContext : DbContext
 
     public virtual DbSet<FAQ> FAQ { get; set; }
 
+    public virtual DbSet<FaqCommentaires> FaqCommentaires { get; set; }
+
     public virtual DbSet<HistoriqueParam> HistoriqueParams { get; set; }
 
     public virtual DbSet<HostedAccount> HostedAccounts { get; set; }
@@ -508,14 +510,63 @@ public partial class CvsanteContext : DbContext
                 .HasConstraintName("FK_UserParamedic_Company_Roles");
         });
 
-        modelBuilder.Entity<FAQ>(entity => { 
-            entity.HasKey(e => new { e.Id });
-            entity.Property(e => e.Prenom).HasColumnName("Prenom").HasMaxLength(50);
-            entity.Property(e => e.Nom).HasColumnName("Nom").HasMaxLength(50);
-            entity.Property(e => e.ville).HasColumnName("ville").HasMaxLength(150);
-            entity.Property(e => e.Courriel).HasColumnName("Courriel");
-            entity.Property(e => e.Question).HasColumnName("Question");
-            entity.Property(e => e.IsNew).HasColumnName("Is_new");
+        modelBuilder.Entity<FAQ>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Prenom)
+                .HasColumnName("Prenom")
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Nom)
+                .HasColumnName("Nom")
+                .HasMaxLength(50);
+
+            entity.Property(e => e.ville)
+                .HasColumnName("ville")
+                .HasMaxLength(150);
+
+            entity.Property(e => e.Courriel)
+                .HasColumnName("Courriel");
+
+            entity.Property(e => e.Question)
+                .HasColumnName("Question");
+
+            entity.Property(e => e.IsNew)
+                .HasColumnName("Is_new");
+
+            entity.Property(e => e.Sujet)
+                .HasColumnName("Sujet")
+                .HasMaxLength(150);
+
+            entity.HasMany(e => e.FaqCommentaires)
+                .WithOne(fc => fc.FAQNavigation)
+                .HasForeignKey(fc => fc.FK_FAQ_ID)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<FaqCommentaires>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.FK_FAQ_ID)
+                .HasColumnName("FK_FAQ_ID");
+
+            entity.Property(e => e.FK_ASP_ID)
+                .HasColumnName("FK_ASP_ID");
+
+            entity.Property(e => e.Comentaire)
+                .HasColumnName("Comentaire");
+
+            entity.HasOne(fc => fc.FAQNavigation)
+                .WithMany(f => f.FaqCommentaires)
+                .HasForeignKey(fc => fc.FK_FAQ_ID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(fc => fc.FkIdentityUserNavigation)
+                .WithMany() // Assuming no direct collection in IdentityUser
+                .HasForeignKey(fc => fc.FK_ASP_ID)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         OnModelCreatingPartial(modelBuilder);
