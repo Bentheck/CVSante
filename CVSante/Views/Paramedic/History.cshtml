@@ -8,6 +8,7 @@
 
 
 <style>
+   
     body {
         font-family: 'Arial', sans-serif;
         background-color: #f4f7fa; /* Couleur de fond douce */
@@ -16,8 +17,8 @@
 
     .container {
         margin-top: 40px;
+        min-height: calc(100vh - 150px); 
     }
-
     .search-container {
         background-color: #ffffff;
         border-radius: 10px;
@@ -371,4 +372,8 @@
             alert("Veuillez entrer un numéro de page valide.");
         }
     }
+    window.addEventListener('load', function () {
+        const container = document.querySelector('.container');
+        container.style.minHeight = window.innerHeight - 200 + 'px'; // Ajustez en fonction de votre design
+    });
 </script>
