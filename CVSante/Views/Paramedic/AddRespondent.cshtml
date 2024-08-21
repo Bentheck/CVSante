@@ -3,27 +3,62 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-
 <style>
+    .container {
+        margin-top: 30px;
+        max-width: 1200px;
+    }
+
+    h2 {
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
     .card {
-        border-radius: 10px;
-        transition: transform 0.2s;
+        border-radius: 15px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        background-color: #ffffff;
     }
 
         .card:hover {
-            transform: scale(1.02);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         }
 
     .card-header {
-        font-weight: bold;
+        background-color: #007bff; /* Couleur primaire */
+        color: #ffffff;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
     }
 
     .form-group label {
         font-weight: bold;
+        margin-top: 10px;
     }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
 
     .btn-link {
         color: #007bff; /* Light blue link color */
+        text-decoration: none;
+        transition: color 0.3s;
     }
 
         .btn-link:hover {
@@ -33,24 +68,56 @@
 
     .btn-light {
         background-color: #e7f3ff; /* Light blue background for buttons */
-        border: 1px solid #007bff; /* Border color */
+        border: 1px solid #007bff;
     }
 
         .btn-light:hover {
             background-color: #d0e7ff;
         }
+
+    .form-check-label {
+        font-weight: bold;
+    }
+
+    .form-check-input {
+        margin-right: 10px;
+    }
+
+    .list-group-item {
+        transition: background-color 0.3s;
+    }
+
+        .list-group-item:hover {
+            background-color: #f0f8ff; /* Couleur de survol douce */
+        }
+
+    .alert-info {
+        background-color: #e9f5ff;
+        color: #31708f;
+        border: 1px solid #bce8f1;
+    }
+
+    /* Styles supplémentaires pour les icônes */
+    .icon {
+        font-size: 1.5rem;
+        margin-right: 8px;
+        color: #ffffff;
+    }
 </style>
 
 <div class="container mt-5">
     <div class="text-center mb-4">
-        <h2 class="text-primary">User Paramedic Details</h2>
+        <h2 class="text-primary">
+            <i class="icon fas fa-user-plus"></i> Ajouter un utilisateur paramédical
+        </h2>
     </div>
 
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm">
-                <div class="card-header bg-light text-primary">
-                    <h5 class="mb-0">Paramedic Information</h5>
+                <div class="card-header">
+                    <i class="icon fas fa-info-circle"></i>
+                    <span>Informations paramédicales</span>
                 </div>
                 <div class="card-body">
                     <form asp-action="AddRespondent" method="post">
@@ -91,54 +158,53 @@
                             <input asp-for="UserParamedic.Matricule" class="form-control" />
                             <span asp-validation-for="UserParamedic.Matricule" class="text-danger"></span>
                         </div>
-                        <div class="form-group mb-3">
 
+                        <div class="form-group mb-3">
                             <label asp-for="UserParamedic.ParamIsActive">Employé Actif</label>
                             <input asp-for="UserParamedic.ParamIsActive" type="checkbox" />
                             <span asp-validation-for="UserParamedic.ParamIsActive" class="text-danger"></span>
                         </div>
                         <input type="hidden" asp-for="CompanyId" />
 
-                        <button type="submit" class="btn btn-primary">Add New Paramedic</button>
-
+                        <button type="submit" class="btn btn-primary">Ajouter un nouveau 1er répondant</button>
                     </form>
+                </div>
+                <div class="card-footer text-left">
+                    <a asp-action="Index" class="btn btn-link">Retour à l'accueil</a>
                 </div>
             </div>
         </div>
         <!-- Add Existing Paramedic by Matricule Card -->
         <div class="col-md-6">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-header">
-                    <h3>Ajouté employé existant</h3>
+                    <i class="icon fas fa-user-check"></i>
+                    <span>Ajouté employé existant</span>
                 </div>
                 <div class="card-body">
                     <form asp-action="AddByMatricule" method="post">
                         @Html.AntiForgeryToken()
 
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label asp-for="UserParamedic.Matricule">Numéro de matricule</label>
                             <input asp-for="UserParamedic.Matricule" class="form-control" />
                             <span asp-validation-for="UserParamedic.Matricule" class="text-danger"></span>
                         </div>
                         <input type="hidden" asp-for="CompanyId" />
 
-                        <button type="submit" asp-route="AddByMatricule" class="btn btn-primary">Add by Matricule</button>
+                        <button type="submit" asp-route="AddByMatricule" class="btn btn-primary">Ajouter par Matricule</button>
                     </form>
                 </div>
             </div>
         </div>
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
     </div>
 </div>
 
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 <script src="~/js/mask.js" asp-append-version="true"></script>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-
     }
 }
-

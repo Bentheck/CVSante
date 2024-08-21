@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using static Grpc.Core.Metadata;
 
 namespace CVSante.Models;
 
@@ -39,6 +40,8 @@ public partial class CvsanteContext : DbContext
     public virtual DbSet<CompanyRole> CompanyRoles { get; set; }
 
     public virtual DbSet<FamilyList> FamilyLists { get; set; }
+
+    public virtual DbSet<FAQ> FAQ { get; set; }
 
     public virtual DbSet<HistoriqueParam> HistoriqueParams { get; set; }
 
@@ -505,8 +508,19 @@ public partial class CvsanteContext : DbContext
                 .HasConstraintName("FK_UserParamedic_Company_Roles");
         });
 
+        modelBuilder.Entity<FAQ>(entity => { 
+            entity.HasKey(e => new { e.Id });
+            entity.Property(e => e.Prenom).HasColumnName("Prenom").HasMaxLength(50);
+            entity.Property(e => e.Nom).HasColumnName("Nom").HasMaxLength(50);
+            entity.Property(e => e.ville).HasColumnName("ville").HasMaxLength(150);
+            entity.Property(e => e.Courriel).HasColumnName("Courriel");
+            entity.Property(e => e.Question).HasColumnName("Question");
+            entity.Property(e => e.IsNew).HasColumnName("Is_new");
+        });
+
         OnModelCreatingPartial(modelBuilder);
-    }
+    
+}
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

@@ -1,0 +1,201 @@
+﻿@model CVSante.Models.UserParamedic
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+ 
+
+    .container {
+        margin-top: 30px;
+        max-width: 1200px;
+    }
+
+    .card {
+        border-radius: 15px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        background-color: #ffffff;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-header {
+        background-color: #007bff; /* Couleur primaire */
+        color: #ffffff;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        font-size: 1.25rem;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+    .btn-link {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .btn-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+    .form-check-label {
+        font-weight: bold;
+    }
+
+    .form-check-input {
+        margin-right: 10px;
+    }
+
+    .list-group-item {
+        transition: background-color 0.3s;
+    }
+
+        .list-group-item:hover {
+            background-color: #f0f8ff; /* Couleur de survol douce */
+        }
+
+    .alert-info {
+        background-color: #e9f5ff;
+        color: #31708f;
+        border: 1px solid #bce8f1;
+    }
+
+    /* Styles supplémentaires pour les icônes */
+    .icon {
+        font-size: 1.5rem;
+        margin-right: 8px;
+        color: #007bff;
+    }
+
+    .header-icon {
+        font-size: 2rem;
+    }
+</style>
+
+<div class="container">
+    <div class="text-center mb-4">
+        <h2 class="text-primary">Modifier l'utilisateur paramédical</h2>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="row">
+                <!-- Left side: List of Paramedics -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="icon fas fa-user-md header-icon"></i>
+                            <span>Paramédics</span>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            @if (ViewBag.Paramedics != null && ViewBag.Paramedics.Count > 0)
+                            {
+                                @foreach (var paramedic in ViewBag.Paramedics as List<CVSante.Models.UserParamedic>)
+                                {
+                                    <li class="list-group-item">
+                                        <a asp-action="EditRespondent" asp-route-paramedicId="@paramedic.ParamId" class="text-decoration-none">
+                                            @paramedic.Nom @paramedic.Prenom
+                                        </a>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="list-group-item">Aucun paramédic n'a été trouvé.</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right side: Edit Form -->
+                <div class="col-md-8">
+                    @if (Model != null)
+                    {
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="icon fas fa-edit header-icon"></i>
+                                <span>Modifier un Paramédic</span>
+                            </div>
+                            <div class="card-body">
+                                <form asp-action="EditRespondent">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label asp-for="Nom" class="control-label"></label>
+                                        <input asp-for="Nom" class="form-control" />
+                                        <span asp-validation-for="Nom" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Prenom" class="control-label"></label>
+                                        <input asp-for="Prenom" class="form-control" />
+                                        <span asp-validation-for="Prenom" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Ville" class="control-label"></label>
+                                        <input asp-for="Ville" class="form-control" />
+                                        <span asp-validation-for="Ville" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Telephone" class="control-label"></label>
+                                        <input asp-for="Telephone" class="form-control phone-mask" />
+                                        <span asp-validation-for="Telephone" class="text-danger"></span>
+                                    </div>
+                                    <input type="hidden" asp-for="ParamId" />
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="ParamIsActive" /> @Html.DisplayNameFor(model => model.ParamIsActive)
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Matricule" class="control-label"></label>
+                                        <input asp-for="Matricule" class="form-control" />
+                                        <span asp-validation-for="Matricule" class="text-danger"></span>
+                                    </div>
+                                    <!-- Hidden field for FkCompany, since it should not change -->
+                                    <input type="hidden" asp-for="FkCompany" />
+                                    <!-- Hidden field for FkIdentityUser, since it should not change -->
+                                    <input type="hidden" asp-for="FkIdentityUser" />
+                                    <div class="form-group">
+                                        <input type="submit" value="Enregistrer" class="btn btn-primary" style="margin-top:25px" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">Veuillez sélectionner un paramédic à modifier</div>
+                    }
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a asp-action="Index" class="btn btn-link">Retour à l'accueil</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src="~/js/mask.js" asp-append-version="true"></script>
