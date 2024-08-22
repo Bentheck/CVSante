@@ -4,6 +4,7 @@ using Google.Api;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace CVSante.Controllers
@@ -23,27 +24,31 @@ namespace CVSante.Controllers
             _hubContext = hubContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var newFAQCount = await _context.FAQ.CountAsync(f => f.IsNew);
+            ViewBag.NewFAQCount = newFAQCount;
             return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Presentation()
         {
+            var newFAQCount = await _context.FAQ.CountAsync(f => f.IsNew);
+            ViewBag.NewFAQCount = newFAQCount;
             return View();
         }
-        public IActionResult Presentation()
+        public async Task<IActionResult> MembreEquipe()
         {
-            return View();
-        }
-        public IActionResult MembreEquipe()
-        {
+            var newFAQCount = await _context.FAQ.CountAsync(f => f.IsNew);
+            ViewBag.NewFAQCount = newFAQCount;
             return View();
         }
 
         // GET Home/FAQ
         public async Task<IActionResult> FAQ()
         {
+            var newFAQCount = await _context.FAQ.CountAsync(f => f.IsNew);
+            ViewBag.NewFAQCount = newFAQCount;
             return View();
         }
 

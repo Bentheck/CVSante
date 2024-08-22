@@ -77,6 +77,21 @@
                             }
                         }
                     </ul>
+                    @{
+                        var newFAQCount = ViewBag.NewFAQCount;
+                     }
+                     <div>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("SuperAdmin") && ViewBag.NewFAQCount > 0) {          
+                        <a asp-controller="SuperAdmin" asp-action="FAQContact" class="btn btn-primary">
+                            Question utilisateurs
+                            @if (newFAQCount > 0)
+                            {
+                                <span class="badge bg-danger">@newFAQCount</span>
+                            }
+                        </a>
+                        }
+                     </div>
+                    
                     <partial name="_LoginPartial" />
                 </div>
             </div>
