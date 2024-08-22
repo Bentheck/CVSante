@@ -9,6 +9,7 @@ using CVSante.Services;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.AspNet.SignalR;
 
 namespace CVSante.Controllers
 {
@@ -462,5 +463,30 @@ namespace CVSante.Controllers
 
             return RedirectToAction(nameof(Bienvenue));
         }
+
+
+
+
+        // GET: Pictures/UploadImage
+        [Authorize]
+        public IActionResult Image(int? id)
+        {
+            return View();
+        }
+
+
+        //POST: Pictures/UploadImage
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadImage(int? id)
+        {
+            return View();
+        }
+
+
+
+
+
     }
 }

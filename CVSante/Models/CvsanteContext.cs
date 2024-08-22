@@ -434,6 +434,7 @@ public partial class CvsanteContext : DbContext
             entity.Property(e => e.Pronoms).HasMaxLength(450);
             entity.Property(e => e.Sexe).HasMaxLength(450);
             entity.Property(e => e.Taille).HasMaxLength(450);
+            entity.Property(e => e.ImageProfil);
             entity.Property(e => e.TelephoneCell)
                 .HasMaxLength(450)
                 .HasColumnName("Telephone_Cell");
