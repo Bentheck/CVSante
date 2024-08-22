@@ -3,6 +3,7 @@ using CVSante.Services;
 using Google.Api;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics;
 
 namespace CVSante.Controllers
@@ -12,12 +13,14 @@ namespace CVSante.Controllers
         private readonly CvsanteContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<HomeController> _logger;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public HomeController(ILogger<HomeController> logger, CvsanteContext context, UserManager<IdentityUser> userManager)
+        public HomeController(ILogger<HomeController> logger, CvsanteContext context, UserManager<IdentityUser> userManager, IHubContext<NotificationHub> hubContext)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
+            _hubContext = hubContext;
         }
 
         public IActionResult Index()
@@ -49,6 +52,8 @@ namespace CVSante.Controllers
         [HttpPost]
         public async Task<IActionResult> FAQ(FAQ faq)
         {
+
+            faq.IsNew = true;
            
            if (ModelState.IsValid)
             {

@@ -14,7 +14,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using CVSante.Tools;
 using System.Globalization;
-using static Google.Cloud.RecaptchaEnterprise.V1.TransactionData.Types;
 
 namespace CVSante.Controllers
 {
@@ -86,6 +85,7 @@ namespace CVSante.Controllers
             }
 
             _historyService.LogActionAsync(null, _currentUser, "Accès à la page d'index de l'administrateur");
+
             return View();
         }
 
