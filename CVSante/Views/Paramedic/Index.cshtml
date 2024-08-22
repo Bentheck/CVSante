@@ -6,13 +6,7 @@
 <style>
     .card {
         border-radius: 15px;
-        transition: transform 0.3s, box-shadow 0.3s;
     }
-
-        .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
 
     .card-header {
         font-weight: bold;
@@ -54,7 +48,7 @@
         }
 </style>
 <div class="container mt-5">
-    <div class="card shadow-sm">
+    <div class="card ">
         <div class="card-header">
 
             <h1 class="dashboard-title text-center">Tableau de bord d'administration</h1>
@@ -95,113 +89,3 @@
         </div>
     </div>
 </div>
-
-@* <div class="container mt-5">
-    <div class="text-center mb-4">
-        <h2 class="text-primary">User Paramedic Details</h2>
-    </div>
-
-    <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Paramedic Information</h5>
-        </div>
-        <div class="card-body">
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert alert-danger">
-                    @TempData["ErrorMessage"]
-                </div>
-            }
-
-            <dl class="row">
-                <dt class="col-sm-3 font-weight-bold">
-                    @Html.DisplayNameFor(model => model.paramInfo.Nom)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.paramInfo.Nom)
-                </dd>
-                <dt class="col-sm-3 font-weight-bold">
-                    @Html.DisplayNameFor(model => model.paramInfo.Prenom)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.paramInfo.Prenom)
-                </dd>
-                <dt class="col-sm-3 font-weight-bold">
-                    @Html.DisplayNameFor(model => model.paramInfo.Ville)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.paramInfo.Ville)
-                </dd>
-                <dt class="col-sm-3 font-weight-bold">
-                    @Html.DisplayNameFor(model => model.paramInfo.Telephone)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.paramInfo.Telephone)
-                </dd>
-                <dt class="col-sm-3 font-weight-bold">
-                    @Html.DisplayNameFor(model => model.paramInfo.ParamIsActive)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.paramInfo.ParamIsActive)
-                </dd>
-                <dt class="col-sm-3 font-weight-bold">
-                    @Html.DisplayNameFor(model => model.paramInfo.Matricule)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.paramInfo.Matricule)
-                </dd>
-                <dt class="col-sm-3 font-weight-bold">
-                    @Html.DisplayNameFor(model => model.paramInfo.FkCompanyNavigation)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.paramInfo.FkCompany)
-                </dd>
-                <dt class="col-sm-3 font-weight-bold">
-                    @Html.DisplayNameFor(model => model.paramInfo.FkIdentityUserNavigation)
-                </dt>
-                <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.paramInfo.FkIdentityUserNavigation.Id)
-                </dd>
-            </dl>
-        </div>
-    </div>
-
-    <div class="mt-4 text-center">
-        <a asp-action="SearchCitoyen" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-primary mx-1">Voir profil citoyen</a>
-        <a asp-action="AddRespondent" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">Add Respondent</a>
-        <a asp-action="EditRespondent" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">Edit Respondent</a>
-        <a asp-action="RedirectToHistory" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">History</a>
-        <a asp-action="ManageCompany" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">Manage Company</a>
-        <a asp-action="ManageRoles" asp-route-id="@Model?.paramInfo.ParamId" class="btn btn-secondary mx-1">Manage Roles</a>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-light mx-1">Back to List</a>
-    </div>
-</div> *@
-
-@* <div>
-    <h4>UserParamedic</h4>
-<div>
-    <form asp-action="AddRespondent" method="get" style="display:inline;">
-        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
-        <button type="submit" class="btn btn-success">Add Respondent</button>
-    </form>
-    <form asp-action="EditRespondent" method="get" style="display:inline;">
-        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
-        <button type="submit" class="btn btn-warning">Edit Respondent</button>
-    </form>
-    <form asp-action="History" method="get" style="display:inline;">
-        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
-        <button type="submit" class="btn btn-info">History</button>
-    </form>
-    <form asp-action="ManageCompany" method="get" style="display:inline;">
-        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
-        <button type="submit" class="btn btn-secondary">Manage Company</button>
-    </form>
-    <form asp-action="ManageRoles" method="get" style="display:inline;">
-        <input type="hidden" name="id" value="@Model?.paramInfo.ParamId" />
-        <button type="submit" class="btn btn-danger">Manage Roles</button>
-    </form>
-    <form asp-action="Index" method="get" style="display:inline;">
-        <button type="submit" class="btn btn-light">Back to List</button>
-    </form>
-</div>
- *@

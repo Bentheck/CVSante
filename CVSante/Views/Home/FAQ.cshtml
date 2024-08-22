@@ -29,32 +29,43 @@
     <div class="contact-form">
         <h2>Nous contacter</h2>
         <form method="post" asp-controller="Home">
-            <div class="form-group">
-                <label for="prenom">Prénom</label>
-                <input asp-for="@Model.Prenom" type="text" id="prenom" name="prenom" class="form-control" />
-                <span asp-validation-for="@Model.Prenom" class="text-danger"></span>
+            <div class="card p-2">
+                <h4>Informations personnelles</h4>
+                <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input asp-for="@Model.Prenom" type="text" id="prenom" name="prenom" class="form-control" />
+                    <span asp-validation-for="@Model.Prenom" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input asp-for="@Model.Nom" type="text" id="nom" name="nom" class="form-control" />
+                    <span asp-validation-for="@Model.Nom" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="ville">Ville</label>
+                    <input asp-for="@Model.ville" type="text" id="ville" name="ville" class="form-control" />
+                        <span asp-validation-for="@Model.ville" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="courriel">Courriel</label>
+                    <input asp-for="@Model.Courriel" type="email" id="courriel" name="courriel" class="form-control" />
+                    <span asp-validation-for="@Model.Courriel" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="nom">Nom</label>
-                <input asp-for="@Model.Nom" type="text" id="nom" name="nom" class="form-control" />
-                <span asp-validation-for="@Model.Nom" class="text-danger"></span>
+            <div class="card p-2">
+                <h4>Question</h4>
+                <div class="form-group">
+                    <label for="question">Sujet</label>
+                    <input asp-for="@Model.Sujet" id="sujet" name="sujet" class="form-control">
+                    <span asp-validation-for="@Model.Sujet" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="question">Question</label>
+                    <textarea asp-for="@Model.Question" id="question" name="question" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.Question" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="ville">Ville</label>
-                <input asp-for="@Model.ville" type="text" id="ville" name="ville" class="form-control" />
-                    <span asp-validation-for="@Model.ville" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="courriel">Courriel</label>
-                <input asp-for="@Model.Courriel" type="email" id="courriel" name="courriel" class="form-control" />
-                <span asp-validation-for="@Model.Courriel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="question">Question</label>
-                <textarea asp-for="@Model.Question" id="question" name="question" class="form-control"></textarea>
-                <span asp-validation-for="@Model.Question" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Soumettre</button>
+            <button type="submit" class="btn btn-primary mt-2">Soumettre</button>
         </form>
     </div>
 
