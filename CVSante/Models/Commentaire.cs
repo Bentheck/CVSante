@@ -15,7 +15,7 @@ public partial class Commentaire
 
     public int FkUserId { get; set; }
 
-    public virtual UserCitoyen FkUser { get; set; } = null!;
+    public virtual UserCitoyen? FkUser { get; set; } = null!;
 
-    public virtual UserParamedic FkUserparamedicNavigation { get; set; } = null!;
+    public virtual UserParamedic? FkUserparamedicNavigation { get; set; } = null!;
 }
