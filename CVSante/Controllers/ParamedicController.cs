@@ -14,6 +14,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using CVSante.Tools;
 using System.Globalization;
+using static Google.Cloud.RecaptchaEnterprise.V1.TransactionData.Types;
 
 namespace CVSante.Controllers
 {
@@ -77,7 +78,14 @@ namespace CVSante.Controllers
                 return NotFound();
             }
 
-            await _historyService.LogActionAsync(null, _currentUser, "Accès à la page d'index de l'administrateur");
+            var currentUser = _context.UserParamedics
+                    .FirstOrDefaultAsync(up => up.FkIdentityUser == _currentUser.ToString());
+            if (currentUser == null)
+                {
+                return NotFound();
+            }
+
+            _historyService.LogActionAsync(null, _currentUser, "Accès à la page d'index de l'administrateur");
             return View();
         }
 
@@ -926,7 +934,7 @@ namespace CVSante.Controllers
                 Antecedent = await _context.UserAntecedents.FirstOrDefaultAsync(a => a.FkUserId == id),
                 Medications = await _context.UserMedications.Where(m => m.FkUserId == id).ToListAsync(),
                 Handicaps = await _context.UserHandicaps.Where(h => h.FkUserId == id).ToListAsync(),
-                Commentaires = await _context.Commentaires.Where(c => c.FkUserId == id).OrderByDescending(c => c.Date).Take(100).ToListAsync(),
+                Commentaires = await _context.Commentaires.Where(c => c.FkUserId == id).OrderByDescending(c => c.Date).Take(100).Include(c => c.FkUserparamedicNavigation).Include(c => c.FkUser).ToListAsync(),
                 CurrentUserParamId = currentUser.ParamId
             };
 
