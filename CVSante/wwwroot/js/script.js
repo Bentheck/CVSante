@@ -1,4 +1,6 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+﻿
+window.onload = function () {
+    var modal = document.getElementById('memberModal');
 
     function showDetails(name, role, description) {
         let details = `
@@ -11,12 +13,11 @@
     }
 
     function openModal() {
-        document.getElementById('memberModal').style.display = 'flex';
+        modal.style.display = 'flex';
     }
 
-
     function closeModal() {
-        document.getElementById('memberModal').style.display = 'none'; 
+        modal.style.display = 'none';
     }
 
     document.querySelectorAll('.team-member').forEach(function (element) {
@@ -28,12 +29,21 @@
         });
     });
 
-    // Vérifiez l'existence de l'élément avant d'ajouter l'écouteur d'événements
+    // Fermer le modal en cliquant sur le "X"
     let closeButton = document.querySelector('.modals .close');
     if (closeButton) {
         closeButton.addEventListener('click', closeModal);
     }
-});
+
+    // Fermer le modal en cliquant en dehors du contenu du modal
+    if (modal) {
+        modal.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    }
+};
 function toggleAnswer(element) {
     const answerElement = element.nextElementSibling;
     if (answerElement.style.display === 'none' || answerElement.style.display === '') {
