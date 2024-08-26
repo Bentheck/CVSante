@@ -80,12 +80,6 @@ namespace CVSante.Controllers
 
         public async Task<IActionResult> CreateId()
         {
-            //var currentUserId = _userManager.GetUserId(User);
-            //var userCheck = await _context.UserCitoyens
-            //    .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
-            //var profilCheck = await _context.UserInfos
-            //    .FirstOrDefaultAsync(u => u.FkUserId == userCheck.UserId);
-
             if (TempData["UserCheck"] != null)
             {
                 if (TempData["Profil"] == null)
