@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.AspNet.SignalR;
+using System.Net.NetworkInformation;
+using FileSignatures;
+using FileSignatures.Formats;
 
 namespace CVSante.Controllers
 {
@@ -36,22 +39,25 @@ namespace CVSante.Controllers
             if (userCitoyen != null)
             {
                 TempData["UserID"] = userCitoyen.UserId;
-
+                
                 var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == userCitoyen.UserId);
 
                 if (userInfo != null)
                 {
                     TempData["Profil"] = 1;
+                    TempData["ImageProfil"] = userInfo.ImageProfil ?? "photo.png";
                 }
                 else
                 {
                     TempData["Profil"] = null;
+                    ViewBag.ImageProfil = "photo.png";
                 }
             }
             else
             {
                 TempData["UserID"] = null;
                 TempData["Profil"] = null;
+                ViewBag.ImageProfil = "photo.png";
             }
 
             var profilCitoyen = _context.UserCitoyens.Select(
@@ -479,14 +485,57 @@ namespace CVSante.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UploadImage(int? id)
+        public async Task<IActionResult> UploadImage(IFormFile imageFile, int? id)
         {
-            return View();
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var inspector = new FileFormatInspector();
+                var format = inspector.DetermineFileFormat(imageFile.OpenReadStream());
+
+                if (format is Png || format is Jpeg)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                    string uploadsFolder = Path.Combine("wwwroot", "assets", "photos");
+
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == id);
+                    if (userInfo != null)
+                    {
+                        userInfo.ImageProfil = uniqueFileName;
+                        _context.Update(userInfo);
+                        await _context.SaveChangesAsync();
+                        TempData["SuccessMessage"] = "L'image de profil a été téléchargée avec succès.";
+                    }
+
+                    // Mettre à jour TempData pour s'assurer que la nouvelle image est affichée immédiatement
+                    TempData["ImageProfil"] = uniqueFileName;
+                    return RedirectToAction("Bienvenue");
+                }
+                else
+                {
+                    TempData["TypeError"] = "Erreur de type de fichier; Veuillez utiliser JPG ou PNG.";
+                    return RedirectToAction("Bienvenue");
+                }
+            }
+
+            TempData["ErrorMessage"] = "Veuillez sélectionner une image à télécharger.";
+            return RedirectToAction("Bienvenue");
         }
 
 
 
 
-
     }
+
 }
+

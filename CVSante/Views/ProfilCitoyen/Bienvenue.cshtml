@@ -1,19 +1,67 @@
 ﻿@model IEnumerable<CVSante.ViewModels.User>
-
 @{
     ViewData["Title"] = "Bienvenue";
 }
 
-<div class="container d-flex flex-column align-items-center justify-content-center text-center" style="height: 80vh";>
+<div class="container d-flex flex-column align-items-center justify-content-center text-center" style="height: 80vh;">
     <div class="card p-5">
-    <h2>Bienvenue, <a href="#">Nom de l'utilisateur</a></h2>
-    <p>Nous sommes ravis de vous accueillir sur notre plateforme</p>
-    <div class="profile-picture">
-        <img src="~/images/profile-placeholder.png" alt="Photo de profil">
-        <p>Photo de profil</p>
-    </div>
-    <div class="buttons-container">
-        <button type="button" onclick="location.href='@Url.Action("CreateId", "ProfilCitoyen")'">Ajouter / modifier profil</button>
-    </div>
+        <p>Nous sommes ravis de vous accueillir sur notre plateforme</p>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <div class="profile-picture">
+            <img src="~/assets/photos/@(TempData["ImageProfil"] ?? "photo.png")" alt="Photo de profil" style="width: 150px; height: 150px; border-radius: 50%;">
+            <p>Photo de profil</p>
+        </div>
+        <form asp-action="UploadImage" asp-controller="ProfilCitoyen" enctype="multipart/form-data" method="post">
+            <div class="form-group">
+                <label for="imageFile">Changer l'image de profil :</label>
+                <input type="file" id="imageFile" name="imageFile" class="form-control" />
+            </div>
+            <input type="hidden" name="id" value="@TempData["UserID"]" />
+            <button type="submit" class="btn btn-primary">Télécharger</button>
+        </form>
+
+        <div class="buttons-container mt-3">
+            <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("CreateId", "ProfilCitoyen")'">Ajouter / modifier profil</button>
+        </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var profileImage = document.querySelector('.profile-picture img');
+            var storedImagePath = localStorage.getItem('profileImagePath');
+            
+            if (storedImagePath) {
+                profileImage.src = storedImagePath;
+            }
+
+            // Écouter les changements d'image
+            var imageFileInput = document.getElementById('imageFile');
+            imageFileInput.addEventListener('change', function(event) {
+                var file = event.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        profileImage.src = e.target.result;
+                        localStorage.setItem('profileImagePath', e.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+}
