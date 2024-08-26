@@ -46,6 +46,8 @@ namespace CVSante.Controllers
                 {
                     TempData["Profil"] = 1;
                     TempData["ImageProfil"] = userInfo.ImageProfil ?? "photo.png";
+                    ViewData["Nom"] = userInfo.Nom;
+                    ViewData["Prenom"] = userInfo.Prenom;
                 }
                 else
                 {

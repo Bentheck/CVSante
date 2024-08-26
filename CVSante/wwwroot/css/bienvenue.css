@@ -1,0 +1,57 @@
+﻿.welcome-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    background-color: #f8f9fa;
+}
+
+.welcome-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.welcome-title {
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.profile-section {
+    margin-bottom: 1.5rem;
+}
+
+.profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007bff;
+}
+
+.profile-label {
+    margin-top: 0.5rem;
+    color: #6c757d;
+}
+
+.profile-message {
+    color: #dc3545;
+    font-style: italic;
+}
+
+.action-section {
+    margin-top: 1.5rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s;
+}

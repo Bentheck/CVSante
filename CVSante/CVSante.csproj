@@ -33,6 +33,7 @@
     <Content Remove="wwwroot\assets\photos\e209af33-8131-48ae-820b-8e6b167a027f_photo1.png" />
     <Content Remove="wwwroot\assets\photos\e55dd154-6a03-4f1a-84d4-1783d986b2aa_photo1.png" />
     <Content Remove="wwwroot\assets\photos\photo1.png" />
+    <Content Remove="wwwroot\css\bienvenue.cs" />
     <Content Remove="wwwroot\js\ProfilCitoyenCreate.js" />
     <Content Remove="wwwroot\themesAdmin\js\datatables-simple-demo.js" />
   </ItemGroup>
