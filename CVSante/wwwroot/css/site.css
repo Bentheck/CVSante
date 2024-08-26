@@ -661,5 +661,20 @@ h2.text-center {
 }
 
 
+.notification-container {
+    position: relative; /* Nécessaire pour le positionnement absolu du badge */
+}
 
-
+.notification-badge {
+    position: absolute;
+    top: -5px; /* Ajuster cette valeur pour déplacer le badge plus haut */
+    right: -5px; /* Ajuster cette valeur pour déplacer le badge plus à gauche */
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 6px; /* Vous pouvez ajuster ces valeurs pour changer la taille du badge */
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
