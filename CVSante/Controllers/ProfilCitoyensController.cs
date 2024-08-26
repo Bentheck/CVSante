@@ -39,6 +39,7 @@ namespace CVSante.Controllers
             if (userCitoyen != null)
             {
                 TempData["UserID"] = userCitoyen.UserId;
+                TempData["UserCheck"] = userCitoyen.UserId;
                 
                 var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == userCitoyen.UserId);
 
@@ -47,7 +48,7 @@ namespace CVSante.Controllers
                     TempData["Profil"] = 1;
                     TempData["ImageProfil"] = userInfo.ImageProfil ?? "photo.png";
                     ViewData["Nom"] = userInfo.Nom;
-                    ViewData["Prenom"] = userInfo.Prenom;
+                    ViewData["Prenom"] = userInfo.Prenom;    
                 }
                 else
                 {
@@ -79,21 +80,21 @@ namespace CVSante.Controllers
 
         public async Task<IActionResult> CreateId()
         {
-            var currentUserId = _userManager.GetUserId(User);
-            var userCheck = await _context.UserCitoyens
-                .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
-            var profilCheck = await _context.UserInfos
-                .FirstOrDefaultAsync(u => u.FkUserId == userCheck.UserId);
+            //var currentUserId = _userManager.GetUserId(User);
+            //var userCheck = await _context.UserCitoyens
+            //    .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
+            //var profilCheck = await _context.UserInfos
+            //    .FirstOrDefaultAsync(u => u.FkUserId == userCheck.UserId);
 
-            if (userCheck.UserId != null)
+            if (TempData["UserCheck"] != null)
             {
-                if (profilCheck == null)
+                if (TempData["Profil"] == null)
                 {
-                    return RedirectToAction("create", new { id = userCheck.UserId });
+                    return RedirectToAction("create", new { id = TempData["UserCheck"] });
                 }
                 else
                 {
-                    return RedirectToAction("Edit", new { id = userCheck.UserId });
+                    return RedirectToAction("Edit", new { id = TempData["UserCheck"] });
                 }
             }
             else
