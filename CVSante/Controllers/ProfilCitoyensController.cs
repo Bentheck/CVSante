@@ -77,15 +77,21 @@ namespace CVSante.Controllers
 
         public async Task<IActionResult> CreateId()
         {
-            if (TempData["UserID"] != null)
+            var currentUserId = _userManager.GetUserId(User);
+            var userCheck = await _context.UserCitoyens
+                .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
+            var profilCheck = await _context.UserInfos
+                .FirstOrDefaultAsync(u => u.FkUserId == userCheck.UserId);
+
+            if (userCheck.UserId != null)
             {
-                if (TempData["Profil"] == null)
-                { 
-                return RedirectToAction("create", new { id = TempData["UserID"] });
+                if (profilCheck == null)
+                {
+                    return RedirectToAction("create", new { id = userCheck.UserId });
                 }
                 else
                 {
-                return RedirectToAction("Edit", new { id = TempData["UserID"] });
+                    return RedirectToAction("Edit", new { id = userCheck.UserId });
                 }
             }
             else
@@ -100,6 +106,7 @@ namespace CVSante.Controllers
                 return RedirectToAction("Create", new { id = userId });
             }
         }
+
 
 
         // GET: ProfilCitoyen/Create
@@ -487,6 +494,12 @@ namespace CVSante.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadImage(IFormFile imageFile, int? id)
         {
+            if (_context.UserInfos.First(u => u.FkUserId == id) == null)
+            {
+                TempData["ErrorMessage"] = "Veuillez créer un profil avant de télécharger une image de profil.";
+                return RedirectToAction("Bienvenue");
+            }
+
             if (imageFile != null && imageFile.Length > 0)
             {
                 var inspector = new FileFormatInspector();

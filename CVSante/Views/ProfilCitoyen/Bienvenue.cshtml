@@ -25,43 +25,44 @@
             <img src="~/assets/photos/@(TempData["ImageProfil"] ?? "photo.png")" alt="Photo de profil" style="width: 150px; height: 150px; border-radius: 50%;">
             <p>Photo de profil</p>
         </div>
-        <form asp-action="UploadImage" asp-controller="ProfilCitoyen" enctype="multipart/form-data" method="post">
-            <div class="form-group">
-                <label for="imageFile">Changer l'image de profil :</label>
-                <input type="file" id="imageFile" name="imageFile" class="form-control" />
-            </div>
-            <input type="hidden" name="id" value="@TempData["UserID"]" />
-            <button type="submit" class="btn btn-primary">Télécharger</button>
-        </form>
+        @if (TempData["Profil"] == null)
+        {
+                    <p>Veuillez créer un profil pour modifier votre photo de profil.</p>
+        }
+        else
+        {
+                    <div class="buttons-container">
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                        Modifier photo de profil
+                    </button>
+                    </div>
+
+
+                    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="uploadModalLabel">Modifier photo de profil</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                       <form asp-action="UploadImage" asp-controller="ProfilCitoyen" enctype="multipart/form-data" method="post">
+                                        <div class="form-group">
+                                         <label for="imageFile">Sélectionner une nouvelle image :</label>
+                                         <input type="file" id="imageFile" name="imageFile" class="form-control" />
+                                           </div>
+                                       <input type="hidden" name="id" value="@TempData["UserID"]" />
+                                        <button type="submit" class="btn btn-primary mt-3">Confirmer</button>
+                                    </form> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        }
+        
 
         <div class="buttons-container mt-3">
             <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("CreateId", "ProfilCitoyen")'">Ajouter / modifier profil</button>
         </div>
     </div>
 </div>
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var profileImage = document.querySelector('.profile-picture img');
-            var storedImagePath = localStorage.getItem('profileImagePath');
-            
-            if (storedImagePath) {
-                profileImage.src = storedImagePath;
-            }
-
-            // Écouter les changements d'image
-            var imageFileInput = document.getElementById('imageFile');
-            imageFileInput.addEventListener('change', function(event) {
-                var file = event.target.files[0];
-                if (file) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        profileImage.src = e.target.result;
-                        localStorage.setItem('profileImagePath', e.target.result);
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        });
-    </script>
-}
