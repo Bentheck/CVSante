@@ -285,7 +285,7 @@ function addDynamicField(type) {
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
-                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                             </div>
                         </div>
                     </div>`;
@@ -333,7 +333,7 @@ function addDynamicField(type) {
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
-                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                             </div>
                         </div>
                     </div>`;
@@ -377,7 +377,7 @@ function addDynamicField(type) {
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
-                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                             </div>
                         </div>
                     </div>`;
@@ -425,7 +425,7 @@ function addDynamicField(type) {
 
                     <!-- Remove Button -->
                     <div class="card-footer d-flex justify-content-between align-items-center">
-                        <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                        <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                     </div>
                 </div>
             </div>`;
