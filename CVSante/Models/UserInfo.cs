@@ -27,5 +27,7 @@ public partial class UserInfo
 
     public string? AutrePrecision { get; set; }
 
+    public string? ImageProfil { get; set; }
+
     public virtual UserCitoyen FkUser { get; set; } = null!;
 }
