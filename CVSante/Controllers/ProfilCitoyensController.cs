@@ -55,6 +55,7 @@ namespace CVSante.Controllers
                 {
                     TempData["Profil"] = null;
                     TempData["ProfilCheck"] = null;
+                    TempData["UserCheck"] = null;
                     ViewBag.ImageProfil = "photo.png";
                 }
             }
@@ -63,6 +64,7 @@ namespace CVSante.Controllers
                 TempData["UserID"] = null;
                 TempData["Profil"] = null;
                 TempData["ProfilCheck"] = null;
+                TempData["UserCheck"] = null;
                 ViewBag.ImageProfil = "photo.png";
             }
 
@@ -102,6 +104,7 @@ namespace CVSante.Controllers
                 _context.Add(userCitoyen);
                 await _context.SaveChangesAsync();
                 var userId = userCitoyen.UserId;
+                TempData["UserCheck"] = userId;
                 TempData["UserID"] = userId;
                 return RedirectToAction("Create", new { id = userId });
             }
