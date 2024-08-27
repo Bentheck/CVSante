@@ -41,11 +41,12 @@ namespace CVSante.Controllers
                 TempData["UserID"] = userCitoyen.UserId;
                 TempData["UserCheck"] = userCitoyen.UserId;
                 
-                var userInfo = await _context.UserInfos.FirstAsync(u => u.FkUserId == userCitoyen.UserId);
+                var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == userCitoyen.UserId);
 
                 if (userInfo != null)
                 {
                     TempData["Profil"] = 1;
+                    TempData["ProfilCheck"] = 1;
                     TempData["ImageProfil"] = userInfo.ImageProfil ?? "photo.png";
                     ViewData["Nom"] = userInfo.Nom;
                     ViewData["Prenom"] = userInfo.Prenom;    
@@ -53,6 +54,7 @@ namespace CVSante.Controllers
                 else
                 {
                     TempData["Profil"] = null;
+                    TempData["ProfilCheck"] = null;
                     ViewBag.ImageProfil = "photo.png";
                 }
             }
@@ -60,6 +62,7 @@ namespace CVSante.Controllers
             {
                 TempData["UserID"] = null;
                 TempData["Profil"] = null;
+                TempData["ProfilCheck"] = null;
                 ViewBag.ImageProfil = "photo.png";
             }
 
@@ -82,7 +85,7 @@ namespace CVSante.Controllers
         {
             if (TempData["UserCheck"] != null)
             {
-                if (TempData["Profil"] == null)
+                if (TempData["ProfilCheck"] == null)
                 {
                     return RedirectToAction("create", new { id = TempData["UserCheck"] });
                 }
@@ -267,6 +270,16 @@ namespace CVSante.Controllers
                 return NotFound();
             }
 
+            var currentUserId = _userManager.GetUserId(User);
+            var profileId = await _context.UserCitoyens
+                .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
+            
+
+            if (id != profileId.UserId)
+            {
+                return NotFound();
+            }
+
             // Fetch the user profile and associated data
             var user = new User
             {
@@ -431,7 +444,6 @@ namespace CVSante.Controllers
         // GET: ProfilCitoyen/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewData["ID"] = id;
             if (id == null)
             {
                 return NotFound();
