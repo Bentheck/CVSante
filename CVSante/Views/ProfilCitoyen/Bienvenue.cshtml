@@ -1,19 +1,140 @@
 ﻿@model IEnumerable<CVSante.ViewModels.User>
-
 @{
     ViewData["Title"] = "Bienvenue";
 }
+<style>
+    .welcome-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        background-color: #f8f9fa;
+    }
 
-<div class="container d-flex flex-column align-items-center justify-content-center text-center" style="height: 80vh";>
-    <div class="card p-5">
-    <h2>Bienvenue, <a href="#">Nom de l'utilisateur</a></h2>
-    <p>Nous sommes ravis de vous accueillir sur notre plateforme</p>
-    <div class="profile-picture">
-        <img src="~/images/profile-placeholder.png" alt="Photo de profil">
-        <p>Photo de profil</p>
-    </div>
-    <div class="buttons-container">
-        <button type="button" onclick="location.href='@Url.Action("CreateId", "ProfilCitoyen")'">Ajouter / modifier profil</button>
-    </div>
+    .welcome-card {
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .welcome-title {
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+
+    .profile-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .profile-picture img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #007bff;
+    }
+
+    .profile-label {
+        margin-top: 0.5rem;
+        color: #6c757d;
+    }
+
+    .profile-message {
+        color: #dc3545;
+        font-style: italic;
+    }
+
+    .action-section {
+        margin-top: 1.5rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s;
+    }
+
+    .user-name {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+  
+</style>
+<div class="welcome-container">
+    <div class="welcome-card">
+        <h2 class="welcome-title">Bienvenue sur notre plateforme</h2>
+       
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger fade-in">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success fade-in">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <div class="profile-section">
+            <div class="profile-picture">
+                <img src="~/assets/photos/@(TempData["ImageProfil"] ?? "photo.png")" alt="Photo de profil">
+            </div>
+            @if (ViewData["Nom"] != null && ViewData["Prenom"] != null)
+            {
+                <h3 class="user-name">@ViewData["Prenom"] @ViewData["Nom"]</h3>
+            }
+        </div>
+        
+        @if (TempData["Profil"] == null)
+        {
+            <p class="profile-message">Veuillez créer un profil pour modifier votre photo de profil.</p>
+        }
+        else
+        {
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                Modifier photo de profil
+            </button>
+
+            <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="uploadModalLabel">Modifier photo de profil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-action="UploadImage" asp-controller="ProfilCitoyen" enctype="multipart/form-data" method="post">
+                                <div class="form-group">
+                                    <label for="imageFile" class="form-label">Sélectionner une nouvelle image :</label>
+                                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" />
+                                </div>
+                                <input type="hidden" name="id" value="@TempData["UserID"]" />
+                                <button type="submit" class="btn btn-primary mt-3">Confirmer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="action-section">
+            <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("CreateId", "ProfilCitoyen")'">
+                Ajouter / modifier profil
+            </button>
+        </div>
     </div>
 </div>
+@section Scripts {
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+}

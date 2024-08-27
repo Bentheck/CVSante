@@ -9,6 +9,10 @@ using CVSante.Services;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.AspNet.SignalR;
+using System.Net.NetworkInformation;
+using FileSignatures;
+using FileSignatures.Formats;
 
 namespace CVSante.Controllers
 {
@@ -28,6 +32,12 @@ namespace CVSante.Controllers
         // GET: ProfilCitoyen
         public async Task<IActionResult> Bienvenue()
         {
+            TempData["UserCheck"] = null;
+            TempData["ProfilCheck"] = null;
+            TempData["ImageProfil"] = null;
+            TempData["UserID"] = null;
+            TempData["Profil"] = null;
+
             var currentUserId = _userManager.GetUserId(User);
             var userCitoyen = await _context.UserCitoyens
                 .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
@@ -35,22 +45,33 @@ namespace CVSante.Controllers
             if (userCitoyen != null)
             {
                 TempData["UserID"] = userCitoyen.UserId;
-
+                TempData["UserCheck"] = userCitoyen.UserId;
+                
                 var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == userCitoyen.UserId);
 
                 if (userInfo != null)
                 {
                     TempData["Profil"] = 1;
+                    TempData["ProfilCheck"] = 1;
+                    TempData["ImageProfil"] = userInfo.ImageProfil ?? "photo.png";
+                    ViewData["Nom"] = userInfo.Nom;
+                    ViewData["Prenom"] = userInfo.Prenom;    
                 }
                 else
                 {
                     TempData["Profil"] = null;
+                    TempData["ProfilCheck"] = null;
+                    TempData["UserCheck"] = null;
+                    ViewBag.ImageProfil = "photo.png";
                 }
             }
             else
             {
                 TempData["UserID"] = null;
                 TempData["Profil"] = null;
+                TempData["ProfilCheck"] = null;
+                TempData["UserCheck"] = null;
+                ViewBag.ImageProfil = "photo.png";
             }
 
             var profilCitoyen = _context.UserCitoyens.Select(
@@ -70,15 +91,15 @@ namespace CVSante.Controllers
 
         public async Task<IActionResult> CreateId()
         {
-            if (TempData["UserID"] != null)
+            if (TempData["UserCheck"] != null)
             {
-                if (TempData["Profil"] == null)
-                { 
-                return RedirectToAction("create", new { id = TempData["UserID"] });
+                if (TempData["ProfilCheck"] == null)
+                {
+                    return RedirectToAction("create", new { id = TempData["UserCheck"] });
                 }
                 else
                 {
-                return RedirectToAction("Edit", new { id = TempData["UserID"] });
+                    return RedirectToAction("Edit", new { id = TempData["UserCheck"] });
                 }
             }
             else
@@ -89,10 +110,12 @@ namespace CVSante.Controllers
                 _context.Add(userCitoyen);
                 await _context.SaveChangesAsync();
                 var userId = userCitoyen.UserId;
+                TempData["UserCheck"] = userId;
                 TempData["UserID"] = userId;
                 return RedirectToAction("Create", new { id = userId });
             }
         }
+
 
 
         // GET: ProfilCitoyen/Create
@@ -252,6 +275,16 @@ namespace CVSante.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
+            {
+                return NotFound();
+            }
+
+            var currentUserId = _userManager.GetUserId(User);
+            var profileId = await _context.UserCitoyens
+                .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
+            
+
+            if (id != profileId.UserId)
             {
                 return NotFound();
             }
@@ -420,8 +453,17 @@ namespace CVSante.Controllers
         // GET: ProfilCitoyen/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewData["ID"] = id;
             if (id == null)
+            {
+                return NotFound();
+            }
+
+            var currentUserId = _userManager.GetUserId(User);
+            var profileId = await _context.UserCitoyens
+                .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
+
+
+            if (id != profileId.UserId)
             {
                 return NotFound();
             }
@@ -462,5 +504,79 @@ namespace CVSante.Controllers
 
             return RedirectToAction(nameof(Bienvenue));
         }
+
+
+
+
+        // GET: Pictures/UploadImage
+        [Authorize]
+        public IActionResult Image(int? id)
+        {
+            return View();
+        }
+
+
+        //POST: Pictures/UploadImage
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadImage(IFormFile imageFile, int? id)
+        {
+            if (_context.UserInfos.First(u => u.FkUserId == id) == null)
+            {
+                TempData["ErrorMessage"] = "Veuillez créer un profil avant de télécharger une image de profil.";
+                return RedirectToAction("Bienvenue");
+            }
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var inspector = new FileFormatInspector();
+                var format = inspector.DetermineFileFormat(imageFile.OpenReadStream());
+
+                if (format is Png || format is Jpeg)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                    string uploadsFolder = Path.Combine("wwwroot", "assets", "photos");
+
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == id);
+                    if (userInfo != null)
+                    {
+                        userInfo.ImageProfil = uniqueFileName;
+                        _context.Update(userInfo);
+                        await _context.SaveChangesAsync();
+                        TempData["SuccessMessage"] = "L'image de profil a été téléchargée avec succès.";
+                    }
+
+                    // Mettre à jour TempData pour s'assurer que la nouvelle image est affichée immédiatement
+                    TempData["ImageProfil"] = uniqueFileName;
+                    return RedirectToAction("Bienvenue");
+                }
+                else
+                {
+                    TempData["TypeError"] = "Erreur de type de fichier; Veuillez utiliser JPG ou PNG.";
+                    return RedirectToAction("Bienvenue");
+                }
+            }
+
+            TempData["ErrorMessage"] = "Veuillez sélectionner une image à télécharger.";
+            return RedirectToAction("Bienvenue");
+        }
+
+
+
+
     }
+
 }
+

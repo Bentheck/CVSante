@@ -134,13 +134,11 @@
                 <ul class="list-group list-group-flush">
                     @foreach (var paramedic in Model.Paramedics)
                     {
+                        <a asp-action="ManageRoles" asp-route-paramedicId="@paramedic.ParamId" class="text-decoration-none">
                         <li class="list-group-item @(paramedic.ParamId == Model.SelectedParamedic?.ParamId ? "active" : "")" onclick="handleParamedicClick(this)">
-                            <a asp-action="ManageRoles"
-                               asp-route-paramedicId="@paramedic.ParamId"
-                               class="text-decoration-none">
-                                <i class="fas fa-user-md"></i> @paramedic.Nom, @paramedic.Prenom
-                            </a>
+                            <i class="fas fa-user-md"></i> @paramedic.Nom, @paramedic.Prenom
                         </li>
+                        </a>
                     }
                 </ul>
             </div>
@@ -282,6 +280,6 @@
 
     </script>
 }
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 

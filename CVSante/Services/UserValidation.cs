@@ -73,6 +73,8 @@ namespace CVSante.Services
                 result.Errors.Add("Le poids est requise.");
             if (string.IsNullOrWhiteSpace(userInfo.Taille))
                 result.Errors.Add("La taille est requise.");
+            if (string.IsNullOrWhiteSpace(userInfo.TypeSanguin))
+                result.Errors.Add("Le groupe sanguin est requis.");
 
             if (result.Errors.Any())
             {

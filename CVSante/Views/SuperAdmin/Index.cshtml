@@ -55,11 +55,11 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-auto">
-                    <a asp-controller="SuperAdmin" asp-action="FAQContact" class="btn btn-primary">
-                        Question utilisateurs
+                    <a asp-controller="SuperAdmin" asp-action="FAQContact" class="btn btn-primary notification-container">
+                        <i class="fas fa-bell"></i> <!-- Icône de cloche -->
                         @if (newFAQCount > 0)
                         {
-                            <span class="badge bg-danger">@newFAQCount</span>
+                            <span class="notification-badge">@newFAQCount</span> <!-- Badge de notification -->
                         }
                     </a>
                 </div>

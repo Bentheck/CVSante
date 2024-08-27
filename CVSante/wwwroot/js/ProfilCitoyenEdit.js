@@ -1,17 +1,10 @@
 ﻿const sections = ['userinfo', 'address', 'antecedent', 'allergy', 'handicap', 'medication'];
 let currentSectionIndex = 0;
 
-// Initialize telephone input mask
-function applyMasks() {
-    Inputmask({ "mask": "999-999-9999" }).mask(document.querySelectorAll('.phone-mask'));
-    Inputmask({ "mask": "A9A 9A9" }).mask(document.querySelectorAll('.CP-mask'));
-    Inputmask({ "mask": "9[9][9]" + ' Kg' }).mask(document.querySelectorAll('.poid-mask'));
-    Inputmask({ "mask": "9.9[9]" + ' Mètres' }).mask(document.querySelectorAll('.taille-mask'));
-}
-
-// Apply masks to existing fields on page load
 document.addEventListener("DOMContentLoaded", function () {
-    applyMasks();
+    handlePrimaryAddressCheckbox();
+    attachAllergyEventListeners();
+    attachMedicationEventListeners();
 });
 
 // Show specific section and update navigation
@@ -227,7 +220,7 @@ function addDynamicField(type) {
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
-                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                             </div>
                         </div>
                     </div>`;
@@ -275,7 +268,7 @@ function addDynamicField(type) {
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
-                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                             </div>
                         </div>
                     </div>`;
@@ -319,7 +312,7 @@ function addDynamicField(type) {
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
-                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                <button type="button" class=" col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                             </div>
                         </div>
                     </div>`;
@@ -367,7 +360,7 @@ function addDynamicField(type) {
 
                     <!-- Remove Button -->
                     <div class="card-footer d-flex justify-content-between align-items-center">
-                        <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                        <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                     </div>
                 </div>
             </div>`;

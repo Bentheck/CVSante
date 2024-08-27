@@ -13,9 +13,6 @@
         text-align: left;
     }
 </style>
-
-<h2 class="text-center" style="margin-top: 55px;">Edit</h2>
-
 <form asp-action="Edit" asp-controller="ProfilCitoyen" method="post" class="form-horizontal">
     <div class="container">
         <div class="row">
@@ -25,7 +22,7 @@
                 <div id="userinfo" class="section">
                     <div class="card mb-3">
                         <div class="card-header">
-                            <h4>User Info</h4>
+                            <h4>informations du citoyen</h4>
                         </div>
                         <div class="card-body">
                             <div asp-validation-summary="ModelOnly" class="visually-hidden"></div>
@@ -70,7 +67,7 @@
                             <!--- Sexe Naissance --->
                             <div class="form-group row align-items-center">
                                 <label class="col-md-2 col-form-label">Sexe à la naissance</label>
-                                <div class="col-md-10 d-flex align-items-center">
+                                <div class="col-md-9 d-flex align-items-center">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" id="sexeHomme" name="UserInfo.Sexe" value="Homme" @(Model.UserInfo.Sexe == "Homme" ? "checked" : "") />
                                         <label class="form-check-label" for="sexeHomme">Homme</label>
@@ -143,7 +140,7 @@
                 <div id="address" class="section" style="display:none;">
                     <div class="card mb-3">
                         <div class="card-header">
-                            <h4>Addresses</h4>
+                            <h4>Adresses</h4>
                         </div>
                         <div class="card-body">
                             <div id="address-fields">
@@ -200,7 +197,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-footer d-flex justify-content-between align-items-center">
-                                                <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                                             </div>
                                         </div>
                                     </div>
@@ -220,18 +217,23 @@
                         <div class="card-body">
                             <div id="antecedent-checkboxes">
                                 @{
-                                    // Ensure Model.Antecedent is a string and split by '/'
-                                    var ant = Model.Antecedent.Antecedent.ToString();
-                                    var antecedents = ant.Split('/');
-                                }
-                                @foreach (var item in new[] { "Aucun", "Asthme", "AVC", "Diabète", "Hypertension", "Maladie cardiaque", "Hypercholestérolémie", "Problèmes abdominaux", "Néoplasie", "Psychiatrie", "Autre" })
-                                {
-                                    <div class="form-group d-flex align-items-center">
-                                        <input type="checkbox" id="@item" name="antecedents" class="form-check-input" value="@item"
-                                        @(antecedents.Contains(item) ? "checked" : "")
-                                               onclick="updateAntecedentsString()" />
-                                        <label for="@item" class="form-check-label ml-2">@item</label>
-                                    </div>
+                                    var antecedents = new string[0];
+                                    if (Model.Antecedent.Antecedent != null)
+                                    {
+                                        // Ensure Model.Antecedent is a string and split by '/'
+                                        var ant = Model.Antecedent.Antecedent.ToString();
+                                        antecedents = ant.Split('/');
+                                    }
+
+                                    @foreach (var item in new[] { "Aucun", "Asthme", "AVC", "Diabète", "Hypertension", "Maladie cardiaque", "Hypercholestérolémie", "Problèmes abdominaux", "Néoplasie", "Psychiatrie", "Autre" })
+                                    {
+                                        <div class="form-group d-flex align-items-center">
+                                            <input type="checkbox" id="@item" name="antecedents" class="form-check-input" value="@item"
+                                            @(antecedents.Contains(item) ? "checked" : "")
+                                                   onclick="updateAntecedentsString()" />
+                                            <label for="@item" class="form-check-label ml-2">@item</label>
+                                        </div>
+                                    }
                                 }
                             </div>
                             <div id="manual-entry" @(antecedents.Contains("Autre") ? "style=display:block;" : "style=display:none;")>
@@ -285,21 +287,21 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row severity-field" style="display: @(allergy.AllergieIntolerance == "Allergie" ? "block" : "none");">
+                                                <div class="form-group row severity-field" style="display: @(allergy.AllergieIntolerance == "Allergie" ? "flex" : "none");">
                                                     <label class="col-md-2 col-form-label">Sévérité</label>
-                                                    <div class="col-md-10">
-                                                        <div class="d-flex flex-column flex-md-row align-items-start">
-                                                            <div class="me-3">
-                                                                <input type="radio" name="Allergies[@i].Gravite" value="Bénigne" class="form-check-input" id="benigne-@i" @(allergy.Gravite == "Bénigne" ? "checked" : "") />
-                                                                <label class="form-check-label" for="benigne-@i">Bénigne</label>
-                                                            </div>
-                                                            <div>
-                                                                <input type="radio" name="Allergies[@i].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-@i" @(allergy.Gravite == "Grave/Mortelle" ? "checked" : "") />
-                                                                <label class="form-check-label" for="grave-@i">Grave/Mortelle</label>
-                                                            </div>
+                                                    <div class="col-md-10 d-flex align-items-center">
+                                                        <div class="form-check form-check-inline ">
+
+                                                            <input type="radio" name="Allergies[@i].Gravite" value="Bénigne" class="form-check-input" id="benigne-@i" @(allergy.Gravite == "Bénigne" ? "checked" : "") />
+                                                            <label class="form-check-label" for="benigne-@i">Bénigne</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input type="radio" name="Allergies[@i].Gravite" value="Grave/Mortelle" class="form-check-input" id="grave-@i" @(allergy.Gravite == "Grave/Mortelle" ? "checked" : "") />
+                                                            <label class="form-check-label" for="grave-@i">Grave/Mortelle</label>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group row">
                                                     <label class="col-md-2 col-form-label">Produit</label>
                                                     <div class="col-md-10">
@@ -307,7 +309,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-footer d-flex justify-content-between align-items-center">
-                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -376,7 +378,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-footer d-flex justify-content-between align-items-center">
-                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -445,7 +447,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-footer d-flex justify-content-between align-items-center">
-                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Remove</button>
+                                                    <button type="button" class="col-1 btn btn-danger btn-sm ms-auto remove-field">Retirer</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -459,7 +461,7 @@
             </div>
 
             <!-- Navigation List Box and Buttons -->
-            <div class="col-md-3">
+            <div class="col-md-3" style="margin-top: 60px;">
                 <div class="card mb-3">
                     <div class="card-header">
                         <h4>Navigation</h4>
@@ -467,10 +469,10 @@
                     <div class="card-body">
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item">
-                                <a id="nav-userinfo" class="nav-link active" href="#" onclick="showSection('userinfo')">User Info</a>
+                                <a id="nav-userinfo" class="nav-link active" href="#" onclick="showSection('userinfo')">Informations utilisateur</a>
                             </li>
                             <li class="nav-item">
-                                <a id="nav-address" class="nav-link" href="#" onclick="showSection('address')">Addresses</a>
+                                <a id="nav-address" class="nav-link" href="#" onclick="showSection('address')">Adresses</a>
                             </li>
                             <li class="nav-item">
                                 <a id="nav-antecedent" class="nav-link" href="#" onclick="showSection('antecedent')">Antécédents</a>
@@ -491,19 +493,19 @@
                 <!-- Navigation Buttons and Save Button -->
                 <div class="card">
                     <div class="card-body text-center">
-                        <button id="prev-btn" type="button" class="btn btn-primary" onclick="previousSection()">Previous</button>
-                        <button id="next-btn" type="button" class="btn btn-primary" onclick="nextSection()">Next</button>
+                        <button id="prev-btn" type="button" class="btn btn-primary" onclick="previousSection()">Précédent</button>
+                        <button id="next-btn" type="button" class="btn btn-primary" onclick="nextSection()">Suivant</button>
                         <div class="mt-3">
-                            <button id="save-btn" type="submit" class="btn btn-primary">Save</button>
-                        </div>
+                            <button type="submit" class="btn btn-primary" id="save-btn">Sauvegarder</button>
 
-                        <div class="mt-3">
-                            <button class="btn btn-danger" type="button" onclick="location.href='@Url.Action("Delete", "ProfilCitoyen", new { id = Model.UserInfo.FkUserId })'">Supprimer Profil</button>
+
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div asp-validation-summary="ModelOnly" class="card-header text-danger"></div>
+                <div class="card-footer">
+                    <div class=" mt-3">
+                        <div asp-validation-summary="ModelOnly" class="card-header text-danger"></div>
+                    </div>
                 </div>
             </div>
         </div>

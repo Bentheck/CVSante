@@ -28,6 +28,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddScoped<IHistoryService, HistoryService>();
 builder.Services.AddTransient<UserValidation>();
 
+builder.Services.AddScoped<NotificationBackground>();
+builder.Services.AddHostedService<NotificationBackground>();
+builder.Services.AddSignalR();
+
 builder.Services.AddControllersWithViews();
 
 
@@ -41,6 +45,7 @@ builder.Services.Configure<MailKitEmailSenderOptions>(options =>
     options.Sender_EMail = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderEmail"];
     options.Sender_Name = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderName"];
 });
+
 
 var app = builder.Build();
 
@@ -65,6 +70,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+app.MapHub<NotificationHub>("/notificationHub");
 
 // Initialize and seed the database
 await InitializeDatabaseAsync(app);

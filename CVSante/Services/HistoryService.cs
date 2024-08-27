@@ -15,7 +15,7 @@ namespace CVSante.Services
         {
             _context = context;
         }
-
+        
         public async Task LogActionAsync(int? userId, int paramId, string action, string additionalInfo = "")
         {
             if (string.IsNullOrWhiteSpace(action))
@@ -49,15 +49,8 @@ namespace CVSante.Services
                 Date = DateTime.UtcNow
             };
 
-            try
-            {
-                _context.HistoriqueParams.Add(history);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("An error occurred while logging the action.", ex);
-            }
+            _context.HistoriqueParams.Add(history);
+            _context.SaveChanges();  // Use SaveChangesAsync
         }
     }
 }

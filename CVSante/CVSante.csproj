@@ -15,6 +15,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\assets\photos\524cee49-3928-4f25-9253-46f6a57f43a1_ex36.4.png" />
+    <Content Remove="wwwroot\assets\photos\61e3f786-614d-49c1-a965-1267da8e2a77_photo1.png" />
+    <Content Remove="wwwroot\assets\photos\6bbbdcb4-203d-4eb2-b4fb-7416ccb78b1a_photo1.png" />
+    <Content Remove="wwwroot\assets\photos\80e64f57-dcc3-4ee2-b1a5-0c4e7a7834ff_photo1.png" />
+    <Content Remove="wwwroot\assets\photos\83222ed8-5ea3-4091-8292-550df65174d4_photo2.png" />
+    <Content Remove="wwwroot\assets\photos\8d019577-9003-4a75-b444-dddc0f1a2a71_photo1.png" />
+    <Content Remove="wwwroot\assets\photos\99ebdf41-4700-422c-b9c3-521f536d46a2_photo1.png" />
+    <Content Remove="wwwroot\assets\photos\aea3e484-111a-4edb-a32f-c5957557e532_photo2.png" />
+    <Content Remove="wwwroot\assets\photos\b4798f9b-2dff-4340-a851-8742dfa9acc9_photo1.png" />
+    <Content Remove="wwwroot\assets\photos\b6881049-f9fe-4472-ac2f-c7ecd49ae5f9_photo2.png" />
+    <Content Remove="wwwroot\assets\photos\b877b589-4ed7-4229-bf98-bfec2619b00c_photo2.png" />
+    <Content Remove="wwwroot\assets\photos\bef82065-b510-4504-8291-a1834f46721a_photo2.png" />
+    <Content Remove="wwwroot\assets\photos\bfc9fa65-7b34-46f2-ba28-eb06d83e0456_photo2.png" />
+    <Content Remove="wwwroot\assets\photos\c10aff8e-1ff0-4085-a8a6-706e9e8fea6d_photo2.png" />
+    <Content Remove="wwwroot\assets\photos\dea82a05-3a0e-42da-a3df-c8a51f7869c3_ex36.4.png" />
+    <Content Remove="wwwroot\assets\photos\e209af33-8131-48ae-820b-8e6b167a027f_photo1.png" />
+    <Content Remove="wwwroot\assets\photos\e55dd154-6a03-4f1a-84d4-1783d986b2aa_photo1.png" />
+    <Content Remove="wwwroot\assets\photos\photo1.png" />
+    <Content Remove="wwwroot\css\bienvenue.cs" />
     <Content Remove="wwwroot\js\ProfilCitoyenCreate.js" />
     <Content Remove="wwwroot\themesAdmin\js\datatables-simple-demo.js" />
   </ItemGroup>
@@ -108,17 +127,22 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
+    <PackageReference Include="FileSignatures" Version="5.0.2" />
     <PackageReference Include="Google.Cloud.RecaptchaEnterprise.V1" Version="2.14.0" />
+    <PackageReference Include="jQuery" Version="3.7.1" />
     <PackageReference Include="MailKit" Version="4.7.1.1" />
+    <PackageReference Include="Microsoft.AspNet.SignalR" Version="2.4.3" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Owin" Version="4.2.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
     <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
   </ItemGroup>

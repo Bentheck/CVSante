@@ -375,7 +375,8 @@ buttons {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: transparent !important;
+    transition: none !important;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -384,7 +385,7 @@ buttons {
 }
 
 .modals-content {
-    background-color: #fff;
+    background-color: lightgrey;
     padding: 2rem;
     border-radius: 8px;
     position: relative;
@@ -392,7 +393,6 @@ buttons {
     width: 100%;
     text-align: center;
 }
-
 .close {
     position: absolute;
     top: 10px;
@@ -661,5 +661,20 @@ h2.text-center {
 }
 
 
+.notification-container {
+    position: relative; /* Nécessaire pour le positionnement absolu du badge */
+}
 
-
+.notification-badge {
+    position: absolute;
+    top: -5px; /* Ajuster cette valeur pour déplacer le badge plus haut */
+    right: -5px; /* Ajuster cette valeur pour déplacer le badge plus à gauche */
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 6px; /* Vous pouvez ajuster ces valeurs pour changer la taille du badge */
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
