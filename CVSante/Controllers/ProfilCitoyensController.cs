@@ -32,6 +32,12 @@ namespace CVSante.Controllers
         // GET: ProfilCitoyen
         public async Task<IActionResult> Bienvenue()
         {
+            TempData["UserCheck"] = null;
+            TempData["ProfilCheck"] = null;
+            TempData["ImageProfil"] = null;
+            TempData["UserID"] = null;
+            TempData["Profil"] = null;
+
             var currentUserId = _userManager.GetUserId(User);
             var userCitoyen = await _context.UserCitoyens
                 .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
