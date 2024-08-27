@@ -41,7 +41,7 @@ namespace CVSante.Controllers
                 TempData["UserID"] = userCitoyen.UserId;
                 TempData["UserCheck"] = userCitoyen.UserId;
                 
-                var userInfo = await _context.UserInfos.FirstOrDefaultAsync(u => u.FkUserId == userCitoyen.UserId);
+                var userInfo = await _context.UserInfos.FirstAsync(u => u.FkUserId == userCitoyen.UserId);
 
                 if (userInfo != null)
                 {
