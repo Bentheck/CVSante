@@ -15,7 +15,7 @@ namespace CVSante.Services
         {
             _context = context;
         }
-
+        
         public async Task LogActionAsync(int? userId, int paramId, string action, string additionalInfo = "")
         {
             if (string.IsNullOrWhiteSpace(action))
