@@ -145,11 +145,11 @@
                             {
                                 @foreach (var paramedic in ViewBag.Paramedics as List<CVSante.Models.UserParamedic>)
                                 {
-                                    <li class="list-group-item">
-                                        <a asp-action="EditRespondent" asp-route-paramedicId="@paramedic.ParamId" class="text-decoration-none">
-                                            @paramedic.Nom @paramedic.Prenom
-                                        </a>
+                                    <a asp-action="EditRespondent" asp-route-paramedicId="@paramedic.ParamId" class="text-decoration-none">
+                                    <li class="list-group-item">                                        
+                                            @paramedic.Nom @paramedic.Prenom                                        
                                     </li>
+                                    </a>
                                 }
                             }
                             else
