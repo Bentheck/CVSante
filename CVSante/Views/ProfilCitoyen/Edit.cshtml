@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="~/js/ProfilCitoyenEdit.js" asp-append-version="true" defer></script>
+
+<h2 class="text-center" style="margin-top: 55px;">Modifier votre profil</h2>
 <style>
     .form-check-label {
         display: inline-block;
@@ -252,8 +254,9 @@
                 <!-- Allergies -->
                 <div id="allergy" class="section" style="display: none;">
                     <div class="card mb-3">
-                        <div class="card-header">
+                        <div class="card-header d-inline">
                             <h4>Allergies</h4>
+                            <h6>Si vous avez des allergies, veuillez les indiquer ci-dessous. (Une seule allergie ou intolérance par entrée.)</h6>
                         </div>
                         <div class="card-body">
                             <div id="allergy-fields">
@@ -326,6 +329,7 @@
                     <div class="card mb-3">
                         <div class="card-header">
                             <h4>Handicaps</h4>
+                            <h6>Si vous avez des handicaps, veuillez les indiquer ci-dessous. (Un seul handicap par entrée.)</h6>
                         </div>
                         <div class="card-body">
                             <div id="handicap-fields">
@@ -395,6 +399,7 @@
                     <div class="card mb-3">
                         <div class="card-header">
                             <h4>Medications</h4>
+                            <h6>Si vous prenez des médicaments ou des produits naturels, veuillez les indiquer ci-dessous. (Un seul médicament ou produit naturel par entrée.)</h6>
                         </div>
                         <div class="card-body">
                             <div id="medication-fields">
@@ -496,9 +501,7 @@
                         <button id="prev-btn" type="button" class="btn btn-primary" onclick="previousSection()">Précédent</button>
                         <button id="next-btn" type="button" class="btn btn-primary" onclick="nextSection()">Suivant</button>
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-primary" id="save-btn">Sauvegarder</button>
-
-
+                            <button type="submit" class="btn btn-danger" id="save-btn">Sauvegarder</button>
                         </div>
                     </div>
                 </div>

@@ -330,6 +330,7 @@ footer {
         list-style-type: disc;
         margin-left: 2rem;
     }
+
 buttons {
     background-color: #007bff;
     color: white;
@@ -343,6 +344,9 @@ buttons {
     buttons:hover {
         background-color: #0056b3;
     }
+	
+	
+  
 	
 	
 /* Team Members */

@@ -44,16 +44,7 @@
         margin-top: 10px;
     }
 
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
+    
 
     .btn-link {
         color: #007bff; /* Light blue link color */
@@ -66,14 +57,7 @@
             text-decoration: underline;
         }
 
-    .btn-light {
-        background-color: #e7f3ff; /* Light blue background for buttons */
-        border: 1px solid #007bff;
-    }
-
-        .btn-light:hover {
-            background-color: #d0e7ff;
-        }
+   
 
     .form-check-label {
         font-weight: bold;
@@ -103,12 +87,44 @@
         margin-right: 8px;
         color: #ffffff;
     }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #0056b3;
+  
+        border: none;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #28a745;
+        }
+
+    .btn-light {
+        background-color: #e7f3ff; /* Couleur claire pour les boutons */
+        border: 1px solid #6c757d;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .btn-light:hover {
+            background-color: #d0e7ff;
+            transform: translateY(-2px);
+        }
 </style>
 
 <div class="container mt-5">
     <div class="text-center mb-4">
         <h2 class="text-primary">
-            <i class="icon fas fa-user-plus"></i> Ajouter un utilisateur paramédical
+            <i class="icon fas fa-user-plus"></i> Ajouter un employé
         </h2>
     </div>
 
@@ -170,7 +186,11 @@
                     </form>
                 </div>
                 <div class="card-footer text-left">
-                    <a asp-action="Index" class="btn btn-link">Retour à l'accueil</a>
+                    <div class="mt-4" style="margin-top: 35px;">
+                        <a asp-action="Index" class="btn btn-light text-primary">
+                            <i class="fas fa-arrow-left"></i> Retour à l'accueil
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
