@@ -449,6 +449,16 @@ namespace CVSante.Controllers
                 return NotFound();
             }
 
+            var currentUserId = _userManager.GetUserId(User);
+            var profileId = await _context.UserCitoyens
+                .FirstOrDefaultAsync(uc => uc.FkIdentityUser == currentUserId);
+
+
+            if (id != profileId.UserId)
+            {
+                return NotFound();
+            }
+
             var user = new User
             {
                 UserInfo = await _context.UserInfos.FirstAsync(u => u.FkUserId == id),
