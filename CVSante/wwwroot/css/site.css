@@ -37,7 +37,7 @@ nav {
 
 /* Styles pour améliorer l'espacement dans la barre de navigation */
 .navbar {
-    padding: 0.5rem 1rem; /* Ajustez l'espacement autour de la barre de navigation */
+    padding: 0.5rem 1rem; 
 }
 
 .navbar-brand {
@@ -46,25 +46,25 @@ nav {
 }
 
 .logo-img {
-    height: 40px; /* Ajustez la taille de l'image du logo */
-    margin-right: 10px; /* Espacement entre le logo et le texte */
+    height: 40px; 
+    margin-right: 10px; 
 }
 
 .vsante {
-    font-size: 1.5rem; /* Ajustez la taille du texte du logo */
+    font-size: 1.5rem;
     font-weight: bold;
 }
 
 .navbar-nav {
-    margin-left: auto; /* Pousse les éléments de navigation à droite */
+    margin-left: auto; 
 }
 
 .nav-item {
-    margin-left: 15px; /* Espacement entre les éléments de navigation */
+    margin-left: 15px; 
 }
 
 .nav-link {
-    padding: 0.5rem 0.75rem; /* Ajustez l'espacement autour des liens de navigation */
+    padding: 0.5rem 0.75rem; 
 }
 
 
@@ -278,7 +278,6 @@ footer {
     padding: 60px 0;
     background-color: white;
 }
-
 .header-content {
     display: flex;
     flex-direction: column;
@@ -296,58 +295,49 @@ footer {
     position: relative;
 }
 
-.heading {
-    color: #006d92;
-    font-size: 2.5rem;
-    margin-top: 0;
-}
-
+/* Presentation Content */
 .presentation-content {
-    max-width: 800px;
+    max-width: 900px; 
     margin: 2rem auto;
-    padding: 2rem;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    background-color: #ffffff; 
+    border-radius: 15px; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); 
 }
 
+    /* Section Styling */
     .presentation-content section {
-        margin-bottom: 2rem;
+        border-bottom: 1px solid #ddd; 
+        padding-bottom: 15px; 
+        margin-bottom: 25px; 
     }
 
+    /* Section Titles */
     .presentation-content h2 {
-        color: #007bff;
-        margin-top: 1.5rem;
+        color: #006d92; 
+        margin-top: 2rem;
         text-align: center;
+        font-size: 2rem; 
     }
 
-    .presentation-content p, .presentation-content ul {
-        margin-bottom: 1rem;
+    .presentation-content p,
+    .presentation-content ul li {
+        margin: 0;
+        margin-bottom: 1rem; 
+        line-height: 1.6; 
+        color: #333; 
+        font-size: 1rem; 
         text-align: left;
     }
 
+    /* Style pour les listes */
     .presentation-content ul {
-        list-style-type: disc;
-        margin-left: 2rem;
+        list-style-type: disc; 
+        padding-left: 1.5rem; 
+        margin-left: 0; 
     }
 
-buttons {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-    buttons:hover {
-        background-color: #0056b3;
-    }
-	
-	
-  
-	
 	
 /* Team Members */
 
@@ -666,19 +656,34 @@ h2.text-center {
 
 
 .notification-container {
-    position: relative; /* Nécessaire pour le positionnement absolu du badge */
+    position: relative; 
 }
 
 .notification-badge {
     position: absolute;
-    top: -5px; /* Ajuster cette valeur pour déplacer le badge plus haut */
-    right: -5px; /* Ajuster cette valeur pour déplacer le badge plus à gauche */
+    top: -5px; 
+    right: -5px; 
     background-color: red;
     color: white;
     border-radius: 50%;
-    padding: 3px 6px; /* Vous pouvez ajuster ces valeurs pour changer la taille du badge */
+    padding: 3px 6px; 
     font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+.custom-btn {
+    background-color: #007bff; 
+    color: white;
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    border: none; 
+    font-size: 1rem; 
+    text-decoration: none; 
+    display: inline-block; 
+    transition: background-color 0.3s ease; 
+}
+
+    .custom-btn:hover {
+        background-color: #0056b3;
+    }
