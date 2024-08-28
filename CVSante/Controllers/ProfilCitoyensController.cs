@@ -143,7 +143,7 @@ namespace CVSante.Controllers
         {
 
             // Remove `FkUser` from ModelState if it exists to avoid validation errors
-            ModelState.Remove("UserInfo.FkUser");
+                ModelState.Remove("UserInfo.FkUser");
 
             if (userViewModel.Addresses != null)
             {

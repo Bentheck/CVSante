@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CVSante.Models.UserInfo>
+﻿@model IEnumerable<CVSante.Models.UserCitoyen>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
@@ -167,7 +167,7 @@
         <form asp-action="SearchCitoyen" method="get">
             <div class="form-group">
                 <label for="searchString">Rechercher par Nom ou ID Utilisateur :</label>
-                <input type="text" class="form-control" id="searchString" name="searchString" value="@ViewBag.SearchString" placeholder="Entrez le nom ou l'ID utilisateur" />
+                <input type="text" class="form-control" id="searchString" name="searchString" value="@ViewBag.SearchString" placeholder="Entrez le nom, prénom, rue, code postal, numéro de cellulaire ou l'ID de utilisateur" />
             </div>
             <button type="submit" class="btn btn-primary">Rechercher</button> <!-- Bouton en bleu -->
         </form>
@@ -196,11 +196,11 @@
                     @foreach (var citoyen in Model)
                     {
                         <tr>
-                            <td>@citoyen.FkUserId</td>
-                            <td>@citoyen.Prenom</td>
-                            <td>@citoyen.Nom</td>
+                            <td>@citoyen.UserInfo.FkUserId</td>
+                            <td>@citoyen.UserInfo.Prenom</td>
+                            <td>@citoyen.UserInfo.Nom</td>
                             <td>
-                                <a class="btn btn-info" asp-action="ViewCitoyen" asp-route-id="@citoyen.FkUserId">Voir Détails</a>
+                                <a class="btn btn-info" asp-action="ViewCitoyen" asp-route-id="@citoyen.UserInfo.FkUserId">Voir Détails</a>
                             </td>
                         </tr>
                     }

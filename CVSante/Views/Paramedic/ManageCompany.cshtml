@@ -141,7 +141,7 @@
                 @for (var i = 0; i < Model.Paramedics.Count; i++)
                 {
                     <tr>
-                        <td>@Model.Paramedics[i].Nom</td>
+                        <td>@Model.Paramedics[i].Prenom @Model.Paramedics[i].Nom</td>
                         <td>@Model.Paramedics[i].Matricule</td>
                         <td>
                             <input asp-for="Paramedics[i].ParamId" type="hidden" />

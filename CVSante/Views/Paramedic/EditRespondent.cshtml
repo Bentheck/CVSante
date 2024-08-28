@@ -137,8 +137,8 @@
                                 @foreach (var paramedic in ViewBag.Paramedics as List<CVSante.Models.UserParamedic>)
                                 {
                                     <a asp-action="EditRespondent" asp-route-paramedicId="@paramedic.ParamId" class="text-decoration-none">
-                                    <li class="list-group-item">                                        
-                                            @paramedic.Nom @paramedic.Prenom                                        
+                                    <li class="list-group-item">
+                                            @paramedic.Prenom @paramedic.Nom
                                     </li>
                                     </a>
                                 }
@@ -197,7 +197,7 @@
                                     <input type="hidden" asp-for="FkCompany" />
                                     <input type="hidden" asp-for="FkIdentityUser" />
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-light text-primary" value="Enregistrer" style="margin-top:25px">Enregistrer</button>
+                                        <button type="submit" class="btn btn-light text-primary" value="Enregistrer" style="margin-top:25px">Enregistrer</button>
                                     </div>
                                 </form>
                             </div>

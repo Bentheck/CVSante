@@ -90,22 +90,6 @@ namespace CVSante.Controllers
         }
 
 
-        // REDIRECT: Admin/History
-        public async Task<IActionResult> RedirectToHistory(int? id)
-        {
-            GetCurrentUser();
-            if (_currentUser == null)
-            {
-                return NotFound();
-            }
-            if (id == null)
-            {
-                return NotFound();
-            }
-            await _historyService.LogActionAsync(null, _currentUser, "Accès à la page d'historique");
-            return RedirectToAction("History", new { id = id });
-        }
-
 
         [Authorize(Roles = "SuperAdmin,Paramedic")]
         // GET: Admin/History
@@ -122,6 +106,7 @@ namespace CVSante.Controllers
             var currentUserId = _userManager.GetUserId(User);
             var userParam = await _context.UserParamedics
                 .Include(u => u.FkRoleNavigation)
+                .Include(u => u.FkCompanyNavigation)
                 .FirstOrDefaultAsync(up => up.FkIdentityUser == currentUserId);
 
             if (userParam == null)
@@ -136,8 +121,7 @@ namespace CVSante.Controllers
 
             var historique = _context.HistoriqueParams
                 .Include(h => h.FkParam)
-                .Include(h => h.FkUser)
-                .Where(h => h.FkParamId == userParam.ParamId);
+                .Where(h => h.FkParam.FkCompany == userParam.FkCompany);
 
             // Appliquer les filtres
             if (!string.IsNullOrEmpty(dateFrom))
@@ -264,7 +248,7 @@ namespace CVSante.Controllers
 
             var companyId = selectedParamedic.FkCompany;
 
-            await _historyService.LogActionAsync(null, _currentUser, $"Accès à la page ManageRoles (SelectedParamedicId: {selectedParamedic.ParamId})");
+            await _historyService.LogActionAsync(null, _currentUser, $"Accès à la page d'édition des rôles pour Matricule: {selectedParamedic.Matricule} par {currentUser.Matricule}");
 
             var viewModel = new ManageCompanyRoles
             {
@@ -339,8 +323,11 @@ namespace CVSante.Controllers
             _context.CompanyRoles.Update(roleToUpdate);
             await _context.SaveChangesAsync();
 
+            var param = _context.UserParamedics.Include(p => p.FkRoleNavigation)
+                .FirstOrDefault(p => p.ParamId == selectedParamedicId);
+
             await _historyService.LogActionAsync(null, selectedParamedicId,
-                $"Rôle {selectedRole.IdRole} mis à jour avec succès");
+                $"Rôle de {param.Matricule} mis à jour avec succès");
 
             return RedirectToAction("ManageRoles", new { paramedicId = selectedParamedicId });
         }
@@ -389,7 +376,7 @@ namespace CVSante.Controllers
                 Paramedics = paramedics
             };
 
-            await _historyService.LogActionAsync(null, _currentUser, $"Accès à la page ManageCompany pour l'ID de l'entreprise {company.IdComp}");
+            await _historyService.LogActionAsync(null, _currentUser, $"Accès à la page ManageCompany pour {company.CompName} par matricule: {currentUser.Matricule}");
 
             return View(viewModel);
         }
@@ -413,7 +400,7 @@ namespace CVSante.Controllers
             if (currentUser == null)
             {
                 // Journaliser si currentUser n'est pas trouvé
-                await _historyService.LogActionAsync(null, _currentUser, $"Échec d'accès à la page ManageCompany : UserParamedic non trouvé pour l'ID utilisateur {currentUserId}");
+                await _historyService.LogActionAsync(null, _currentUser, $"Échec d'accès à la page ManageCompany (Matricule: {currentUser.Matricule}");
                 return NotFound();
             }
 
@@ -427,7 +414,7 @@ namespace CVSante.Controllers
                 {
                     // Journaliser l'action de suppression
                     await _historyService.LogActionAsync(null, _currentUser,
-                        $"Suppression du paramédical avec l'ID {paramedicToRemove.Matricule} de l'entreprise. Mise à jour du statut du paramédical à inactif.");
+                        $"Retrait du paramédic avec le matricule {paramedicToRemove.Matricule} de l'entreprise. Mise à jour du statut du paramédic à inactif.");
 
                     // Définir FkCompany du paramédical sur null (supprimer de l'entreprise)
                     paramedicToRemove.FkCompany = null;
@@ -467,9 +454,12 @@ namespace CVSante.Controllers
 
                 await _context.SaveChangesAsync();
 
+                var company = await _context.Companies
+                    .FirstOrDefaultAsync(c => c.IdComp == currentUser.FkCompany);
+
                 // Journaliser les modifications apportées au statut actif des paramédicaux
                 await _historyService.LogActionAsync(null, _currentUser,
-                    "Mise à jour du statut actif des paramédicaux dans ManageCompany.");
+                    $"Mise à jour du statut actif de paramédic dans {company.CompName}.");
             }
             else
             {
@@ -478,7 +468,7 @@ namespace CVSante.Controllers
 
                 // Journaliser le problème des données manquantes
                 await _historyService.LogActionAsync(null, _currentUser,
-                    "Échec de la mise à jour des paramédicaux : Données des paramédicaux manquantes.");
+                    "Échec de la mise à jour des paramédic : Données des paramédic manquantes.");
             }
 
             return RedirectToAction("ManageCompany");
@@ -573,6 +563,16 @@ namespace CVSante.Controllers
                     return View(viewModel);
                 }
 
+                var matriculeExists = await _context.UserParamedics
+                    .AnyAsync(p => p.Matricule == viewModel.UserParamedic.Matricule);
+
+                if (matriculeExists == true)
+                {
+                    ModelState.AddModelError("UserParamedic.Matricule", "Il existe déja un paramédic avec ce matricule.");
+                    await _historyService.LogActionAsync(null, _currentUser, $"Échec de l'ajout du répondant : un paramédic existe déjà avec le matricule {viewModel.UserParamedic.Matricule}.");
+                    return View(viewModel);
+                }
+
                 var newRole = new CompanyRole
                 {
                     CreateParamedic = false,
@@ -636,7 +636,7 @@ namespace CVSante.Controllers
                 await _historyService.LogActionAsync(null, _currentUser,
                     $"Échec de l'ajout du paramédic par matricule : aucun paramédic trouvé avec le matricule {viewModel.UserParamedic.Matricule}.");
 
-                ModelState.AddModelError("Matricule", "Aucun paramédic trouvé avec ce matricule dans cette entreprise.");
+                ModelState.AddModelError("UserParamedic.Matricule", "Aucun paramédic trouvé avec ce matricule dans cette entreprise.");
                 return View("AddRespondent", viewModel);
             }
 
@@ -646,7 +646,7 @@ namespace CVSante.Controllers
                 await _historyService.LogActionAsync(null, _currentUser,
                     $"Échec de l'ajout du paramédic par matricule : le paramédic avec le matricule {viewModel.UserParamedic.Matricule} appartient déjà à une autre entreprise.");
 
-                ModelState.AddModelError("Matricule", "Le paramédic appartient à une autre entreprise.");
+                ModelState.AddModelError("UserParamedic.Matricule", "Le paramédic appartient à une autre entreprise.");
                 return View("AddRespondent", viewModel);
             }
 
@@ -657,7 +657,7 @@ namespace CVSante.Controllers
 
             // Enregistrer l'ajout réussi du paramédic
             await _historyService.LogActionAsync(null, _currentUser,
-                $"Paramédic ajouté avec succès avec le matricule {viewModel.UserParamedic.Matricule} à l'ID de l'entreprise {viewModel.CompanyId}.");
+                $"Paramédic ajouté avec succès avec le matricule {viewModel.UserParamedic.Matricule} à l'ID de l'entreprise {viewModel.CompanyName}.");
 
             return RedirectToAction("ManageCompany");
         }
@@ -696,7 +696,7 @@ namespace CVSante.Controllers
             {
                 // Enregistrer lorsque l'utilisateur n'a pas les autorisations nécessaires
                 await _historyService.LogActionAsync(null, _currentUser,
-                    $"L'utilisateur avec l'ID {currentUserId} a tenté d'accéder à EditRespondent sans les autorisations nécessaires.");
+                    $"L'utilisateur avec le matricule {currentUser.Matricule} a tenté d'accéder à EditRespondent sans les autorisations nécessaires.");
 
                 return RedirectToAction("ManageCompany", "Paramedic");
             }
@@ -729,7 +729,7 @@ namespace CVSante.Controllers
 
                 // Enregistrer éventuellement la récupération réussie du paramédic
                 await _historyService.LogActionAsync(null, _currentUser,
-                    $"Paramédic récupéré avec succès avec l'ID {paramedic.ParamId} pour la modification.");
+                    $"Paramédic récupéré avec succès avec le matricule {paramedic.Matricule} pour la modification.");
             }
 
             return View(paramedic);
@@ -789,9 +789,9 @@ namespace CVSante.Controllers
                 await _context.SaveChangesAsync();
 
                 await _historyService.LogActionAsync(null, _currentUser,
-                $"Paramédic mis à jour avec succès avec l'ID {paramedic.Matricule}.");
+                $"Paramédic matricule {paramedic.Matricule} mis à jour avec succès.");
 
-                return RedirectToAction("ManageCompany");
+                return RedirectToAction("EditRespondent");
             }
 
             // Réinitialiser le ViewBag avec la liste filtrée des paramédics
@@ -825,12 +825,14 @@ namespace CVSante.Controllers
                 .Select(u => u.ParamId)
                 .FirstOrDefault();
 
-            // Enregistrer l'action d'accéder à la page SearchCitoyen
-            await _historyService.LogActionAsync(null, paramId, $"Accès à la page SearchCitoyen");
+
 
             var currentUser = await _context.UserParamedics
                 .Include(u => u.FkRoleNavigation)
                 .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
+            // Enregistrer l'action d'accéder à la page SearchCitoyen
+            await _historyService.LogActionAsync(null, paramId, $"Accès à la page SearchCitoyen par matricule {currentUser.Matricule}");
 
             if (currentUser == null)
             {
@@ -842,34 +844,42 @@ namespace CVSante.Controllers
                 return RedirectToAction("Index", "Paramedic");
             }
 
-            IQueryable<UserInfo> citoyensQuery = _context.UserInfos;
+            var citoyensQuery = _context.UserCitoyens
+                .Include(c => c.UserInfo)
+                .Include(c => c.UserAdresses)
+                .AsQueryable(); // Ensure that this is still IQueryable for any further filtering
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                searchString = searchString.Trim(); // Supprimer les espaces en début et fin de chaîne
+                searchString = searchString.Trim();
 
                 int parsedUserId;
                 bool isNumeric = int.TryParse(searchString, out parsedUserId);
 
                 citoyensQuery = citoyensQuery.Where(c =>
-                    c.Nom.Contains(searchString) ||
-                    c.Prenom.Contains(searchString) ||
-                    (isNumeric && c.FkUserId == parsedUserId)
+                    ((c.UserInfo.Prenom + " " + c.UserInfo.Nom).Contains(searchString)) ||
+                    c.UserInfo.TelephoneCell.Contains(searchString) ||
+                    c.UserAdresses.Any(a => a.Rue.Contains(searchString) || a.CodePostal.Contains(searchString)) ||
+                    (isNumeric && c.UserInfo.FkUserId == parsedUserId)
                 );
             }
 
             var citoyenList = await citoyensQuery.ToListAsync();
 
             // Enregistrer le résultat de la requête de recherche
-            await _historyService.LogActionAsync(null, paramId, $"Recherche effectuée pour les citoyens avec la chaîne de recherche : {searchString}. Résultats trouvés : {citoyenList.Count}");
-
+            if (citoyenList.Any()) 
+            { 
+            await _historyService.LogActionAsync(null, paramId, $"Recherche effectuée par {currentUser.Matricule} pour les citoyens avec la chaîne de recherche : {searchString}. Résultats trouvés : {citoyenList.Count}");
+            }
             // Passer la chaîne de recherche à la vue en utilisant ViewBag
             ViewBag.SearchString = searchString;
 
             if (!string.IsNullOrWhiteSpace(searchString) && !citoyenList.Any())
             {
+                if (!citoyenList.Any()) { 
                 // Enregistrer lorsque aucun citoyen n'est trouvé
-                await _historyService.LogActionAsync(null, paramId, $"Aucun citoyen trouvé correspondant aux critères de recherche : {searchString}");
+                await _historyService.LogActionAsync(null, paramId, $"Recherche effectuée par {currentUser.Matricule}. Aucun citoyen trouvé correspondant aux critères de recherche : {searchString}");
+                }
                 ViewBag.Message = "Aucun citoyen trouvé correspondant à vos critères de recherche.";
             }
 
@@ -914,7 +924,7 @@ namespace CVSante.Controllers
             if (!currentUser.FkRoleNavigation.GetCitoyen)
             {
                 // Enregistrer si l'utilisateur actuel n'a pas les autorisations suffisantes
-                await _historyService.LogActionAsync(id, _currentUser, "Tentative d'afficher les détails du citoyen sans les autorisations suffisantes.");
+                await _historyService.LogActionAsync(id, _currentUser, $"Tentative d'afficher les détails du citoyen par l'ID {currentUser.ParamId} sans les autorisations suffisantes.");
                 return RedirectToAction("Index", "Paramedic");
             }
 
@@ -922,7 +932,7 @@ namespace CVSante.Controllers
             if (userInfo == null)
             {
                 // Enregistrer si les informations sur l'utilisateur ne sont pas trouvées
-                await _historyService.LogActionAsync(id, _currentUser, $"UserInfo avec ID : {id} n'a pas été trouvé.");
+                await _historyService.LogActionAsync(id, _currentUser, $"Citoyen avec ID : {id} n'a pas été trouvé.");
                 return NotFound();
             }
 
@@ -939,7 +949,7 @@ namespace CVSante.Controllers
             };
 
             // Enregistrer la récupération réussie des détails de l'utilisateur
-            await _historyService.LogActionAsync(id, _currentUser, $"Détails récupérés avec succès pour UserInfo ID : {id}");
+            await _historyService.LogActionAsync(id, _currentUser, $"Détails récupérés avec succès pour Citoyen ID : {id}");
 
             return View(citoyen);
         }
@@ -989,7 +999,7 @@ namespace CVSante.Controllers
             await _context.SaveChangesAsync();
 
             // Enregistrer l'ajout réussi du commentaire
-            await _historyService.LogActionAsync(null, _currentUser, $"Commentaire ajouté avec succès {commentaire.Id}. Texte du commentaire : {commentText}");
+            await _historyService.LogActionAsync(null, _currentUser, $"Commentaire ajouté avec succès ({commentaire.Id}) par {currentUser.Matricule}. Texte du commentaire : {commentText}");
 
             return RedirectToAction("ViewCitoyen", new { id = userId, showModal = true });
         }
@@ -1005,8 +1015,13 @@ namespace CVSante.Controllers
             {
                 return NotFound();
             }
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _context.UserParamedics
+                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
+
             // Enregistrer la tentative de modifier un commentaire
-            await _historyService.LogActionAsync(null, _currentUser, $"Tentative de modifier le commentaire {commentId}. Nouveau texte du commentaire : {commentText}");
+            await _historyService.LogActionAsync(null, _currentUser, $"Tentative de modifier le commentaire ({commentId}) par {currentUser.Matricule}. Nouveau texte du commentaire : {commentText}");
 
             if (string.IsNullOrWhiteSpace(commentText))
             {
@@ -1024,9 +1039,6 @@ namespace CVSante.Controllers
                 return NotFound();
             }
 
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentUser = await _context.UserParamedics
-                .FirstOrDefaultAsync(u => u.FkIdentityUser == currentUserId);
 
             if (currentUser == null || comment.FkUserparamedic != currentUser.ParamId)
             {
@@ -1081,7 +1093,7 @@ namespace CVSante.Controllers
             await _context.SaveChangesAsync();
 
             // Enregistrer la suppression réussie du commentaire
-            await _historyService.LogActionAsync(null, _currentUser, $"Commentaire supprimé avec succès avec l'ID : {commentId}");
+            await _historyService.LogActionAsync(null, _currentUser, $"Commentaire supprimé avec succès par {currentUser.Matricule} avec l'ID : {commentId}");
 
             return RedirectToAction("ViewCitoyen", new { id = userId, showModal = true });
         }
