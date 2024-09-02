@@ -15,6 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\assets\img\CvSante.jpg" />
+    <Content Remove="wwwroot\assets\img\CvSante1.jpg" />
+    <Content Remove="wwwroot\assets\img\cvSante2.jpg" />
+    <Content Remove="wwwroot\assets\img\hero-bg-light.webp" />
+    <Content Remove="wwwroot\assets\img\imageCVsante1.png" />
     <Content Remove="wwwroot\assets\photos\524cee49-3928-4f25-9253-46f6a57f43a1_ex36.4.png" />
     <Content Remove="wwwroot\assets\photos\61e3f786-614d-49c1-a965-1267da8e2a77_photo1.png" />
     <Content Remove="wwwroot\assets\photos\6bbbdcb4-203d-4eb2-b4fb-7416ccb78b1a_photo1.png" />
@@ -34,6 +39,7 @@
     <Content Remove="wwwroot\assets\photos\e55dd154-6a03-4f1a-84d4-1783d986b2aa_photo1.png" />
     <Content Remove="wwwroot\assets\photos\photo1.png" />
     <Content Remove="wwwroot\css\bienvenue.cs" />
+    <Content Remove="wwwroot\css\bienvenue.css" />
     <Content Remove="wwwroot\js\ProfilCitoyenCreate.js" />
     <Content Remove="wwwroot\themesAdmin\js\datatables-simple-demo.js" />
   </ItemGroup>

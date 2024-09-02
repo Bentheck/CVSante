@@ -59,16 +59,7 @@
             color: #003366; /* Texte sombre pour contraste */
         }
 
-    .btn {
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.9em;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
+    
     .btn-primary {
         background-color: #28a745;
         border: none;
@@ -146,8 +137,8 @@
                                 @foreach (var paramedic in ViewBag.Paramedics as List<CVSante.Models.UserParamedic>)
                                 {
                                     <a asp-action="EditRespondent" asp-route-paramedicId="@paramedic.ParamId" class="text-decoration-none">
-                                    <li class="list-group-item">                                        
-                                            @paramedic.Nom @paramedic.Prenom                                        
+                                    <li class="list-group-item">
+                                            @paramedic.Prenom @paramedic.Nom
                                     </li>
                                     </a>
                                 }
@@ -206,7 +197,7 @@
                                     <input type="hidden" asp-for="FkCompany" />
                                     <input type="hidden" asp-for="FkIdentityUser" />
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-light text-primary" value="Enregistrer" style="margin-top:25px">Enregistrer</button>
+                                        <button type="submit" class="btn btn-light text-primary" value="Enregistrer" style="margin-top:25px">Enregistrer</button>
                                     </div>
                                 </form>
                             </div>
